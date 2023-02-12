@@ -1,0 +1,252 @@
+\documentclass[danish ,a4paper,12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[table]{xcolor}% http://ctan.org/pkg/xcolor
+\title{Bachelor projekt}
+\author{msan18 }
+\date{Juni 2021}
+
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{rotating}
+\usepackage{soul}
+\usepackage[utf8]{inputenc}
+%\usepackage[english]{babel}
+\usepackage{apacite}
+\usepackage[square,numbers]{natbib}
+\bibliographystyle{apacite}
+\usepackage{import}
+
+
+%Title and author
+\title{Bibliography management: \texttt{natbib} package}
+\author{overleaf}
+\date{}
+\usepackage{amsmath}
+\usepackage{wrapfig}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\setcitestyle{authoryear,open={(},close={)}}
+\graphicspath{ {./images/} }
+\usepackage{url}
+\usepackage{csquotes}
+\usepackage{fullpage}
+\usepackage{tabularx}
+\usepackage{dcolumn}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{makecell}
+\renewcommand\theadfont{\bfseries}
+\usepackage{threeparttable}
+\usepackage[colorlinks=true, hypertexnames=true, linkcolor=black, citecolor=black, urlcolor=black]{hyperref}
+\usepackage{pdflscape}
+\usepackage{rotating}
+\usepackage{dcolumn}
+\usepackage{blkarray}
+\usepackage{array}
+\usepackage{eurosym}
+\usepackage{longtable}
+\usepackage[]{multirow}
+\usepackage{csquotes}
+\usepackage{epstopdf}
+\usepackage{soul}
+\usepackage{float}
+\usepackage{rotfloat}
+\usepackage{subcaption}
+\usepackage{parskip}
+\usepackage{enumitem}
+\usepackage{placeins}
+\usepackage{tikz}
+\usepackage{listings}
+\usepackage{setspace}
+
+
+
+
+\usepackage[a4paper,margin=1in,headheight=.4in,headsep=12pt,heightrounded]{geometry}
+\usepackage{fancyhdr}
+\usetikzlibrary{arrows,automata,positioning, fit, calc}
+\tikzset{
+    state/.style={
+           rectangle,
+           rounded corners,
+           draw=black, very thick,
+           minimum height=2em,
+           inner sep=4pt,
+           text centered,
+           },
+}
+
+\usepackage[T1]{fontenc}
+%\usepackage[table,xcdraw]{xcolor}
+\renewcommand{\figurename}{\textbf{Figure}}
+\renewcommand{\tablename}{Table}
+
+%\addto\captionsenglish{\renewcommand{\appendixname}{Appendiks}}
+%\usepackage[title]{appendix}
+
+
+
+
+
+\setlength\parindent{15pt}
+\newcommand{\dd}[1]{\mathrm{d}#1}
+
+\makeatletter
+% make numeric styles use name format
+\patchcmd{\NAT@test}{\else \NAT@nm}{\else \NAT@nmfmt{\NAT@nm}}{}{}
+% define \citepos just like \citet
+\DeclareRobustCommand\citepos
+  {\begingroup
+   \let\NAT@nmfmt\NAT@posfmt% ...except with a different name format
+   \NAT@swafalse\let\NAT@ctype\z@\NAT@partrue
+   \@ifstar{\NAT@fulltrue\NAT@citetp}{\NAT@fullfalse\NAT@citetp}}
+\let\NAT@orig@nmfmt\NAT@nmfmt
+\def\NAT@posfmt#1{\NAT@orig@nmfmt{#1's}}
+\makeatother
+\raggedbottom
+\usepackage{ragged2e}
+\definecolor{numbercolor}{gray}{0.7}		% Definerer en farve til brug til kapiteludseende
+
+
+
+\pagestyle{headings}
+
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{Københavns Universitet}
+\fancyhead[LE]{\nouppercase{\rightmark}}
+\rfoot{Page \thepage}
+
+\patchcmd{\maketitle}{\@fnsymbol}{\@arabic}{}{}
+% \patchcmd{\maketitle}{\setcounter{footnote}{0}}{}{}{}
+\makeatother
+
+\makeatletter
+\pgfdeclaregenericanchor{top base}{%
+  \csname pgf@anchor@#1@north\endcsname
+  \pgf@anchor@generic@top@base@main
+}
+\pgfdeclaregenericanchor{top base west}{%
+  \csname pgf@anchor@#1@north west\endcsname
+  \pgf@anchor@generic@top@base@main
+}
+\pgfdeclaregenericanchor{top base east}{%
+  \csname pgf@anchor@#1@north east\endcsname
+  \pgf@anchor@generic@top@base@main
+}
+\def\pgf@anchor@generic@top@base@main{%
+  {%
+    \pgfmathsetlength\pgf@ya{\pgfkeysvalueof{/pgf/outer ysep}}%
+    \advance\pgf@y-\pgf@ya
+    \pgfmathsetlength\pgf@ya{\pgfkeysvalueof{/pgf/inner ysep}}%
+    \advance\pgf@y-\pgf@ya
+    \pgf@ya=0pt
+    \pgfutil@loop
+    \ifdim\pgf@y>\baselineskip
+      \advance\pgf@y-\baselineskip
+      \advance\pgf@ya\baselineskip
+    \pgfutil@repeat
+    \global\pgf@y=\pgf@ya
+  }%
+}
+\makeatother
+
+\usepackage{setspace}
+
+  \renewcommand{\contentsname}
+    {Indholdsfortegnelse}
+  \renewcommand{\listfigurename}{Liste af figurer}
+  \renewcommand{\listtablename}{Liste af tabeller}
+
+  \usepackage{array}
+\newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+ 
+
+\begin{document}
+
+\rowcolors{2}{white}{gray!10}
+
+\linespread{1.5}
+
+\fancypagestyle{plain}{%
+  \fancyhf{}%
+  \fancyfoot[R]{ \thepage}%
+  \renewcommand{\headrulewidth}{0pt}% Line at the header invisible
+}
+\frontmatter
+
+
+\include{Output/frontpage.tex}
+
+
+%%%% Indholdsfortegnelse (TOC) %%%%
+
+\phantomsection													% Kunstigt afsnit, som hyperlinks kan 'holde fast i'
+\pdfbookmark[0]{Indholdsfortegnelse}{indhold}					% Tildeler en klikbar bookmark til den endelige PDF
+\tableofcontents*	
+\newpage
+% Here we can add figures and tables
+%\listoffigures
+%\newpage
+%\listoftables
+% Indholdsfortegnelsen (kaldet ToC) 
+
+%\addtocontents{toc}{\protect\newpage}							% Fremtvinger sideskift i ToC hvis noedvendig (der hvor koden placeres)
+
+\renewcommand{\cleardoublepage}{\newpage}
+\mainmatter
+
+\fancypagestyle{plain}{%
+  \fancyhf{}%
+  \fancyfoot[R]{Side \thepage}%
+  \renewcommand{\headrulewidth}{0pt}% Line at the header invisible
+}
+
+\vspace{1.5 cm}
+\selectfont
+
+
+
+\input{Projekt/1.Introduction.tex}
+
+\section{Literature review} \label{lit_rev}
+\input{Projekt/2.Litterature review.tex}
+
+\section{Methodology} \label{sec:method}
+\input{Projekt/3.Methodology.tex}
+
+\section{Theory} \label{sec:theory}
+\input{Projekt/4.Theory.tex}
+
+\section{Empirical analysis} \label{sec:analysis}
+\input{Projekt/Empirical analysis.tex}
+
+\section{Results} \label{results}
+\input{Projekt/Results.tex}
+
+\section{Discussion} \label{sec:discussion}
+\input{Projekt/Discussion.tex}
+\pagebreak
+
+ \renewcommand{\bibsection}{\section{Bibliography}}
+\bibliography{Output/Litteraturliste}
+
+\pagebreak
+
+\appendix
+\rhead{University of Copenhagen}
+\lhead{Bilag}
+\rfoot{Side \thepage}
+
+
+\section{Appendix} \label{sec:appendix}
+\input{Projekt/x.Appendix.tex}
+\pagebreak
+
+
+
+\end{document}
