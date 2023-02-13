@@ -1,0 +1,62 @@
+---
+title: "Speciale_analysis"
+author: "Martin Andersen"
+date: "2023-02-13"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+# Set the path to the data location
+setwd("C:/Users/Marti/OneDrive - University of Copenhagen/KU/Speciale/Data behandling")
+
+# Load packages:
+library(tidyverse)
+library(lubridate)
+library(dplyr)
+library(ggplot2)
+```
+
+First we download the data that we want to work with:
+```{r}
+data <- read.csv("all_data_weekly.csv", sep = ",") %>%
+  select(-X) %>%
+  mutate(date = as.Date(date))
+```
+
+
+The function: "assign_portfolio" allows a specific variable (SGD sentiment) and the number of portfolios to divide a dataset into portfolio sorts: 
+```{r}
+assign_portfolio <- function(data, var, n_portfolios) {
+  breakpoints <- data %>%
+    summarize(breakpoint = quantile({{ var }}, 
+                                    #quantile() produces - in this case - 10 quantiles to split the data into, by a sequences from 0 to 1 by the number of portfolios. Thus creating a breakpoint for which we can split the portfolios into. 
+                                    probs = seq(0, 1, length.out = n_portfolios + 1),
+                                    na.rm = TRUE #Removes all NA's
+    )) %>%
+    pull(breakpoint) %>%
+    as.numeric()
+  
+  data %>%
+    mutate(portfolio = findInterval({{ var }}, #Given a vector of breakpoints, we find the interval containing each element of breakpoints
+                                    breakpoints,
+                                    all.inside = TRUE 
+    )) %>%
+    pull(portfolio) #Returns the portfolio number for each security
+}
+```
+
+
+```{r}
+
+
+data %>% filter(isin == 'DE0006062144') %>% ggplot(aes(x = date, y = MKT_CAP)) +
+  geom_line()
+
+ggsave("plt.pdf")
+ggsave("plt.png")
+```

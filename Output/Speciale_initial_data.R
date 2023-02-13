@@ -31,6 +31,7 @@ stocks <- stock %>%
   relocate(date, .before = ID) %>%
   # And join the stock information with the ISIN number:
   left_join(ISIN, by = "ID") %>% rename("isin" = id_isin) %>%
+  select(-ID) %>%
   relocate(value, .after = isin)
 
 
@@ -129,25 +130,33 @@ sentiment_week <- sentiment %>%
     # sentiment_week %>%
         # write.csv(file = "clean_sentiment_data_weekly.csv")
 
-
 # Summarize the stocks to get the same weekly format (EoW) as sentiment data:
 stocks_weekly <- stocks %>%
-  group_by(date,ID,type,isin) %>%
+  group_by(isin,date,type) %>%
   summarise_by_time(
     .date_var = date,
     .by = "week",
     .type = "ceiling",
     value = value
+  ) %>%
+  pivot_wider(
+    names_from = type,
+    values_from = value
   )
 
 # Write to CSV to keep in nice format:
   # stocks_weekly %>%
-    #     write.csv(file = "clean_stock_data_weekly.csv")
+   #      write.csv(file = "clean_stock_data_weekly.csv")
+
 
 # Join the sentiment data with the stock prices
-data <- stocks %>%
-  left_join(stocks, by = c("isin","aggregate_time_period_start" = "date")) %>% na.omit()
+all_data <- stocks_weekly %>%
+  left_join(sentiment_week, by = c("date","isin")) %>%
+  drop_na(observations) 
 
+# Write to CSV to keep in nice format:
+      # all_data %>%
+      #     write.csv(file = "all_data_weekly.csv")
 
 
 
