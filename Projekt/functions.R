@@ -1,7 +1,7 @@
-rolling_mean <- function(dataset,periods) (
+rolling_mean <- function(dataset,periods, ignore) (
   dataset %>% ungroup() %>% 
     group_by(isin) %>% 
-    mutate(across(!c(date,global_unique_sentences,global_unique_articles,global_unique_sources),
+    mutate(across(!c(date,ignore),
                   ~ rollmean(.x, periods, fill = NA, align = "right"))) %>% na.omit()
   
 )

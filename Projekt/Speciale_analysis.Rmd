@@ -18,22 +18,79 @@ library(readxl)
 library(timetk)
 library(dplyr)
 library(zoo)
-```
 
-First we download the data that we want to work with:
-```{r}
-data <- read.csv("C:/Users/Marti/OneDrive - University of Copenhagen/KU/Speciale/Data behandling/all_data_weekly.csv", sep = ",") %>%
-  select(-X) %>%
-  mutate(date = as.Date(date)) %>% 
-  arrange(isin) %>%
-  replace(is.na(.), 0) #Replace NA's with zero's as this simply means no signal this week
-```
-
-Calculate moving averages of the sentiment data
-```{r}
 source("functions.R")
 
-rollmean_sentiment_data <- function_rolling_mean(dataset = data, periods = 2) %>% select(-c(PX_LAST,W_RETURN,MKT_CAP))
+
+library(RSQLite)
+# Data connection to get mkt_ret
+
+
+stoxx600_index <- read.csv("C:/Users/Marti/OneDrive - University of Copenhagen/KU/Speciale/Data behandling/STOXX600_index.csv", sep = ",") %>%
+  mutate(
+    date = as.Date(Date, format = "%m/%d/%Y")-3,
+    date = ceiling_date(date, "week", week_start = getOption("lubridate.week.start", 5)),
+    mkt_excess = as.numeric(sub("%", "",Change..))/100)
+
+```
+
+
+################ Portfolio sorts 1 week sentiment data:
+First we download the data that we want to work with, and compute the market cap weighted mean
+################
+```{r}
+data_weekly <- read.csv("C:/Users/Marti/OneDrive - University of Copenhagen/KU/Speciale/Data behandling/all_data_weekly.csv", sep = ",") %>%
+  
+  select(-c(X,observations_unique_sentences,observations_unique_articles,observations_unique_sources,global_unique_sentences,global_unique_articles,global_unique_sources,
+            sentiment_negative_mean:sdg_broad_positive_count
+            )) %>%
+  replace(is.na(.), 0) %>% #Replace NA's with zero's as this simply means no signal this week
+  group_by(date) %>% 
+  mutate(scalar= round(1 + scale(MKT_CAP),2),
+         negative_sum = round((negative_sum/scalar),2),
+         neutral_sum = round((neutral_sum/scalar),2), 
+         positive_sum = round((positive_sum/scalar),2)
+         ) %>% arrange(date) 
+
+
+
+  # The first step to conduct portfolio sorts is to calculate periodic breakpoints that you can use to group the stocks into portfolios. 
+sentiment_portfolios_1week <- sentiment_weekly %>% # %>% select(date,isin,W_RETURN,MKT_CAP,positive_sum) %>%
+  select(date,isin,positive_sum) %>%
+  group_by(date) %>%
+  mutate(
+    portfolio = assign_portfolio(
+      data = cur_data(),
+      var = positive_sum,
+      n_portfolios = 2
+    ),
+    portfolio = as.factor(portfolio)
+  ) %>%
+  group_by(portfolio, date) %>%
+  summarize(
+    ret = weighted.mean(W_RETURN, MKT_CAP),
+    .groups = "drop"
+  )
+
+# In the next step, we compute summary statistics for each beta portfolio. Namely, we compute CAPM-adjusted alphas, the beta of each beta portfolio, and average returns.
+
+beta_portfolios_summary <- sentiment_portfolios %>% 
+  left_join(stoxx600_index %>% select(date,mkt_excess), by = "date") %>%
+  group_by(portfolio) %>%
+  summarize(
+    alpha = as.numeric(lm(ret ~ 1 + mkt_excess)$coefficients[1]),
+    beta = as.numeric(lm(ret ~ 1 + mkt_excess)$coefficients[2]),
+    ret = mean(ret)
+  )
+
+```
+
+
+Calculate 2-week moving averages of the sentiment data
+```{r}
+
+rollmean_sentiment_data <- rolling_mean(dataset = all_data_weekly, periods = 2, ignore = any_of(c("PX_LAST","W_RETURN","MKT_CAP", "global_unique_sentences","global_unique_articles","global_unique_sources")))
+
   
 ```
 
