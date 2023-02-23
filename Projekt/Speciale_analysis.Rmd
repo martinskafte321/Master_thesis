@@ -1,0 +1,177 @@
+---
+title: "Speciale_analysis"
+author: "Martin Andersen"
+date: "2023-02-13"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+# Load packages:
+library(tidyverse)
+library(lubridate)
+library(readxl)
+library(timetk)
+library(dplyr)
+library(zoo)
+
+source("functions.R")
+```
+
+
+################ Portfolio sorts 1 week sentiment data:
+First we download the data that we want to work with, and compute the market cap weighted mean
+################
+```{r}
+
+# Data connection to get STOXX 600 Europe sentiment and stock data. Joined on stock data, so there will be NA's in the sentiment.  
+data_weekly <- read.csv("C:/Users/Marti/OneDrive - University of Copenhagen/KU/Speciale/Data behandling/all_data_weekly.csv", sep = ",") %>% 
+  select(-c(X,observations_unique_sentences,observations_unique_articles,observations_unique_sources,global_unique_sentences,global_unique_articles,global_unique_sources,
+            sentiment_negative_mean:sdg_broad_positive_count
+            )) %>% 
+  na.omit(observations) %>%
+  group_by(date) %>% 
+  mutate(scalar= round(1 + scale(MKT_CAP),2),
+         negative_sum = round((negative_sum/scalar),2),
+         neutral_sum = round((neutral_sum/scalar),2), 
+         positive_sum = round((positive_sum/scalar),2)
+         ) %>% arrange(date) 
+
+# Data connection to get Nasdaq Global sentiment data:
+nasdaq_weekly <- read.csv("C:/Users/Marti/OneDrive - University of Copenhagen/KU/Speciale/Data behandling/nasdaq_global_data_weekly.csv", sep = ",") %>% 
+  select(-c(X,observations_unique_sentences,observations_unique_articles,observations_unique_sources,global_unique_sentences,global_unique_articles,global_unique_sources,
+            sentiment_negative_mean:sdg_broad_positive_count)) %>% 
+  na.omit(observations)
+
+# Data connection to get market return for STOXX 600 Europe:
+stoxx600_index <- read.csv("C:/Users/Marti/OneDrive - University of Copenhagen/KU/Speciale/Data behandling/STOXX600_index.csv", sep = ",") %>%
+  mutate(
+    date = as.Date(Date, format = "%m/%d/%Y")-3,
+    date = ceiling_date(date, "week", week_start = getOption("lubridate.week.start", 5)),
+    mkt_excess = as.numeric(sub("%", "",Change..))/100)
+
+  
+
+```
+
+
+################ 
+Univariate portfolio sorts 1 week sentiment data:
+################
+```{r}
+
+sentiment_portfolios <- data_weekly %>% # filter(positive_sum > 0 | negative_sum > 0) %>%
+  group_by(date) %>%
+  mutate(
+    breakpoint = mean(negative_sum),
+    portfolio = case_when(
+      negative_sum <= breakpoint ~ "low",
+      negative_sum > breakpoint ~ "high"
+    )
+  ) |>
+  group_by(date, portfolio) |>
+  summarize(ret = weighted.mean(W_RETURN, MKT_CAP), .groups = "drop") %>%
+  pivot_wider(date, names_from = portfolio, values_from = ret) |>
+  mutate(ret = low - high)
+
+portfolios_summary <- beta_portfolios %>% mutate(date = as.Date(date)) %>%
+  left_join(stoxx600_index %>% select(date,mkt_excess), by = "date") %>%
+  #group_by(portfolio) |>
+  summarize(
+    alpha = as.numeric(lm(ret ~ 1 + mkt_excess)$coefficients[1]),
+    beta = as.numeric(lm(ret ~ 1 + mkt_excess)$coefficients[2]),
+    ret = 54*mean(mkt_excess)
+  )
+
+```
+
+################
+Bivariate sorts
+################
+```{r}
+
+value_portfolios <- data_weekly %>% filter(positive_sum > 0 | negative_sum > 0) %>%
+  group_by(date) %>%
+  
+  mutate(portfolio_pos = assign_portfolio_bi(
+    data = cur_data(),
+    var = positive_sum,
+    n_portfolios = 3
+  )) %>%
+  
+  group_by(date, portfolio_pos) %>%
+  mutate(
+    portfolio_neg = assign_portfolio_bi(
+      data = cur_data(),
+      var = negative_sum,
+      n_portfolios = 3
+    ),
+    
+    portfolio_combined = str_c(portfolio_neg, portfolio_pos)
+  ) %>% 
+  
+  select(date,isin,portfolio_neg,portfolio_pos,portfolio_combined,W_RETURN,MKT_CAP,negative_sum) %>% filter(portfolio_neg == 1)
+  group_by(date, portfolio_combined) %>%
+  summarize(
+    ret = weighted.mean(W_RETURN, MKT_CAP),
+    portfolio_pos = unique(portfolio_pos),
+    .groups = "drop"
+  )
+
+value_portfolios %>% 
+  group_by(portfolio_combined) %>%
+  summarise(ret = mean(ret))
+
+# 
+# value_premium <- value_portfolios %>%
+#   group_by(date, portfolio_pos) %>%
+#   summarize(ret = mean(ret), .groups = "drop_last") %>%
+#   summarize(value_premium = ret[portfolio_pos == max(portfolio_pos)] -
+#     ret[portfolio_pos == min(portfolio_pos)])
+# 
+# mean(value_premium$value_premium * 100)
+  
+```
+
+################
+Short term abnormal return after an individual event
+################
+```{r}
+data_weekly <- read.csv("C:/Users/Marti/OneDrive - University of Copenhagen/KU/Speciale/Data behandling/all_data_weekly.csv", sep = ",") %>%
+  select(-X) %>% 
+  mutate(date = as.Date(date)) %>%
+  left_join(stoxx600_index %>% select(date, mkt_excess), by = "date")
+  
+
+
+short_term_data <- data_weekly %>% filter(isin == c('NL0006294274','AT0000831706')) %>% 
+  group_by(isin) %>%
+  mutate(roll_capm_estimation(cur_data(), weeks = 10, min_obs = 10)) %>% select(date,isin,W_RETURN,mkt_excess,alpha,beta,positive_sum)
+  ungroup() %>% na.omit(beta,alpha) %>%
+  mutate(
+    pred_ret = alpha + beta*mkt_excess,
+    abnormal_ret = W_RETURN - pred_ret) %>% 
+  select(date,isin,W_RETURN,pred_ret,abnormal_ret,observations,positive_sum) %>%
+  group_by(date,isin) %>% 
+  mutate(one_lag = )
+  
+  
+nested <- data_weekly %>% filter(isin == c('NL0006294274')) %>%
+  select(date,isin,W_RETURN,mkt_excess,positive_sum) %>%
+  nest(data = c(date, W_RETURN, mkt_excess))
+
+nested %>%
+  mutate(beta = map(
+    data,
+    ~ roll_capm_estimation(., months = 10, min_obs = 10)
+  )) |>
+  unnest(beta) |>
+  select(permno, month, beta_monthly = beta) |>
+  drop_na()
+
+
+```
