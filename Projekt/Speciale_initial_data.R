@@ -67,7 +67,7 @@ sentiment <- read.csv("SXXP_sentiment.csv", sep = ",") %>%
 
 
   # Read Sentiment data from CSV
-  sentiment <- read.csv("nasdaq_global_large_cap.csv", sep = ",") %>%
+  sentiment_nasdaq <- read.csv("nasdaq_global_large_cap.csv", sep = ",") %>%
     # Get the correct date format and cut the series by 2018. 
     mutate(
       aggregate_time_period_start = as_datetime(aggregate_time_period_start)) %>%
@@ -173,5 +173,5 @@ all_data_week <- stocks_weekly %>%
 
 # Write to CSV to keep in nice format:
        sentiment_weekly %>%
-           write.csv(file = "nasdaq_global_data_weekly.csv")
+           write.csv(file = "data_weekly.csv")
 
