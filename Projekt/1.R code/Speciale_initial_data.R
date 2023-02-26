@@ -57,7 +57,7 @@ stocks_weekly <- stocks %>%
 ###############################################################
 
 # Read Sentiment data from CSV
-sentiment <- read.csv("SXXP_sentiment.csv", sep = ",") %>%
+sentiment <- read.csv("SXXP_sentiment.csv", sep = ",") %>% 
 # Get the correct date format and cut the series by 2018. 
   mutate(
     aggregate_time_period_start = as_datetime(aggregate_time_period_start)) %>%

@@ -47,7 +47,7 @@ assign_portfolio_bi <- function(data, var, n_portfolios) {
   return(assigned_portfolios)
 }
 
-estimate_capm_beta <- function(data, min_obs = 1) {
+estimate_capm <- function(data, min_obs = 1) {
   if (nrow(data) < min_obs) {
     beta <- as.numeric(NA)
   } else {
@@ -76,7 +76,7 @@ roll_capm_estimation <- function(data, weeks, min_obs) {
     .x = data,
     .i = data$date,
     .period = "week",
-    .f = ~ estimate_capm_beta(., min_obs),
+    .f = ~ estimate_capm(., min_obs),
     .before = weeks - 1,
     .complete = FALSE
   )
@@ -97,22 +97,3 @@ roll_capm_estimation <- function(data, weeks, min_obs) {
   ))
 }
 
-
-roll_capm_estimation2 <- function(data, months, min_obs) {
-  data <- data |>
-    arrange(date)
-  
-  betas <- slide_period_vec(
-    .x = data,
-    .i = data$date,
-    .period = "week",
-    .f = ~ estimate_capm_beta(., min_obs),
-    .before = months - 1,
-    .complete = FALSE
-  )
-  
-  return(tibble(
-    month = unique(data$date),
-    beta = betas
-  ))
-}
