@@ -1,4 +1,66 @@
-\subsection{Event data collection}
+\subsection{The Event Study Methodology}
 
-\subsection{Abnormal returns}
+The short-term event study examine the behavior of stock returns around corporate events, and is used to measure shareholders' reaction to unexpected news. 
+- Something with Fama
+
+
+\subsection{The Market Adjusted Model}
+
+In the context of event studies, an expected return model is a hypothetical prediction of the stock return. The individual stock price return is measured against the market return, as a simple way to control for potential effects of the event on the general market. The model does not adjust for basic CAPM risk and thus abstracts from the individual firm's distinct risk profile. The argument for implementing a simple model is to give a general overview of long and short term return-effects from events, and not to provide statistical conclusions. 
+The daily excess returns are measured as the difference between the stock return and the market return on a given day, with the market return assumed to be the MXWO\footnote{https://www.msci.com/World} index:
+\begin{equation}
+    \text{Abnormal Returns} \:  (AR_{i,t}) = R_{i,t} - R_{M,t} 
+\end{equation}
+Where, $R_{i,t}$ is the return of stock \textit{i} on day \textit{t}, and $R_{M,t}$ is the return of the market on day \textit{t}. 
+
+The returns series for stock \textit{i} is indexed wrt. the event date (t = 0) by setting the value to 100 and expressing the cumulative return of the future and foregoing observations with respect to this value, to isolate the effect of the event from the discrete trading days. 
+
+The argument is that on t = 0 the information becomes available to the market. However, the investor will not be able to trade on the information before the following trading day. The return index is calculated as the 
+cumulative product of the daily excess return leading up to or following the event date multiplied by 100. 
+
+\subsection{Short-term abnormal returns}
+
+The inspection of short-term abnormal return behavior covers (2n+1) trading days surrounding a corporate event: n days before to catch possible insiders information, the day of the event, and n days after. The short term analysis will use N = 10, which leaves a total window of 21 days [-10,+10] to investigate effect from an event. The effect of an event is expressed in terms of the abnormal return, defined as the difference between the realized ex-post return and the expected return, with the latter characterized as the expected return conditional on the event not taking place \citep{Event_studies}. Several models have been applied in the literature to estimate the short-term abnormal returns in event studies, which includes the CAPM, the Market Model, and multi-factor models. According to \cite{holler2014event} the most widely used is the Market Model, which assumes a linear relationship between the individual stock return and the market return. 
+
+\subsubsection{The Market Model}
+
+The Market Model is a single factor statistical model, which relates the return of a given security to the return of the market portfolio. The linear specification follows from the assumed joint normality of asset returns. For any given stock the model is defined as:
+
+\begin{equation} \label{market_model}
+    R_{i,t} = \alpha_i + \beta_i * R_{m,t} + \epsilon_{i,t},
+\end{equation}
+ where $R_{i,t}$ is the return of the stock \textit{i} on day \textit{t}, $\alpha_i$ is the regression intercept\footnote{The excess return of a stock relative to the market, that is not explained by the $\beta$.} for stock \textit{i}, $R_{m,t}$ is the market return on day \textit{t}, and
+ $\beta_i$ is the sensitivity of $R_{i,t}$ to the market return.  
+
+ The regression coefficients $\alpha_i$ and $\beta_i$ are computed as the stock returns of a given frequency on the market returns. To analyze the market participants' short-term reaction before and after the event date, the event window is set to +-10 days around the event date, and the estimation window of the regression is set to 120 days prior to the event, as proposed by \cite{Event_studies}. The linear ordinary least squares (OLS) has been applied in the estimation. \cite{brown1985using} investigate the properties of applying daily stock returns in event studies with the market model, and find that the model is well-specified under a variety of conditions. 
+
+ With the expected returns predicted from the Market Model, the abnormal returns are defined as the residual between the realized and the expected returns for each event:
+ \begin{equation}
+     AR_{i,t} = R_{i,t} - (\alpha_i + \beta_i * R_{m,t})
+ \end{equation}
+
+ where $AR_{i,t}$ measures the shareholder's reaction to the event addressing firm \textit{i} at time \textit{t}  with $\alpha_i$ and $\beta_i$ defined as the OLS-parameter estimates from the regression in equation \ref{market_model}. The abnormal return can be transformed into average, cumulative, and cumulative average abnormal returns (for n = (1, ..., 10) by: 
+  \begin{equation}
+     AAR_t = \frac{1}{N} \sum_{i=1} ^{I} AR_i
+ \end{equation}
+ \begin{equation}
+     CAR_{i,t}[-n,+n] = \sum_{\tau = t-n} ^{t+n} AR_{i,t}
+ \end{equation}
+ \begin{equation}
+     CAAR_{[-n,+n]} = \sum_{\tau = t-n} ^{t+n} AR_{i,t}
+ \end{equation}
+ 
+ The AAR is the average of the AR per time period, the CAR is the cumulative sum of the AR per stock, and the CAAR is the cumulative sum of the AAR of all stocks and over windows. 
+
+
+
+ 
+
+\subsection{Long-term abnormal returns}
+
+\subsubsection{Portfolio sorts / Calendar Time Portfolio Approach}
+
+
+
+
 
