@@ -50,14 +50,21 @@ nasdaq_weekly <- read.csv("C:/Users/Marti/OneDrive - University of Copenhagen/KU
             sentiment_negative_mean:sdg_broad_positive_count)) %>% 
   na.omit(observations)
 
-# Data connection to get market return for STOXX 600 Europe:
+# Data connection to get weekly market returns for STOXX 600 Europe
 stoxx600_index <- read.csv("C:/Users/Marti/OneDrive - University of Copenhagen/KU/Speciale/Data behandling/STOXX600_index.csv", sep = ",") %>%
   mutate(
     date = as.Date(Date, format = "%m/%d/%Y")-3,
     date = ceiling_date(date, "week", week_start = getOption("lubridate.week.start", 5)),
     mkt_excess = as.numeric(sub("%", "",Change..))/100)
 
-  
+# Data connection to get daily market returns for STOXX 600 Europe
+stoxx600_index_daily <- read.csv("C:/Users/Marti/OneDrive - University of Copenhagen/KU/Speciale/Data behandling/STOXX600_index.csv", sep = ",") %>%
+  mutate(date = as.Date(Date),
+    mkt_excess = as.numeric(sub("%", "",Change..))/100)
+
+
+                           
+
 
 ```
 
@@ -140,8 +147,115 @@ value_portfolios %>%
   
 ```
 
+
+
 ################
-Short term abnormal return after an individual event
+Short term abnormal return after an individual event - Daily
+################
+```{r}
+data_daily <- read.csv("C:/Users/Marti/OneDrive - University of Copenhagen/KU/Speciale/Data behandling/data_daily.csv", sep = ",") %>%
+  select(date,isin,W_RETURN,PX_LAST,MKT_CAP,negative_sum,positive_sum) %>% 
+  mutate(date = as.Date(date)) %>%
+  left_join(stoxx600_index_daily %>% select(date, mkt_excess), by = "date")
+
+short_term_data_nested <- data_daily %>% ungroup() %>%
+  select(date,isin,W_RETURN,mkt_excess) %>%
+  nest(data = -c(isin)) %>%
+  mutate(beta = future_map(
+    data, ~ roll_capm_estimation(.,window = 120, min_obs = 50)
+  )) %>%
+  unnest(c(beta)) %>%
+  na.omit(beta,alpha) %>% select(-data)
+
+short_term_data <- short_term_data_nested %>% 
+  left_join(data_weekly, by = c("date","isin")) %>%
+  mutate(
+    pred_ret = alpha + beta*mkt_excess,
+    abnormal_ret = W_RETURN - pred_ret) %>%
+  select(-c(beta,alpha,pred_ret))
+
+# Create columns that represent the lagged and leading values in relation to the event date:
+for (i in 1:10) {
+  
+  short_term_data[paste0("-",i)] <- short_term_data %>% group_by(isin) %>% transmute(t = lag(abnormal_ret,i)) %>% ungroup() %>% select(-isin)
+  
+  short_term_data[paste0("+",i)] <- short_term_data %>% group_by(isin) %>% transmute(t = lead(abnormal_ret,i)) %>% ungroup() %>% select(-isin)
+}
+
+
+short_term_data_event = short_term_data %>%
+  group_by(isin) %>%
+  mutate(
+    pos_mean = na_if(positive_sum, 0),
+    positive_mean = mean(pos_mean,na.rm = TRUE)) %>%
+  group_by(date,isin) %>%
+  # Make sure that we only calculate the cutoff value of periods with actual observations. 
+  mutate(event = 
+    case_when(positive_sum > positive_mean ~ 1, TRUE
+               ~ 0)
+  ) %>%
+  filter(event == 1) %>%
+  ungroup() %>% 
+  rename("0" = abnormal_ret) %>% 
+  # Remove columns we don't use
+  select(-c("W_RETURN","PX_LAST","mkt_excess","positive_sum","MKT_CAP","negative_sum","event","positive_mean","pos_mean")) %>%
+  pivot_longer(!c(date,isin), names_to = "type", values_to = "value") %>% 
+  na.omit(value) %>%
+  group_by(isin,type) %>% 
+  summarise(abnormal_ret = mean(value))
+
+
+lagged_index = short_term_data_event %>%
+  mutate(type = as.character(type),
+         type = as.integer(type)) %>% filter(type <= 0) %>% 
+  mutate(type = as.factor(type)) 
+
+lagged_index$type <- factor(lagged_index$type, levels = c("0", "-1", "-2","-3","-4","-5","-6","-7","-8","-9","-10"))
+
+lagged_index = lagged_index %>%
+  arrange(isin,type) %>%
+  group_by(isin) %>%
+  mutate(index_ret = case_when(type == '0' ~ 0,
+                        TRUE ~ abnormal_ret),
+         index =  100*(cumprod(1+index_ret)))
+
+lead_index = short_term_data_event %>%
+  mutate(type = as.character(type),
+         type = as.integer(type)) %>% filter(type > 0) %>% 
+  mutate(type = as.factor(type)) 
+
+lead_index$type <- factor(lead_index$type, levels = c("0", "1", "2","3","4","5","6","7","8","9","10"))
+
+lead_index = lead_index %>%
+  arrange(isin,type) %>%
+  group_by(isin) %>%
+  mutate(index_ret = case_when(type == '0' ~ 0,
+                        TRUE ~ abnormal_ret),
+         index =  100*(cumprod(1+index_ret)))
+
+short_term_indexed = lead_index %>%
+  rbind(lagged_index)
+
+short_term_indexed$type <- factor(short_term_indexed$type, levels = c("-10", "-9","-8","-7","-6","-5","-4","-3","-2","-1","0", "1", "2","3","4","5","6","7","8","9","10"))
+
+short_term_indexed %>% 
+  ggplot(aes(x = type, y = index, colour = isin, group = isin)) + 
+  geom_line() +
+  theme(legend.position = "none")
+
+
+short_term_indexed %>%
+  group_by(type) %>%
+  summarise(AAR =  mean(54 * abnormal_ret)) %>% 
+  ggplot(aes(x = type, y = AAR)) +
+  geom_point() +
+  theme(legend.position = "none")
+```
+
+
+
+################
+Short term abnormal return after an individual event - Weekly
 ################
 ```{r}
 data_weekly <- read.csv("C:/Users/Marti/OneDrive - University of Copenhagen/KU/Speciale/Data behandling/all_data_weekly.csv", sep = ",") %>%
@@ -237,8 +351,8 @@ short_term_indexed %>%
 
 short_term_indexed %>%
   group_by(type) %>%
-  summarise(abnormal_ret = mean(abnormal_ret)) %>% 
-  ggplot(aes(x = type, y = abnormal_ret)) +
+  summarise(AAR =  mean(54 * abnormal_ret)) %>% 
+  ggplot(aes(x = type, y = AAR)) +
   geom_point() +
   theme(legend.position = "none")
 ```

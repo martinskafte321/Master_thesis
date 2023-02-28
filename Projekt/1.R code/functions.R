@@ -68,25 +68,25 @@ estimate_capm_alpha <- function(data, min_obs = 1) {
 }
 
 
-roll_capm_estimation <- function(data, weeks, min_obs) {
+roll_capm_estimation <- function(data, window, min_obs, period = "week" ) {
   data <- data %>%
     arrange(date)
   
   betas <- slide_period_vec(
     .x = data,
     .i = data$date,
-    .period = "week",
+    .period = period,
     .f = ~ estimate_capm(., min_obs),
-    .before = weeks - 1,
+    .before = window - 1,
     .complete = FALSE
   )
   
   alphas <- slide_period_vec(
     .x = data,
     .i = data$date,
-    .period = "week",
+    .period = period,
     .f = ~ estimate_capm_alpha(., min_obs),
-    .before = weeks - 1,
+    .before = window - 1,
     .complete = FALSE
   )
 

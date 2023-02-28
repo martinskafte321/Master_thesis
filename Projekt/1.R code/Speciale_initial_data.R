@@ -12,7 +12,7 @@ setwd("C:/Users/Marti/OneDrive - University of Copenhagen/KU/Speciale/Data behan
 
 
 ###############################################################
-############# Get stock market data ###########################
+############# Get stock market data weekly ###########################
 ###############################################################
 
 # Read stock data from:
@@ -50,10 +50,11 @@ stocks_weekly <- stocks %>%
 # Write to CSV to keep in nice format:
   stocks_weekly %>%
       write.csv(file = "clean_stock_data_weekly.csv")
+  
 
 
 ###############################################################
-############# Get Sentiment data ##############################
+############# Get Sentiment data weekly ##############################
 ###############################################################
 
 # Read Sentiment data from CSV
@@ -175,3 +176,89 @@ all_data_week <- stocks_weekly %>%
        sentiment_weekly %>%
            write.csv(file = "data_weekly.csv")
 
+       
+       ###############################################################
+       ############# Get stock market data daily ###########################
+       ###############################################################
+       
+       # Read stock data from:
+       ISIN <- read_excel("ISIN numbers.xlsx")
+       stock <- read_excel("SXXP_daily.xlsx")
+       
+       # Clean up the stock market data: Remove the two first rows 
+       stocks <- stock %>%
+         filter(!row_number() %in% c(1,2)) %>% 
+         # Make the data set a long matrix instead of wide
+         pivot_longer(!DATES, names_to = "firm",values_to = "value")  %>% 
+         mutate(
+           type = str_split_fixed(firm, "_", 2)[,2],
+           ID = str_split_fixed(firm, "_", 2)[,1],
+           date = as.Date(as.numeric(DATES), origin = "1899-12-30"),
+           value = as.numeric(value)
+         ) %>% 
+         select(-DATES,-firm) %>%
+         relocate(type, .after = ID) %>%
+         relocate(date, .before = ID) %>%
+         # And join the stock information with the ISIN number:
+         left_join(ISIN, by = "ID") %>% rename("isin" = id_isin) %>%
+         select(-ID) %>%
+         relocate(value, .after = isin)
+       
+       
+       # Summarize the stocks to index by date and isin
+       stocks_daily <- stocks %>%
+         pivot_wider(
+           names_from = type,
+           values_from = value
+         ) %>% na.omit()
+       
+       
+       # Write to CSV to keep in nice format:
+       stocks_daily %>%
+         write.csv(file = "clean_stock_data_daily.csv")
+       
+       remove(ISIN,stock,stocks)
+       ###############################################################
+       ############# Get Sentiment data daily ##############################
+       ###############################################################
+       
+       # Read Sentiment data from CSV
+       sentiment <- read.csv("SXXP_sentiment.csv", sep = ",") %>% 
+         # Get the correct date format and cut the series by 2018. 
+         mutate(
+           aggregate_time_period_start = as_datetime(aggregate_time_period_start)) %>%
+         filter(aggregate_time_period_start >= ' 2018-01-01') %>%
+         rename("date" = aggregate_time_period_start) %>%
+         select(-c(aggregate_type,aggregate_key,aggregate_updated_ts,aggregate_time_period_end,day,week,month,year,match_identity)) 
+       
+       
+       # Add a variable that contains the sum of all, respectively, positive, negative and neutral signals wrt. SGD's: 
+       sentiment_daily <- sentiment %>% group_by(date,isin) %>%
+         mutate(
+           negative_sum = sum(c_across(contains("sdg") & contains("negative_count"))),
+           neutral_sum = sum(c_across(contains("sdg") & contains("neutral_count"))),
+           positive_sum = sum(c_across(contains("sdg") & contains("positive_count")))
+         )  %>%
+         # Make sure that if a news article is published on a weekend, then it should show as Friday, because we measure the return on Monday. 
+         mutate(date = date(date),
+                Day = weekdays(date), 
+                date = case_when(Day == "lørdag" ~ date - 1, 
+                                 Day == "søndag" ~ date - 2, 
+                                 TRUE ~ date)) %>%
+         select(-Day)
+       
+       
+       # Write to CSV to keep in nice format:
+       sentiment_daily %>%
+         write.csv(file = "clean_sentiment_daily.csv")
+       
+       # Join the weekly sentiment data with the stock prices
+       all_data_daily <- stocks_daily %>%
+         left_join(sentiment_daily, by = c("date","isin")) #%>%
+       # drop_na(observations) 
+       
+       # Write to CSV to keep in nice format:
+       all_data_daily %>%
+         write.csv(file = "data_daily.csv")
+
+       
