@@ -4,9 +4,10 @@ rolling_mean <- function(dataset,periods, ignore) (
   dataset %>% ungroup() %>% 
     group_by(isin) %>% 
     mutate(across(!c(date,ignore),
-                  ~ rollmean(.x, periods, fill = NA, align = "right"))) %>% na.omit()
+                  ~ rollmean(.x, k = 5, fill = NA, align = "right"))) %>% na.omit()
   
 )
+
 
 
 assign_portfolio <- function(data, var, n_portfolios) {
@@ -68,9 +69,9 @@ estimate_capm_alpha <- function(data, min_obs = 1) {
 }
 
 
-roll_capm_estimation <- function(data, window, min_obs, period = "week" ) {
-  data <- data %>%
-    arrange(date)
+roll_capm_estimation <- function(data, window, min_obs, period = "day" ) {
+  data <- data %>% 
+    arrange(date) 
   
   betas <- slide_period_vec(
     .x = data,

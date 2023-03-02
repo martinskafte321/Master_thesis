@@ -229,7 +229,7 @@ all_data_week <- stocks_weekly %>%
            aggregate_time_period_start = as_datetime(aggregate_time_period_start)) %>%
          filter(aggregate_time_period_start >= ' 2018-01-01') %>%
          rename("date" = aggregate_time_period_start) %>%
-         select(-c(aggregate_type,aggregate_key,aggregate_updated_ts,aggregate_time_period_end,day,week,month,year,match_identity)) 
+         select(-c(match_names,aggregate_type,aggregate_key,aggregate_updated_ts,aggregate_time_period_end,day,week,month,year,match_identity)) 
        
        
        # Add a variable that contains the sum of all, respectively, positive, negative and neutral signals wrt. SGD's: 
@@ -245,8 +245,9 @@ all_data_week <- stocks_weekly %>%
                 date = case_when(Day == "lørdag" ~ date - 1, 
                                  Day == "søndag" ~ date - 2, 
                                  TRUE ~ date)) %>%
-         select(-Day)
-       
+         select(-Day) %>% select(-match_names) %>%
+         group_by(date,isin) %>%
+         summarise_all(sum)
        
        # Write to CSV to keep in nice format:
        sentiment_daily %>%
