@@ -1,6 +1,23 @@
 \subsection{The Event Study Methodology}
 
-The short-term event study examine the behavior of stock returns around corporate events, and is used to measure shareholders' reaction to unexpected news. 
+On the surface, measuring the effect of an economic event is often a difficult task for economists. However, with frequent and efficient data from the financial markets an event study can be constructed, which has the capabilities of measuring the impact of an isolated event on the value of the firm. 
+
+
+
+The methodology is used to measure investors' reaction to unexpected news. The foundation for event studies emerge from the \textit{efficient market hypothesis} \citep{fama1969_EMH}, which states that security prices reflect all present information. Given rationality on the markets, the effects of an event will be reflected immediately in the price of a security. Consequently, it is possible to measure investors' reaction to specific information by measuring the ex-post realized return relative to the expected return. If investors react adversely to negative and positive events, it should to be reflected in the stock price. The advantage of this procedure is that it is expected to be efficient, since it is based on the overall assessment of many investors who treat the available information. 
+
+Within finance research, event studies has been applied to firm specific events such as mergers and acquisitions and earnings announcements \citep{Event_studies}. The initial task of establishing an event study is to outline the event of interest and determine the window over which the security prices will be inspected. The latter is dependent on the former, as distinct events require different examination time. For example, the impact of an earnings release or a federal interest rate announcement will likely be priced in the market immediately and will thus need a narrow examination window. In contrast, the effects of public news, charges and accusations may require wider windows to reflect all information. 
+
+After identifying the event and examination period, it is necessary to determine the selection criteria for which firms and events to include in the study, where it is useful to summarise some sample characteristics on the firm level. Furthermore, the analysis requires a measure of event impact on firm performance. \cite{Event_studies} defines the effect of an event expressed in terms of the "abnormal return", defined as the difference between the realized ex-post return and the expected return, with the latter characterized as the expected return conditional on the event not taking place: 
+\begin{equation}
+    AR_{i,t} = R_{i,t} - E[R_{i,t} \mid X_t ]
+\end{equation}
+where $AR_{i,t}$, $R_{i,t}$, and $E[R_{i,t}$ are the abnormal, actual and expected returns for firm \textit{i} at time \textit{t}, and $X_t$ is the conditional information for the expected returns model. 
+
+The methodology is used to measure investors' reaction to unexpected news. The foundation for event studies emerge from the \textit{efficient market hypothesis} \citep{fama1969_EMH}, which states that security prices reflect all present information, and when new information becomes accessible it will be fully taken into account by investors. Consequently, it is possible to measure investors' reaction to specific information by measuring the ex-post realized return relative to the expected return. If investors react adversely to negative and positive events, it should to be reflected in the stock price. The advantage of this procedure is that 
+
+
+This paper will apply the event study methodology examine the behavior of stock returns around corporate events, and is used to measure shareholders' reaction to unexpected news. 
 - Something with Fama
 
 
@@ -36,23 +53,14 @@ The Market Model is a single factor statistical model, which relates the return 
 
  With the expected returns predicted from the Market Model, the abnormal returns are defined as the residual between the realized and the expected returns for each event:
  \begin{equation}
-     AR_{i,t} = R_{i,t} - (\alpha_i + \beta_i * R_{m,t})
+    \text{Abnormal returns} \: (AR_{i,t}) = R_{i,t} - (\alpha_i + \beta_i * R_{m,t})
  \end{equation}
 
- where $AR_{i,t}$ measures the shareholder's reaction to the event addressing firm \textit{i} at time \textit{t}  with $\alpha_i$ and $\beta_i$ defined as the OLS-parameter estimates from the regression in equation \ref{market_model}. The abnormal return can be transformed into average, cumulative, and cumulative average abnormal returns (for n = (1, ..., 10) by: 
-  \begin{equation}
-     AAR_t = \frac{1}{N} \sum_{i=1} ^{I} AR_i
- \end{equation}
+ where $AR_{i,t}$ measures the shareholder's reaction to the event addressing firm \textit{i} at time \textit{t}  with $\alpha_i$ and $\beta_i$ defined as the OLS-parameter estimates from the regression in equation \ref{market_model}. The abnormal return can be transformed into cumulative abnormal returns (for n = (1, ..., 10) by: 
  \begin{equation}
      CAR_{i,t}[-n,+n] = \sum_{\tau = t-n} ^{t+n} AR_{i,t}
  \end{equation}
- \begin{equation}
-     CAAR_{[-n,+n]} = \sum_{\tau = t-n} ^{t+n} AR_{i,t}
- \end{equation}
- 
- The AAR is the average of the AR per time period, the CAR is the cumulative sum of the AR per stock, and the CAAR is the cumulative sum of the AAR of all stocks and over windows. 
-
-
+ To test the hypothesis we compute average abnormal returns ($AAR_t = \overline{AR}_{i,t})$ and cumulative average abnormal returns ($CAAR_{[-n,+n]} = \overline{CAR}_{[-n,+n]}$, and use statistical analysis to test the significance of the results. 
 
  
 
