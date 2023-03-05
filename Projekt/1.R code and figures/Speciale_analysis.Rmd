@@ -168,7 +168,7 @@ short_term_data_nested <- data_daily %>% ungroup() %>%
 
  
  
-short_term_data <- short_term_data_nested %>% 
+short_term_data <- short_term_data_nested %>% filter(isin == 'SE0017768716') %>%
   left_join(data_daily, by = c("date","isin")) %>%
   
   left_join(
@@ -272,6 +272,7 @@ positive_index %>%
   ggplot(aes(x = type, y = value, colour = metric, group = metric)) + 
   geom_line() +
   theme(legend.title = element_blank())
+ggsave("ST_positive_all.png")
 
 negative_index %>% 
   pivot_longer(!c(type,event), names_to = "metric", values_to = "value") %>%
@@ -323,9 +324,9 @@ short_term_data <- short_term_data_nested %>%
   
   left_join(
     sentiment_daily %>%
-      mutate(date = as.Date(date)) %>%
+      mutate(date = as.Date(date)),
       # select(date,isin,sdg_not_relevant_negative_count,sdg_not_relevant_positive_count,sentiment_negative_count,sentiment_positive_count), 
-            by =c("date","isin")) %>%
+            by = c("date","isin")) %>%
   
   group_by(isin) %>%
   mutate(
@@ -334,87 +335,76 @@ short_term_data <- short_term_data_nested %>%
   ) %>%
   select(-c(beta,alpha,pred_ret,sdg_not_relevant_positive_count,sdg_not_relevant_negative_count))
 
-# Create columns that represent the lagged and leading values in relation to the event date:
-
-for (i in 1:15) {
-  short_term_data[paste0("-",i)] <- short_term_data %>% group_by(isin) %>% transmute(t = lag(abnormal_ret,i)) %>% ungroup() %>% select(-isin)
-  short_term_data[paste0("+",i)] <- short_term_data %>% group_by(isin) %>% transmute(t = lead(abnormal_ret,i)) %>% ungroup() %>% select(-isin)
-}
 
 short_term_data_event = short_term_data %>% 
-  select(date,isin,sgd1:sgd17,)
-  pivot_longer(!c(date,isin))
-  group_by(isin) %>%
-  mutate(
-    
-    norm_positive_sum = sentiment_positive_count,
-    norm_negative_sum = sentiment_negative_count,
-    
-    
-    norm_positive_sum = na_if(norm_positive_sum, 0),
-    norm_negative_sum = na_if(norm_negative_sum, 0),
-    
-    positive_sd = sd(norm_positive_sum,na.rm = TRUE),
-    negative_sd = sd(norm_negative_sum,na.rm = TRUE),
-    
-    positive_threshold = mean(norm_positive_sum,na.rm = TRUE) + 2*positive_sd,
-    negative_threshold = mean(norm_negative_sum,na.rm = TRUE) + 2*negative_sd
-    ) %>%
-  group_by(date,isin) %>%
-  # Make sure that we only calculate the cutoff value of periods with actual observations. 
-  mutate(pos_event = 
-    case_when(norm_positive_sum > positive_threshold & norm_positive_sum > 5 ~ 1,
-              TRUE
-               ~ 0),
-    neg_event = 
-    case_when(norm_negative_sum > negative_threshold & norm_negative_sum > 5 ~ 1, TRUE
-               ~ 0)
-    ) %>% 
-  select(-c("W_RETURN","mkt_excess","positive_sum","negative_sum","positive_threshold","positive_sd",
-            "negative_sd","negative_threshold","norm_positive_sum","norm_negative_sum",
-            "sentiment_negative_count","sentiment_positive_count","roll_mean_sentiment_positive_count","roll_mean_sentiment_negative_count",
-            "roll_sum_sentiment_positive_count","roll_sum_sentiment_negative_count")) %>%
-  rename("0" = abnormal_ret)
+  select(isin,date,abnormal_ret, contains("sdg")) %>% 
+  select(isin,date,abnormal_ret, contains("tive"),-c(sdg_broad_negative_count,sdg_broad_neutral_count,sdg_broad_positive_count))
 
-positive_index = short_term_data_event %>% 
-  filter(pos_event == 1) %>%
-  select(-c(pos_event,neg_event)) %>%
-  pivot_longer(!c(date,isin), names_to = "type", values_to = "value") %>%
-  na.omit(value) %>%
-  mutate(type = as.factor(type)) %>%
-  group_by(type) %>% 
-  summarise(AAR = mean(value)) %>%
-  mutate(event = "positive",
-         type = factor(type, levels = c("-15","-14","-13","-12","-11","-10", "-9","-8","-7","-6","-5","-4","-3","-2","-1","0", "+1", "+2","+3","+4","+5","+6","+7","+8","+9","+10","+11", "+12","+13","+14","+15"))) %>%
-  arrange(type) %>%
-  mutate(CAAR = cumsum(AAR))
-         
-negative_index = short_term_data_event %>%
-  filter(neg_event == 1) %>%
-  select(-c(pos_event,neg_event)) %>%
-  pivot_longer(!c(date,isin), names_to = "type", values_to = "value") %>%
-  na.omit(value) %>%
-  mutate(type = as.factor(type)) %>%
-  group_by(type) %>% 
-  summarise(AAR = mean(value)) %>%
-  mutate( event = "negative",
-    type = factor(type, levels = c("-15","-14","-13","-12","-11","-10", "-9","-8","-7","-6","-5","-4","-3","-2","-1","0", "+1", "+2","+3","+4","+5","+6","+7","+8","+9","+10","+11", "+12","+13","+14","+15"))) %>%
-  arrange(type) %>%
+# Create columns that represent the lagged and leading values in relation to the event date:
+for (i in 1:15) {
+  short_term_data_event[paste0("-",i)] <- short_term_data_event %>% group_by(isin) %>% transmute(t = lag(abnormal_ret,i)) %>% ungroup() %>% select(-isin)
+  short_term_data_event[paste0("+",i)] <- short_term_data_event %>% group_by(isin) %>% transmute(t = lead(abnormal_ret,i)) %>% ungroup() %>% select(-isin)
+}
+
+
+short_term_return = short_term_data_event %>%
+  pivot_longer(!c(date,isin,abnormal_ret,'-1':'+15'), names_to = "type", values_to = "value") %>%
+  group_by(isin,type) %>%
+  mutate(
+      value = na_if(value, 0),
+      sd = sd(value,na.rm = TRUE),
+      mean = mean(value, na.rm = TRUE),
+      
+    threshold = mean + 1*sd
+  ) %>% 
+  mutate(event = 
+    case_when(value > threshold & value > 1 ~ 1,
+              TRUE 
+               ~ 0)
+    ) %>%
+  rename('0' = abnormal_ret) %>%
+  select(-c(value,sd,mean,threshold)) %>% 
+  filter(event == 1) %>%
+  mutate(group = case_when(grepl("pos", type) ~ "positive",
+                            grepl("nega", type) ~"negative"),
+         ) 
+
+positive_index = short_term_return %>%
+  filter(group == 'positive') %>%
+  select(-c(event,group)) %>%
+  pivot_longer(!c(date,isin,type), names_to = "period", values_to = "return") %>% na.omit(return) %>%
+  group_by(type,period) %>%
+    mutate(period = as.factor(period)) %>%
+  summarise(AAR = mean(return)) %>%
+  mutate( event = "positive",
+    period = factor(period, levels = c("-15","-14","-13","-12","-11","-10", "-9","-8","-7","-6","-5","-4","-3","-2","-1","0", "+1", "+2","+3","+4","+5","+6","+7","+8","+9","+10","+11", "+12","+13","+14","+15"))) %>%
+  arrange(type,period) %>%
   mutate(CAAR = cumsum(AAR))
 
 positive_index %>% 
-  pivot_longer(!c(type,event), names_to = "metric", values_to = "value") %>%
-  ggplot(aes(x = type, y = value, colour = metric, group = metric)) + 
+  ggplot(aes(x = period, y = CAAR, group = type, colour = type)) + 
   geom_line() +
   theme(legend.title = element_blank())
+ggsave("ST_positive_sdgs.png")
 
+negative_index = short_term_return %>%
+  filter(group == 'negative') %>%
+  select(-c(event,group)) %>%
+  pivot_longer(!c(date,isin,type), names_to = "period", values_to = "return") %>% na.omit(return) %>%
+  group_by(type,period) %>%
+    mutate(period = as.factor(period)) %>%
+  summarise(AAR = mean(return)) %>%
+  mutate( event = "negative",
+    period = factor(period, levels = c("-15","-14","-13","-12","-11","-10", "-9","-8","-7","-6","-5","-4","-3","-2","-1","0", "+1", "+2","+3","+4","+5","+6","+7","+8","+9","+10","+11", "+12","+13","+14","+15"))) %>%
+  arrange(type,period) %>%
+  mutate(CAAR = cumsum(AAR))
+  
 negative_index %>% 
-  pivot_longer(!c(type,event), names_to = "metric", values_to = "value") %>%
-  ggplot(aes(x = type, y = value, colour = metric, group = metric)) + 
+   ggplot(aes(x = period, y = CAAR, group = type, colour = type)) + 
   geom_line() +
   theme(legend.title = element_blank())
+ggsave("ST_negative_sdgs.png")
 
-short_term_data_event %>% arrange(date)
 
 ```
 
