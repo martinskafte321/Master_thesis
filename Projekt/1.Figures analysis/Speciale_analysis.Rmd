@@ -86,6 +86,7 @@ portfolios_summary <- beta_portfolios %>% mutate(date = as.Date(date)) %>%
 
 ```
 
+
 ################
 Bivariate sorts
 ################
@@ -134,6 +135,7 @@ value_portfolios %>%
   short_term_data_event %>%
   filter(pos_event == 1)
 ```
+
 
 
 
