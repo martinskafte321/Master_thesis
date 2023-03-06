@@ -188,27 +188,27 @@ short_term_data <- short_term_data_nested %>%
       pred_ret = alpha + beta*mkt_excess,
       abnormal_ret = W_RETURN - pred_ret,
       norm_positive_sum = sentiment_positive_count - sdg_not_relevant_positive_count,
-      norm_negative_sum = sentiment_negative_count - sdg_not_relevant_negative_count,
-      
-      roll_sum = across(!c(date,sdg_not_relevant_positive_count,sdg_not_relevant_negative_count,beta,alpha,W_RETURN,negative_sum,
-                      positive_sum,mkt_excess,pred_ret,abnormal_ret,sentiment_positive_count,sentiment_negative_count),
-                      ~ rollsum(.x, k = 5, fill = NA, align = "right"))) %>% 
-  unnest(roll_sum,names_sep = "_") %>%
-  
-  mutate(
-    roll_mean = across(!c(date,sdg_not_relevant_positive_count,sdg_not_relevant_negative_count,beta,alpha,W_RETURN,negative_sum,
-                       positive_sum,mkt_excess,pred_ret,abnormal_ret,roll_sum_norm_positive_sum,roll_sum_norm_negative_sum,
-                       sentiment_positive_count,sentiment_negative_count),
-                      ~ rollmean(.x, k = 5, fill = NA, align = "right"))
-    
+      norm_negative_sum = sentiment_negative_count - sdg_not_relevant_negative_count#,
+  #     
+  #     roll_sum = across(!c(date,sdg_not_relevant_positive_count,sdg_not_relevant_negative_count,beta,alpha,W_RETURN,negative_sum,
+  #                     positive_sum,mkt_excess,pred_ret,abnormal_ret,sentiment_positive_count,sentiment_negative_count),
+  #                     ~ rollsum(.x, k = 5, fill = NA, align = "right"))) %>% 
+  # unnest(roll_sum,names_sep = "_") %>%
+  # 
+  # mutate(
+  #   roll_mean = across(!c(date,sdg_not_relevant_positive_count,sdg_not_relevant_negative_count,beta,alpha,W_RETURN,negative_sum,
+  #                      positive_sum,mkt_excess,pred_ret,abnormal_ret,roll_sum_norm_positive_sum,roll_sum_norm_negative_sum,
+  #                      sentiment_positive_count,sentiment_negative_count),
+  #                     ~ rollmean(.x, k = 5, fill = NA, align = "right"))
+  #   
      
   ) %>%
-  unnest(roll_mean,names_sep = "_") %>%
+  #unnest(roll_mean,names_sep = "_") %>%
   select(-c(beta,alpha,pred_ret,sdg_not_relevant_positive_count,sdg_not_relevant_negative_count))
 
 # Create columns that represent the lagged and leading values in relation to the event date:
 
-for (i in 1:15) {
+for (i in 1:10) {
   short_term_data[paste0("-",i)] <- short_term_data %>% group_by(isin) %>% transmute(t = lag(abnormal_ret,i)) %>% ungroup() %>% select(-isin)
   short_term_data[paste0("+",i)] <- short_term_data %>% group_by(isin) %>% transmute(t = lead(abnormal_ret,i)) %>% ungroup() %>% select(-isin)
 }
@@ -217,8 +217,8 @@ short_term_data_event = short_term_data %>%
   group_by(isin) %>%
   mutate(
     
-    norm_positive_sum = roll_mean_norm_positive_sum,
-    norm_negative_sum = roll_mean_norm_negative_sum,
+    # norm_positive_sum = roll_mean_norm_positive_sum,
+    # norm_negative_sum = roll_mean_norm_negative_sum,
     
     norm_positive_sum = na_if(norm_positive_sum, 0),
     norm_negative_sum = na_if(norm_negative_sum, 0),
@@ -226,14 +226,15 @@ short_term_data_event = short_term_data %>%
     positive_sd = sd(norm_positive_sum,na.rm = TRUE),
     negative_sd = sd(norm_negative_sum,na.rm = TRUE),
     
-    positive_threshold = mean(norm_positive_sum,na.rm = TRUE) + 2*positive_sd,
-    negative_threshold = mean(norm_negative_sum,na.rm = TRUE) + 2*negative_sd
+    positive_threshold = mean(norm_positive_sum,na.rm = TRUE) + 1*positive_sd,
+    negative_threshold = mean(norm_negative_sum,na.rm = TRUE) + 1*negative_sd
     ) %>%
   
    select(-c("W_RETURN","mkt_excess","positive_sum","negative_sum","positive_sd","negative_sd",
              #"positive_threshold","negative_threshold","norm_positive_sum","norm_negative_sum",
-            "sentiment_negative_count","sentiment_positive_count","roll_mean_norm_negative_sum","roll_mean_norm_positive_sum",
-            "roll_sum_norm_negative_sum","roll_sum_norm_positive_sum")) %>%
+              "sentiment_negative_count","sentiment_positive_count",
+             #"roll_mean_norm_negative_sum","roll_mean_norm_positive_sum", "roll_sum_norm_negative_sum","roll_sum_norm_positive_sum"
+             )) %>%
   rename("0" = abnormal_ret) %>%
 
   group_by(date,isin) %>%
@@ -248,7 +249,9 @@ short_term_data_event = short_term_data %>%
     ) 
 
 positive_index = short_term_data_event %>% 
-  filter(pos_event == 1) %>%
+  filter(pos_event == 1) %>% 
+  
+  positive_index = data_no_outlier %>%
   select(-c(pos_event,neg_event,positive_threshold,negative_threshold,norm_positive_sum,norm_negative_sum)) %>%
   pivot_longer(!c(date,isin), names_to = "type", values_to = "value") %>%
   na.omit(value) %>%
@@ -261,7 +264,9 @@ positive_index = short_term_data_event %>%
   mutate(CAAR = cumsum(AAR))
          
 negative_index = short_term_data_event %>%
-  filter(neg_event == 1)  %>% 
+  filter(neg_event == 1)  %>%
+  
+  negative_index = data_no_outlier %>%
   select(-c(pos_event,neg_event,positive_threshold,negative_threshold,norm_positive_sum,norm_negative_sum)) %>%
   pivot_longer(!c(date,isin), names_to = "type", values_to = "value") %>%
   na.omit(value) %>%
@@ -289,20 +294,20 @@ negative_index %>%
 ggsave("ST_negative_all.png")
 
   
-#   data = short_term_data_event %>%
-#   filter(pos_event == 1) %>% na.omit(1)
-#   
-#  data = data[!(is.na(data$'0')), ]
-#   
-# quartiles <- quantile(data$'0', probs=c(.25, .75), na.rm = TRUE)
-# IQR <- IQR(data$'0')
-#  
-# Lower <- quartiles[1] - 1.5*IQR
-# Upper <- quartiles[2] + 1.5*IQR 
-#  
-# data_no_outlier <- subset(data, data$'0' > Lower & data$'0' < Upper)
-#  dim(data)
-# dim(data_no_outlier)
+  data = short_term_data_event %>%
+  filter(pos_event == 1) %>% na.omit(3)
+
+ data = data[!(is.na(data$'0')), ]
+
+quartiles <- quantile(data$'0', probs=c(.25, .75), na.rm = TRUE)
+IQR <- IQR(data$'0')
+
+Lower <- quartiles[1] - 1.5*IQR
+Upper <- quartiles[2] + 1.5*IQR
+
+data_no_outlier <- subset(data, data$'0' > Lower & data$'0' < Upper)
+ dim(data)
+dim(data_no_outlier)
 
 
 ```
