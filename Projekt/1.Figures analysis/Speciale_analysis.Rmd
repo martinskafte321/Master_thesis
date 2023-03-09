@@ -281,11 +281,12 @@ positive_index = pos_data %>%
   na.omit(value) %>%
   mutate(type = as.factor(type)) %>%
   group_by(type) %>% 
-  summarise(AAR = mean(value)) %>%
+  summarise(AAR = mean(value),
+            SE = sd(value)/sqrt(n())) %>% 
   mutate(event = "positive",
          type = factor(type, levels = c("-10", "-9","-8","-7","-6","-5","-4","-3","-2","-1","0", "+1", "+2","+3","+4","+5","+6","+7","+8","+9","+10"))) %>%
   arrange(type) %>%
-  mutate(CAAR = cumsum(AAR))
+  mutate(CAAR = cumsum(AAR)) 
 
 
 negative_index = neg_data %>%
@@ -294,7 +295,8 @@ negative_index = neg_data %>%
   na.omit(value) %>%
   mutate(type = as.factor(type)) %>%
   group_by(type) %>% 
-  summarise(AAR = mean(value)) %>%
+  summarise(AAR = mean(value),
+            SE = sd(value)/sqrt(n())) %>%
   mutate( event = "negative",
     type = factor(type, levels = c("-10", "-9","-8","-7","-6","-5","-4","-3","-2","-1","0", "+1", "+2","+3","+4","+5","+6","+7","+8","+9","+10"))) %>%
   arrange(type) %>%
@@ -304,12 +306,12 @@ negative_index = neg_data %>%
 # Plots
 
 positive_index %>%  
-  pivot_longer(!c(type,event), names_to = "metric", values_to = "value") %>%
+  pivot_longer(!c(type,event,SE), names_to = "metric", values_to = "value") %>%
   group_by(metric) %>%
   mutate(m = mean(value, na.rm = TRUE),
          s = sd(value, na.rm = TRUE),
-         hi = value + m +2*s,
-         lo = value - m - 2*s) %>% 
+         hi = value + m + 2*SE,
+         lo = value - m - 2*SE) %>% 
   
   ggplot(aes(x = type, y = value, colour = metric, group = metric)) + 
   geom_ribbon(aes(ymin = lo, ymax = hi, colour = metric, group = metric, fill = metric), 
@@ -326,12 +328,12 @@ positive_index %>%
 ggsave("ST_positive_all_CI.png")
 
 negative_index %>%  
-  pivot_longer(!c(type,event), names_to = "metric", values_to = "value") %>%
+  pivot_longer(!c(type,event,SE), names_to = "metric", values_to = "value") %>%
   group_by(metric) %>%
   mutate(m = mean(value, na.rm = TRUE),
          s = sd(value, na.rm = TRUE),
-         hi = value + m +2*s,
-         lo = value - m - 2*s) %>% 
+         hi = value + m + 2*SE,
+         lo = value - m - 2*SE) %>% 
   ggplot(aes(x = type, y = value, colour = metric, group = metric)) + 
   geom_ribbon(aes(ymin = lo, ymax = hi, colour = metric, group = metric, fill = metric), 
               alpha=0.5, 
@@ -503,15 +505,27 @@ negative_index %>%
   scale_x_discrete(name = "Relative time",breaks=c("-10","-5","0","5","10"))
 ggsave("ST_negative_sdgs.png")
 
+## Bar plot of all SDGs
+
+n_positive = short_term_return %>%
+  filter(group == 'positive') %>%
+  mutate_at("sdg", str_replace, "_positive_count", "") %>%
+  mutate_at("sdg", str_replace, "_", " ") %>%
+  mutate(sdg = factor(sdg, levels = c("sdg 1", "sdg 2","sdg 3","sdg 4","sdg 5","sdg 6","sdg 7","sdg 8","sdg 9","sdg 10","sdg 11", 
+                                        "sdg 12", "sdg 13","sdg 14","sdg 15","sdg 16","sdg 17"))) %>%
+  group_by(sdg) %>% summarise(n = n())
 
 positive_index %>% 
   group_by(sdg) %>% 
   summarise(
   sd = sd(AAR),
   sum = sum(AAR)) %>%
+  left_join(n_positive, by = "sdg") %>%
   ggplot(
     aes(x = sdg, y = sum, group = sdg, fill = sdg)) + 
   geom_bar(stat="identity") +
+  geom_text(aes(label=n),  color="black", size=3.5,
+            vjust=1.5) +
   scale_y_continuous(name ="Abnormal return",
                      labels = scales::percent,
                      limits=c(-0.01, 0.005)) +
@@ -520,14 +534,25 @@ positive_index %>%
         axis.text.x = element_text(angle=45))
 ggsave("ST_positive_sdg_bar.png")
 
+n_negative = short_term_return %>%
+  filter(group == 'negative') %>%
+  mutate_at("sdg", str_replace, "_negative_count", "") %>%
+  mutate_at("sdg", str_replace, "_", " ") %>%
+  mutate(sdg = factor(sdg, levels = c("sdg 1", "sdg 2","sdg 3","sdg 4","sdg 5","sdg 6","sdg 7","sdg 8","sdg 9","sdg 10","sdg 11", 
+                                        "sdg 12", "sdg 13","sdg 14","sdg 15","sdg 16","sdg 17"))) %>% 
+    group_by(sdg) %>% summarise(n = n())
+
 negative_index %>% 
   group_by(sdg) %>% 
   summarise(
   sd = sd(AAR),
   sum = sum(AAR)) %>%
+  left_join(n_negative, by = "sdg") %>%
   ggplot(
     aes(x = sdg, y = sum, group = sdg, fill = sdg)) + 
   geom_bar(stat="identity") +
+  geom_text(aes(label=n),  color="black", size=3.5,
+            vjust=1.5) +
   scale_y_continuous(name ="Abnormal return",
                      labels = scales::percent,
                      limits=c(-0.01, 0.02)) +
