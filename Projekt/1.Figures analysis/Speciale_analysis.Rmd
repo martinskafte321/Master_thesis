@@ -210,6 +210,15 @@ short_term_data <- short_term_data_nested %>%
   #unnest(roll_mean,names_sep = "_") %>%
   select(-c(beta,alpha,pred_ret,sdg_not_relevant_positive_count,sdg_not_relevant_negative_count))
 
+# Removing outliers by Winsoriazation (Tidy-Finance.com)
+
+# short_term_data <- short_term_data %>%
+#   mutate(across(
+#     c(abnormal_ret),
+#     ~ winsorize(., 0.01)
+#   ))
+
+
 # Create columns that represent the lagged and leading values in relation to the event date:
 
 for (i in 1:10) {
@@ -252,30 +261,11 @@ short_term_data_event = short_term_data %>%
                ~ 0)
     ) 
 
-# Removing outliers:
-
-  pos_data = short_term_data_event %>%
-  filter(pos_event == 1) %>% na.omit(3)
- pos_data = pos_data[!(is.na(pos_data$'0')), ]
-quartiles <- quantile(pos_data$'0', probs=c(.25, .75), na.rm = TRUE)
-IQR <- IQR(pos_data$'0')
-Lower <- quartiles[1] - 1.5*IQR
-Upper <- quartiles[2] + 1.5*IQR
-pos_data_no_outlier <- subset(pos_data, pos_data$'0' > Lower & pos_data$'0' < Upper)
-
-
-  neg_data = short_term_data_event %>%
-  filter(neg_event == 1) %>% na.omit(3)
- neg_data = neg_data[!(is.na(neg_data$'0')), ]
-quartiles <- quantile(neg_data$'0', probs=c(.25, .75), na.rm = TRUE)
-IQR <- IQR(neg_data$'0')
-Lower <- quartiles[1] - 1.5*IQR
-Upper <- quartiles[2] + 1.5*IQR
-neg_data_no_outlier <- subset(neg_data, neg_data$'0' > Lower & neg_data$'0' < Upper)
 
 #Splitting events into positive and negative, and cleaning the data:
 
-positive_index = pos_data %>% 
+positive_index = short_term_data_event %>%
+  filter(pos_event == 1) %>%
   select(-c(pos_event,neg_event,positive_threshold,negative_threshold,norm_positive_sum,norm_negative_sum)) %>%
   pivot_longer(!c(date,isin), names_to = "type", values_to = "value") %>%
   na.omit(value) %>%
@@ -289,7 +279,8 @@ positive_index = pos_data %>%
   mutate(CAAR = cumsum(AAR)) 
 
 
-negative_index = neg_data %>%
+negative_index = short_term_data_event %>%
+  filter(neg_event == 1) %>%
   select(-c(pos_event,neg_event,positive_threshold,negative_threshold,norm_positive_sum,norm_negative_sum)) %>%
   pivot_longer(!c(date,isin), names_to = "type", values_to = "value") %>%
   na.omit(value) %>%
@@ -332,8 +323,8 @@ negative_index %>%
   group_by(metric) %>%
   mutate(m = mean(value, na.rm = TRUE),
          s = sd(value, na.rm = TRUE),
-         hi = value + m + 2*SE,
-         lo = value - m - 2*SE) %>% 
+         hi = value + m + 2*s,
+         lo = value - m - 2*s) %>% 
   ggplot(aes(x = type, y = value, colour = metric, group = metric)) + 
   geom_ribbon(aes(ymin = lo, ymax = hi, colour = metric, group = metric, fill = metric), 
               alpha=0.5, 
@@ -379,8 +370,6 @@ print(xtable(st_table,type="latex",
       include.rownames=FALSE,
       include.colnames = FALSE) %>% 
   write(file="test.tex")
-
-
   
 ```
 
@@ -408,20 +397,20 @@ short_term_data <- short_term_data_nested %>%
   select(-c(beta,alpha,pred_ret,sdg_not_relevant_positive_count,sdg_not_relevant_negative_count))
 
 
-short_term_data_event = short_term_data %>% 
+short_term_data_event_sdg = short_term_data %>% 
   select(isin,date,abnormal_ret, contains("sdg")) %>% 
   select(isin,date,abnormal_ret, contains("tive"),-c(sdg_broad_negative_count,sdg_broad_neutral_count,sdg_broad_positive_count))
 
 # Create columns that represent the lagged and leading values in relation to the event date:
 
 for (i in 1:10) {
-  short_term_data_event[paste0("-",i)] <- short_term_data_event %>% group_by(isin) %>% transmute(t = lag(abnormal_ret,i)) %>% ungroup() %>% select(-isin)
-  short_term_data_event[paste0("",i)] <- short_term_data_event %>% group_by(isin) %>% transmute(t = lead(abnormal_ret,i)) %>% ungroup() %>% select(-isin)
+  short_term_data_event_sdg[paste0("-",i)] <- short_term_data_event_sdg %>% group_by(isin) %>% transmute(t = lag(abnormal_ret,i)) %>% ungroup() %>% select(-isin)
+  short_term_data_event_sdg[paste0("",i)] <- short_term_data_event_sdg %>% group_by(isin) %>% transmute(t = lead(abnormal_ret,i)) %>% ungroup() %>% select(-isin)
 }
 
 # Create the threshold and filter only firms that have a significant event:
 
-short_term_return = short_term_data_event %>%
+short_term_return_sdg = short_term_data_event_sdg %>%
   pivot_longer(!c(date,isin,abnormal_ret,'-1':'10'), names_to = "sdg", values_to = "value") %>%
   group_by(isin,sdg) %>%
   mutate(
@@ -446,7 +435,7 @@ short_term_return = short_term_data_event %>%
 
 # Splitting up positive and negative events:
 
-positive_index = short_term_return %>%
+positive_index_sdg = short_term_return_sdg %>%
   filter(group == 'positive') %>%
   mutate_at("sdg", str_replace, "_positive_count", "") %>%
   mutate_at("sdg", str_replace, "_", " ") %>%
@@ -463,7 +452,7 @@ positive_index = short_term_return %>%
   mutate(CAAR = cumsum(AAR))
 
 
-negative_index = short_term_return %>%
+negative_index_sdg = short_term_return_sdg %>%
   filter(group == 'negative') %>%
   mutate_at("sdg", str_replace, "_negative_count", "") %>%
   mutate_at("sdg", str_replace, "_", " ") %>%
@@ -482,7 +471,7 @@ negative_index = short_term_return %>%
 
 # Plots of all SDGs
 
-positive_index %>% 
+positive_index_sdg %>% 
   ggplot(aes(x = period, y = CAAR, group = factor(sdg), colour = factor(sdg))) + 
   geom_line() +
   theme_bw() +
@@ -494,7 +483,7 @@ positive_index %>%
 ggsave("ST_positive_sdgs.png")
 
   
-negative_index %>% 
+negative_index_sdg %>% 
   ggplot(aes(x = period, y = CAAR, group = factor(sdg), colour = factor(sdg))) + 
   geom_line() +
   theme_bw() +
@@ -507,7 +496,7 @@ ggsave("ST_negative_sdgs.png")
 
 ## Bar plot of all SDGs
 
-n_positive = short_term_return %>%
+n_positive = short_term_return_sdg %>%
   filter(group == 'positive') %>%
   mutate_at("sdg", str_replace, "_positive_count", "") %>%
   mutate_at("sdg", str_replace, "_", " ") %>%
@@ -515,7 +504,7 @@ n_positive = short_term_return %>%
                                         "sdg 12", "sdg 13","sdg 14","sdg 15","sdg 16","sdg 17"))) %>%
   group_by(sdg) %>% summarise(n = n())
 
-positive_index %>% 
+positive_index_sdg %>% 
   group_by(sdg) %>% 
   summarise(
   sd = sd(AAR),
@@ -528,13 +517,13 @@ positive_index %>%
             vjust=1.5) +
   scale_y_continuous(name ="Abnormal return",
                      labels = scales::percent,
-                     limits=c(-0.01, 0.005)) +
+                     limits=c(-0.015, 0.005)) +
   theme(legend.title = element_blank(),
         legend.key.size = unit(0.5, 'cm'),
         axis.text.x = element_text(angle=45))
 ggsave("ST_positive_sdg_bar.png")
 
-n_negative = short_term_return %>%
+n_negative = short_term_return_sdg %>%
   filter(group == 'negative') %>%
   mutate_at("sdg", str_replace, "_negative_count", "") %>%
   mutate_at("sdg", str_replace, "_", " ") %>%
@@ -542,7 +531,7 @@ n_negative = short_term_return %>%
                                         "sdg 12", "sdg 13","sdg 14","sdg 15","sdg 16","sdg 17"))) %>% 
     group_by(sdg) %>% summarise(n = n())
 
-negative_index %>% 
+negative_index_sdg %>% 
   group_by(sdg) %>% 
   summarise(
   sd = sd(AAR),
