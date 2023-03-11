@@ -239,7 +239,7 @@ short_term_data_event = short_term_data %>%
     positive_sd = sd(norm_positive_sum,na.rm = TRUE),
     negative_sd = sd(norm_negative_sum,na.rm = TRUE),
     
-    positive_threshold = mean(norm_positive_sum,na.rm = TRUE) + 2*positive_sd,
+    positive_threshold = mean(norm_positive_sum,na.rm = TRUE) + 1*positive_sd,
     negative_threshold = mean(norm_negative_sum,na.rm = TRUE) + 1*negative_sd
     ) %>%
   
@@ -380,7 +380,7 @@ Short term abnormal return after an individual event - Daily split on SDG's
 ```{r}
  # Use the data from above chunk
 
-short_term_data <- short_term_data_nested %>% 
+short_term_data_sdg <- short_term_data_nested %>% 
   left_join(data_daily, by = c("date","isin")) %>%
   
   left_join(
@@ -397,7 +397,7 @@ short_term_data <- short_term_data_nested %>%
   select(-c(beta,alpha,pred_ret,sdg_not_relevant_positive_count,sdg_not_relevant_negative_count))
 
 
-short_term_data_event_sdg = short_term_data %>% 
+short_term_data_event_sdg = short_term_data_sdg %>% 
   select(isin,date,abnormal_ret, contains("sdg")) %>% 
   select(isin,date,abnormal_ret, contains("tive"),-c(sdg_broad_negative_count,sdg_broad_neutral_count,sdg_broad_positive_count))
 
@@ -418,10 +418,10 @@ short_term_return_sdg = short_term_data_event_sdg %>%
       sd = sd(value,na.rm = TRUE),
       mean = mean(value, na.rm = TRUE),
       
-    threshold = mean + 2*sd
+    threshold = mean + 1*sd
   ) %>% 
   mutate(event = 
-    case_when(value > threshold & value > 1 ~ 1,
+    case_when(value > threshold & value > 10 ~ 1,
               TRUE 
                ~ 0)
     ) %>%
@@ -517,7 +517,7 @@ positive_index_sdg %>%
             vjust=1.5) +
   scale_y_continuous(name ="Abnormal return",
                      labels = scales::percent,
-                     limits=c(-0.015, 0.005)) +
+                     limits=c(-0.01, 0.005)) +
   theme(legend.title = element_blank(),
         legend.key.size = unit(0.5, 'cm'),
         axis.text.x = element_text(angle=45))
@@ -544,7 +544,7 @@ negative_index_sdg %>%
             vjust=1.5) +
   scale_y_continuous(name ="Abnormal return",
                      labels = scales::percent,
-                     limits=c(-0.01, 0.02)) +
+                     limits=c(-0.015, 0.015)) +
   theme(legend.title = element_blank(),
         legend.key.size = unit(0.5, 'cm'),
         axis.text.x = element_text(angle=45))
