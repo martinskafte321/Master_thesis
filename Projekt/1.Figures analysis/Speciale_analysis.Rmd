@@ -421,7 +421,7 @@ short_term_return_sdg = short_term_data_event_sdg %>%
     threshold = mean + 1*sd
   ) %>% 
   mutate(event = 
-    case_when(value > threshold & value > 10 ~ 1,
+    case_when(value > threshold & value > 5 ~ 1,
               TRUE 
                ~ 0)
     ) %>%
@@ -502,22 +502,29 @@ n_positive = short_term_return_sdg %>%
   mutate_at("sdg", str_replace, "_", " ") %>%
   mutate(sdg = factor(sdg, levels = c("sdg 1", "sdg 2","sdg 3","sdg 4","sdg 5","sdg 6","sdg 7","sdg 8","sdg 9","sdg 10","sdg 11", 
                                         "sdg 12", "sdg 13","sdg 14","sdg 15","sdg 16","sdg 17"))) %>%
-  group_by(sdg) %>% summarise(n = n())
+  group_by(sdg) %>% na.omit() %>%
+  rename("t" = "0") %>%
+  summarise(n = n(),
+            sd = sd(t),
+            se = sd/sqrt(n),
+            t = qt((1-0.05)/2 + .5, n-1),
+            CI=t*se
+            )
+            
 
 positive_index_sdg %>% 
   group_by(sdg) %>% 
   summarise(
-  sd = sd(AAR),
   sum = sum(AAR)) %>%
   left_join(n_positive, by = "sdg") %>%
   ggplot(
-    aes(x = sdg, y = sum, group = sdg, fill = sdg)) + 
+    aes(x = sdg, y = sum, color= sdg,group = sdg, fill = sdg)) + 
   geom_bar(stat="identity") +
-  geom_text(aes(label=n),  color="black", size=3.5,
-            vjust=1.5) +
+  geom_errorbar( aes(x=sdg, ymin=sum-CI, ymax=sum+CI), colour = "orange", width=0.5, alpha=0.9, size=0.8) + 
   scale_y_continuous(name ="Abnormal return",
                      labels = scales::percent,
-                     limits=c(-0.01, 0.005)) +
+                     limits=c(-0.01, 0.005),
+                     breaks=c(-0.01,-0.005,0, 0.005)) +
   theme(legend.title = element_blank(),
         legend.key.size = unit(0.5, 'cm'),
         axis.text.x = element_text(angle=45))
@@ -528,23 +535,27 @@ n_negative = short_term_return_sdg %>%
   mutate_at("sdg", str_replace, "_negative_count", "") %>%
   mutate_at("sdg", str_replace, "_", " ") %>%
   mutate(sdg = factor(sdg, levels = c("sdg 1", "sdg 2","sdg 3","sdg 4","sdg 5","sdg 6","sdg 7","sdg 8","sdg 9","sdg 10","sdg 11", 
-                                        "sdg 12", "sdg 13","sdg 14","sdg 15","sdg 16","sdg 17"))) %>% 
-    group_by(sdg) %>% summarise(n = n())
+                                        "sdg 12", "sdg 13","sdg 14","sdg 15","sdg 16","sdg 17"))) %>%
+  group_by(sdg) %>% na.omit() %>%
+  rename("t" = "0") %>%
+  summarise(n = n(),
+            sd = sd(t),
+            se = sd/sqrt(n),
+            t = qt((1-0.05)/2 + .5, n-1),
+            CI=t*se
+            )
 
 negative_index_sdg %>% 
   group_by(sdg) %>% 
   summarise(
-  sd = sd(AAR),
   sum = sum(AAR)) %>%
   left_join(n_negative, by = "sdg") %>%
   ggplot(
     aes(x = sdg, y = sum, group = sdg, fill = sdg)) + 
   geom_bar(stat="identity") +
-  geom_text(aes(label=n),  color="black", size=3.5,
-            vjust=1.5) +
+  geom_errorbar( aes(x=sdg, ymin=sum-CI, ymax=sum+CI), colour = "orange", width=0.5, alpha=0.8, size=0.7) + 
   scale_y_continuous(name ="Abnormal return",
-                     labels = scales::percent,
-                     limits=c(-0.015, 0.015)) +
+                     labels = scales::percent) +
   theme(legend.title = element_blank(),
         legend.key.size = unit(0.5, 'cm'),
         axis.text.x = element_text(angle=45))
