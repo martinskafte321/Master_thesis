@@ -25,36 +25,32 @@ The average abnormal returns and cumulative average abnormal returns retrieved f
 
 The positive AAR provides basis for a significantly positive and increasing trend in the CAAR (red line) leading up to and including the event date. However, at $t = 1$ and all subsequent days the AARs are slightly negative leading to a downward-sloping trend in CAAR, which eventually ends in significantly negative territory on $t = 10$ at $-0.16\%$.
 
- Examining the average effect from, respectively, positive and negative events provides insights into the overall tendency in shareholder sentiment on social responsibility. 
+Examining the average effect from, respectively, positive and negative events provides insights into the overall tendency of the relation between shareholder sentiment and corporate sustainability. By investigating the abnormal returns resulting from events specific to the individual SDGs one can gain a deeper understanding of which themes in corporate sustainability that investors places most emphasis with. Figure \ref{fig:ST_pos_bar} illustrates the aggregated CAAR over the full event window (from $t=-10$ to $t=10$) from events related to specific SDGs along with the amount of observed events. In general, positive news in relation to the SDGs seems to be priced positively preceding an event, whereas the subsequent reaction is negative. 
 
+The tendency of positive events from above is further reinforced by the results from the individual SDGs, as most are offering negative CAAR over the event window. The SDGs with the most negative abnormal returns from positive events are 1 (no hunger), 14 (life below water), 15 (life on land), and 16 (peace, justice, and strong institutions). The amount of observations is helpful in understanding how much emphasis one should place with the final return outcome. Clearly, the SDGs with a large number of observations (more than 1000) lies closer to zero abnormal return, indicating that the large negative outcome may be subject to some statistical uncertainty. Only positive events (with a decent number of observations) involving SDG 8 (decent work and economic growth) are associated with positive abnormal returns in a short horizon. \textcolor{red}{I should incorporate some error bands here instead of just stating the number of observations as a threshold to significance}
+ 
+ 
 \begin{figure} [H]
     \centering
     \includegraphics[scale=0.6]{Projekt/1.Figures analysis/ST_positive_sdg_bar.png}
     \caption{$CAAR_{t=10}$: short term positive events}
-    \label{fig:ST_pos_news}
+    \label{fig:ST_pos_bar}
 \end{figure}
-
-
 
 
 \input{Projekt/1.Figures analysis/test} \label{ST_tab}
 
 \subsubsection{Negative news}
 
-The effect from negative events is clearly more influential on shareholder sentiment than positive events. Figure \ref{fig:ST_pos_news} illustrates the development in AAR and CAAR.  The impact from negative events is approximately zero until $t = -6$ upon which the AAR decreases steadily until $t=0$, where it bottoms at $-0.36\%$. Subsequently, after the negative event at $t=0$ the AAR increases towards $0.0\%$ and remains there for the rest of the periods. The CAAR stays negative during the full event window and bottoms at $t=2$ after a large decline of approximately $1.2\%$ from  $t=-5$.  
-Moreover, the AAR is significantly negative between $t=-2$ and $t=0$ at $95\%$. The same goes for the CAAR after $t=-2$ and the remaining window.  
-
+The effect from negative events is clearly more influential on shareholder sentiment than positive events. Figure \ref{fig:ST_pos_news} illustrates the development in AAR and CAAR. The impact from negative events is approximately zero until $t = -6$ upon which the AAR decreases steadily until $t=0$, where it bottoms at $-0.36\%$. Subsequently, after the negative event at $t=0$ the AAR increases towards neutrality at zero and remains there for the rest of the window. The CAAR stays negative during the full event window and bottoms at $t=2$ after a large decline of approximately $1.2\%$ from  $t=-5$.  
 \begin{figure} [H]
     \centering
     \includegraphics[scale=0.6]{Projekt/1.Figures analysis/ST_negative_all_CI.png}
     \caption{Short term negative news: AAR and CAAR}
     \label{fig:ST_neg_news}
 \end{figure}
-
-
-\subsection{Individual SDGs}
-
-The individual SDGs
+Moreover, the AAR is significantly negative between $t=-2$ and $t=0$ at $95\%$. The same goes for the CAAR after $t=-2$ and the remaining window. Generally, negative news seems to be priced in leading up to and including the identified event day, after which they have limited impact. 
+The specific 
 
 
 \begin{figure} [H]
