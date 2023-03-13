@@ -268,46 +268,53 @@ positive_index = short_term_data_event %>%
   filter(pos_event == 1) %>%
   select(-c(pos_event,neg_event,positive_threshold,negative_threshold,norm_positive_sum,norm_negative_sum)) %>%
   pivot_longer(!c(date,isin), names_to = "type", values_to = "value") %>%
-  na.omit(value) %>%
-  mutate(type = as.factor(type)) %>%
-  group_by(type) %>% 
-  summarise(AAR = mean(value),
-            SE = sd(value)/sqrt(n())) %>% 
-  mutate(event = "positive",
-         type = factor(type, levels = c("-10", "-9","-8","-7","-6","-5","-4","-3","-2","-1","0", "+1", "+2","+3","+4","+5","+6","+7","+8","+9","+10"))) %>%
-  arrange(type) %>%
-  mutate(CAAR = cumsum(AAR)) 
+  na.omit(value) %>% 
+  mutate(type = factor(type, levels = c("-10", "-9","-8","-7","-6","-5","-4","-3","-2","-1","0", "+1", "+2","+3","+4","+5","+6","+7","+8","+9","+10"))) %>%
+  arrange(isin,date,type) %>%
+  group_by(isin,date) %>% 
+  mutate(csum = cumsum(value)) %>%
+  group_by(type) %>%
+  summarise(
+    AAR = mean(value),
+    CAAR = mean(csum),
+    SE_AAR = sd(value, na.rm = TRUE)/sqrt(n()),
+    SE_CAAR = sd(csum, na.rm = TRUE)/sqrt(n())
+    )
 
 
 negative_index = short_term_data_event %>%
   filter(neg_event == 1) %>%
   select(-c(pos_event,neg_event,positive_threshold,negative_threshold,norm_positive_sum,norm_negative_sum)) %>%
   pivot_longer(!c(date,isin), names_to = "type", values_to = "value") %>%
-  na.omit(value) %>%
-  mutate(type = as.factor(type)) %>%
-  group_by(type) %>% 
-  summarise(AAR = mean(value),
-            SE = sd(value)/sqrt(n())) %>%
-  mutate( event = "negative",
-    type = factor(type, levels = c("-10", "-9","-8","-7","-6","-5","-4","-3","-2","-1","0", "+1", "+2","+3","+4","+5","+6","+7","+8","+9","+10"))) %>%
-  arrange(type) %>%
-  mutate(CAAR = cumsum(AAR))
-  
+  na.omit(value) %>% 
+  mutate(type = factor(type, levels = c("-10", "-9","-8","-7","-6","-5","-4","-3","-2","-1","0", "+1", "+2","+3","+4","+5","+6","+7","+8","+9","+10"))) %>%
+  arrange(isin,date,type) %>%
+  group_by(isin,date) %>% 
+  mutate(csum = cumsum(value)) %>%
+  group_by(type) %>%
+  summarise(
+    AAR = mean(value),
+    CAAR = mean(csum),
+    SE_AAR = sd(value, na.rm = TRUE)/sqrt(n()),
+    SE_CAAR = sd(csum, na.rm = TRUE)/sqrt(n())
+    )
+
 
 # Plots
 
-positive_index %>%  
-  pivot_longer(!c(type,event,SE), names_to = "metric", values_to = "value") %>%
-  group_by(metric) %>%
-  mutate(m = mean(value, na.rm = TRUE),
-         s = sd(value, na.rm = TRUE),
-         hi = value + m + 2*SE,
-         lo = value - m - 2*SE) %>% 
-  
-  ggplot(aes(x = type, y = value, colour = metric, group = metric)) + 
-  geom_ribbon(aes(ymin = lo, ymax = hi, colour = metric, group = metric, fill = metric), 
-              alpha=0.5, 
-              linetype="dashed") +
+  positive_index %>% select(type,AAR,CAAR) %>%
+    pivot_longer(!c(type), names_to = "metric", values_to = "ret") %>%
+   left_join(
+     pos %>% select(type, "AAR" = SE_AAR, "CAAR" = SE_CAAR) %>% pivot_longer(!c(type), names_to = "metric", values_to = "SE"), by = c("metric","type")
+   ) %>%
+   mutate(
+     low = ret - 1.96*SE,
+     high = ret + 1.96*SE
+   ) %>%
+   group_by(metric) %>%
+    ggplot(aes(x = type, y = ret, colour = metric, group = metric)) + 
+     geom_ribbon(aes(ymin = low, ymax = high,colour = metric, group = metric, fill = metric),
+                 alpha=0.5, linetype="dashed") +
   geom_line(size=1.2) +
   theme_bw() +
     theme(legend.title = element_blank(),
@@ -316,25 +323,27 @@ positive_index %>%
   scale_y_continuous(name ="Abnormal return",
                      labels = scales::percent) + 
   scale_x_discrete(name = "Relative time",breaks=c("-10","-5","0","+5","+10"))
-ggsave("ST_positive_all_CI.png")
+  ggsave("ST_positive_all_CI.png")
+ 
 
-negative_index %>%  
-  pivot_longer(!c(type,event,SE), names_to = "metric", values_to = "value") %>%
-  group_by(metric) %>%
-  mutate(m = mean(value, na.rm = TRUE),
-         s = sd(value, na.rm = TRUE),
-         hi = value + m + 2*s,
-         lo = value - m - 2*s) %>% 
-  ggplot(aes(x = type, y = value, colour = metric, group = metric)) + 
-  geom_ribbon(aes(ymin = lo, ymax = hi, colour = metric, group = metric, fill = metric), 
-              alpha=0.5, 
-              linetype="dashed") +
+negative_index %>% select(type,AAR,CAAR) %>%
+    pivot_longer(!c(type), names_to = "metric", values_to = "ret") %>%
+   left_join(
+     pos %>% select(type, "AAR" = SE_AAR, "CAAR" = SE_CAAR) %>% pivot_longer(!c(type), names_to = "metric", values_to = "SE"), by = c("metric","type")
+   ) %>%
+   mutate(
+     low = ret - 1.96*SE,
+     high = ret + 1.96*SE
+   ) %>%
+   group_by(metric) %>%
+    ggplot(aes(x = type, y = ret, colour = metric, group = metric)) + 
+     geom_ribbon(aes(ymin = low, ymax = high,colour = metric, group = metric, fill = metric),
+                 alpha=0.5, linetype="dashed") +
   geom_line(size=1.2) +
   theme_bw() +
-  theme(legend.title = element_blank(),
-        axis.title.y = element_blank(),
-        legend.position="top",
-        legend.direction = "horizontal") +
+    theme(legend.title = element_blank(),
+          legend.position="top",
+          legend.direction = "horizontal") +
   scale_y_continuous(name ="Abnormal return",
                      labels = scales::percent) + 
   scale_x_discrete(name = "Relative time",breaks=c("-10","-5","0","+5","+10"))
@@ -370,6 +379,9 @@ print(xtable(st_table,type="latex",
       include.rownames=FALSE,
       include.colnames = FALSE) %>% 
   write(file="test.tex")
+
+
+ 
   
 ```
 
@@ -520,7 +532,7 @@ positive_index_sdg %>%
   ggplot(
     aes(x = sdg, y = sum, color= sdg,group = sdg, fill = sdg)) + 
   geom_bar(stat="identity") +
-  geom_errorbar( aes(x=sdg, ymin=sum-CI, ymax=sum+CI), colour = "orange", width=0.5, alpha=0.9, size=0.8) + 
+  geom_errorbar( aes(x=sdg, ymin=sum-CI, ymax=sum+CI), colour = "orange", width=0.5, alpha=0.8, size=0.7) + 
   scale_y_continuous(name ="Abnormal return",
                      labels = scales::percent,
                      limits=c(-0.01, 0.005),
