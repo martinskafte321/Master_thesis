@@ -149,7 +149,7 @@ Short term abnormal return after an individual event - Daily
 ################
 ```{r}
 data_daily <- read.csv("C:/Users/Marti/OneDrive - University of Copenhagen/KU/Speciale/Data behandling/data_daily.csv", sep = ",")  %>% 
-  select(date,isin,W_RETURN,negative_sum,positive_sum) %>%
+  select(date,isin,W_RETURN) %>%
   mutate(date = as.Date(date)) %>% 
   right_join(sxxp_index_daily %>% select(date, mkt_excess), by = "date")
   
@@ -169,7 +169,7 @@ short_term_data_nested <- data_daily %>% ungroup() %>%
         # short_term_data_nested %>%
         #   write.csv(file = "C:/Users/Marti/OneDrive - University of Copenhagen/KU/Speciale/Data behandling/nested_daily_for_capm_sxxp.csv")
 
- short_term_data_nested <- read.csv("C:/Users/Marti/OneDrive - University of Copenhagen/KU/Speciale/Data behandling/nested_daily_for_capm.csv", sep = ",") %>%
+ short_term_data_nested <- read.csv("C:/Users/Marti/OneDrive - University of Copenhagen/KU/Speciale/Data behandling/nested_daily_for_capm_sxxp.csv", sep = ",") %>%
    select(-X) %>%
    mutate(date = as.Date(date))
  
@@ -219,6 +219,7 @@ short_term_data <- short_term_data_nested %>%
 #     ~ winsorize(., 0.01)
 #   ))
 
+remove(short_term_data_nested,short_term_data_sdg,sentiment_daily,data_daily,sxxp_index_daily,msci_index_daily)
 
 # Create columns that represent the lagged and leading values in relation to the event date:
 
@@ -244,7 +245,7 @@ short_term_data_event = short_term_data %>%
     negative_threshold = mean(norm_negative_sum,na.rm = TRUE) + 1*negative_sd
     ) %>%
   
-   select(-c("W_RETURN","mkt_excess","positive_sum","negative_sum","positive_sd","negative_sd",
+   select(-c("W_RETURN","mkt_excess","positive_sd","negative_sd",
              #"positive_threshold","negative_threshold","norm_positive_sum","norm_negative_sum",
               "sentiment_negative_count","sentiment_positive_count",
              #"roll_mean_norm_negative_sum","roll_mean_norm_positive_sum", "roll_sum_norm_negative_sum","roll_sum_norm_positive_sum"
@@ -306,7 +307,7 @@ negative_index = short_term_data_event %>%
   positive_index %>% select(type,AAR,CAAR) %>%
     pivot_longer(!c(type), names_to = "metric", values_to = "ret") %>%
    left_join(
-     pos %>% select(type, "AAR" = SE_AAR, "CAAR" = SE_CAAR) %>% pivot_longer(!c(type), names_to = "metric", values_to = "SE"), by = c("metric","type")
+     positive_index %>% select(type, "AAR" = SE_AAR, "CAAR" = SE_CAAR) %>% pivot_longer(!c(type), names_to = "metric", values_to = "SE"), by = c("metric","type")
    ) %>%
    mutate(
      low = ret - 1.96*SE,
@@ -330,7 +331,7 @@ negative_index = short_term_data_event %>%
 negative_index %>% select(type,AAR,CAAR) %>%
     pivot_longer(!c(type), names_to = "metric", values_to = "ret") %>%
    left_join(
-     pos %>% select(type, "AAR" = SE_AAR, "CAAR" = SE_CAAR) %>% pivot_longer(!c(type), names_to = "metric", values_to = "SE"), by = c("metric","type")
+     negative_index %>% select(type, "AAR" = SE_AAR, "CAAR" = SE_CAAR) %>% pivot_longer(!c(type), names_to = "metric", values_to = "SE"), by = c("metric","type")
    ) %>%
    mutate(
      low = ret - 1.96*SE,
@@ -392,9 +393,9 @@ test = short_term_data_event %>%
   arrange(isin,date,type) %>%
   group_by(isin,date) %>% 
   mutate(csum = 100*cumsum(value)) %>%
-  filter(type == '+10') %>% #ungroup() %>% select(csum)
-   group_by(type) %>%
-   summarise(sd = sd(csum, na.rm = TRUE), n = n(), se = sd / sqrt(n))
+  filter(type == '+10') %>% ungroup() %>% select(csum)
+   # group_by(type) %>%
+   # summarise(sd = sd(csum, na.rm = TRUE), n = n(), se = sd / sqrt(n))
 
 
 z.test(test,y = NULL,
@@ -451,8 +452,9 @@ short_term_data_sdg <- short_term_data_nested %>%
 
 short_term_data_event_sdg = short_term_data_sdg %>% 
   select(isin,date,abnormal_ret, contains("sdg")) %>% 
-  select(isin,date,abnormal_ret, contains("tive"),-c(sdg_broad_neutral_count))
+  select(isin,date,abnormal_ret, contains("tive"),-c(sdg_broad_negative_count,sdg_broad_neutral_count,sdg_broad_positive_count))
 
+remove(short_term_data_nested,short_term_data_sdg,sentiment_daily,data_daily)
 # Create columns that represent the lagged and leading values in relation to the event date:
 
 for (i in 1:10) {
@@ -482,9 +484,7 @@ short_term_return_sdg = short_term_data_event_sdg %>%
   filter(event == 1) %>%
   mutate(group = case_when(grepl("pos", sdg) ~ "positive",
                             grepl("nega", sdg) ~"negative"),
-         ) %>% 
-  mutate(sdg = factor(sdg, levels = c("sdg 1", "sdg 2","sdg 3","sdg 4","sdg 5","sdg 6","sdg 7","sdg 8","sdg 9","sdg 10","sdg 11", 
-                                        "sdg 12", "sdg 13","sdg 14","sdg 15","sdg 16","sdg 17","sdg broad")))
+         )
   
 
 # Splitting up positive and negative events:
@@ -493,6 +493,8 @@ positive_index_sdg = short_term_return_sdg %>%
   filter(group == 'positive') %>%
   mutate_at("sdg", str_replace, "_positive_count", "") %>%
   mutate_at("sdg", str_replace, "_", " ") %>%
+  mutate(sdg = factor(sdg, levels = c("sdg 1", "sdg 2","sdg 3","sdg 4","sdg 5","sdg 6","sdg 7","sdg 8","sdg 9","sdg 10","sdg 11", 
+                                        "sdg 12", "sdg 13","sdg 14","sdg 15","sdg 16","sdg 17"))) %>%
   select(-c(event,group)) %>%
   pivot_longer(!c(date,isin,sdg), names_to = "period", values_to = "abnormal_ret") %>% na.omit(abnormal_ret) %>%
   group_by(sdg,period) %>%
@@ -508,6 +510,8 @@ negative_index_sdg = short_term_return_sdg %>%
   filter(group == 'negative') %>%
   mutate_at("sdg", str_replace, "_negative_count", "") %>%
   mutate_at("sdg", str_replace, "_", " ") %>%
+  mutate(sdg = factor(sdg, levels = c("sdg 1", "sdg 2","sdg 3","sdg 4","sdg 5","sdg 6","sdg 7","sdg 8","sdg 9","sdg 10","sdg 11", 
+                                        "sdg 12", "sdg 13","sdg 14","sdg 15","sdg 16","sdg 17"))) %>%
   select(-c(event,group)) %>%
   pivot_longer(!c(date,isin,sdg), names_to = "period", values_to = "abnormal_ret") %>% na.omit(abnormal_ret) %>%
   group_by(sdg,period) %>%
@@ -582,14 +586,14 @@ positive_index_sdg %>%
         axis.text.x = element_text(angle=45))
 ggsave("ST_positive_sdg_bar.png")
 
-n_negative = t = short_term_return_sdg %>%
+n_negative = short_term_return_sdg %>%
   filter(group == 'negative') %>% 
   mutate_at("sdg", str_replace, "_negative_count", "") %>%
   mutate_at("sdg", str_replace, "_", " ") %>%
   mutate(sdg = factor(sdg, levels = c("sdg 1", "sdg 2","sdg 3","sdg 4","sdg 5","sdg 6","sdg 7","sdg 8","sdg 9","sdg 10","sdg 11", 
-                                        "sdg 12", "sdg 13","sdg 14","sdg 15","sdg 16","sdg 17"))) %>%
+                                        "sdg 12", "sdg 13","sdg 14","sdg 15","sdg 16","sdg 17","sdg broad"))) %>%
   select(-c(event,group)) %>%
-  pivot_longer(!c(date,isin,sdg), names_to = "period", values_to = "abnormal_ret") %>% na.omit(abnormal_ret) %>% mutate(period = as.numeric(period)) %>% filter(period => '-5') %>% filter(period < '+5')
+  pivot_longer(!c(date,isin,sdg), names_to = "period", values_to = "abnormal_ret") %>% na.omit(abnormal_ret) %>%
   mutate(period = factor(period, levels = c("-10", "-9","-8","-7","-6","-5","-4","-3","-2","-1","0", "1", "2","3","4","5","6","7","8","9","10"))) %>%
   arrange(isin,sdg,date,period) %>%
   group_by(isin,sdg,date) %>% 
@@ -605,7 +609,7 @@ n_negative = t = short_term_return_sdg %>%
 negative_index_sdg %>% 
   group_by(sdg) %>% 
   summarise(
-  sum = sum(AAR)) %>%
+  sum = sum(AAR)) %>% 
   left_join(n_negative, by = "sdg") %>%
   ggplot(
     aes(x = sdg, y = sum, color= sdg,group = sdg, fill = sdg)) + 
@@ -619,6 +623,59 @@ negative_index_sdg %>%
         axis.text.x = element_text(angle=45))
 ggsave("ST_negative_sdg_bar.png")
 
+
+
+
+# TEst
+
+all = short_term_return_sdg %>%
+  filter(group == 'negative') %>%
+  mutate_at("sdg", str_replace, "_negative_count", "") %>%
+  mutate_at("sdg", str_replace, "_", " ") %>%
+  mutate(sdg = factor(sdg, levels = c("sdg 1", "sdg 2","sdg 3","sdg 4","sdg 5","sdg 6","sdg 7","sdg 8","sdg 9","sdg 10","sdg 11", 
+                                        "sdg 12", "sdg 13","sdg 14","sdg 15","sdg 16","sdg 17"))) %>%
+  select(-c(event,group)) %>%
+  pivot_longer(!c(date,isin,sdg), names_to = "period", values_to = "abnormal_ret") %>% na.omit(abnormal_ret) %>%
+   mutate(sdg = as.character(sdg)) %>%
+   mutate(sdg = case_when(
+    sdg == "sdg 1" | sdg == "sdg 2" | sdg == "sdg 3" | sdg == "sdg 4" | sdg == "sdg 5"  ~ "People",
+    sdg == "sdg 7" | sdg == "sdg 8" | sdg == "sdg 9" | sdg == "sdg 10" | sdg == "sdg 11"  ~ "prosperity",
+    sdg == "sdg 6" | sdg == "sdg 12" | sdg == "sdg 13" | sdg == "sdg 14" | sdg == "sdg 15"  ~ "planet",
+    sdg == "sdg 16"  ~ "peace",
+    sdg == "sdg 17" ~ "partnership")
+         ) %>%
+  mutate(period = as.factor(period),
+           sdg = as.factor(sdg)) %>%
+  mutate(period = factor(period, levels = c("-10", "-9","-8","-7","-6","-5","-4","-3","-2","-1","0", "1", "2","3","4","5","6","7","8","9","10"))) 
+
+
+bands = all %>%
+   arrange(isin,sdg,date,period) %>%
+  group_by(isin,sdg,date) %>% 
+  mutate(CAAR = cumsum(abnormal_ret)) %>%
+  group_by(sdg) %>% filter(period == '10') %>%
+  summarise(n = n(),
+            sd = sd(CAAR),
+            se = sd/sqrt(n),
+            t = 1.96,
+            CI=t*se
+            )
+
+all %>%
+  group_by(sdg,period) %>%
+  summarise(AAR = mean(abnormal_ret)) %>%
+  group_by(sdg) %>% 
+  summarise(sum = sum(AAR)) %>%
+  left_join(bands, by = "sdg") %>%
+  ggplot(
+    aes(x = sdg, y = sum, color= sdg,group = sdg, fill = sdg)) + 
+  geom_bar(stat="identity") +
+  geom_errorbar( aes(x=sdg, ymin=sum-CI, ymax=sum+CI), colour = "orange", width=0.5, alpha=0.8, size=0.7) + 
+  scale_y_continuous(name ="Abnormal return",
+                     labels = scales::percent) +
+  theme(legend.title = element_blank(),
+        legend.key.size = unit(0.5, 'cm'),
+        axis.text.x = element_text(angle=45))
 
 ```
 
