@@ -14,7 +14,7 @@ To test hypothesis #1 and #2 of whether negative and positive SDG related events
 \subsubsection{Positive news}
 
  
-The average abnormal returns and cumulative average abnormal returns retrieved from the Market Model are illustrated in table \ref{ST_tab}. The development in AAR and CAAR, along with its corresponding standard error bands with a confidence interval of 95\%, is portrayed in figure \ref{fig:ST_pos_news} to support the analysis from a visual perspective. The y-axis depicts the abnormal return and the x-axis before and after an event. The effect of positive events on average stock behavior is presented by the blue line in the graph, and is mostly positive leading up to an event, which indicates a leakage effect. The positive AAR is especially pronounced between $t =-8$ and $t=-4$ before an event, and with a spike on the event date. However, when adjusting for the expected errors with assistance from the error bands, the AAR is only significantly positive and different from zero on $t= 0$ with an average abnormal return of 0.07\%. 
+The average abnormal returns and cumulative average abnormal returns retrieved from the Market Model are illustrated in table \ref{ST_tab}. The development in AAR and CAAR, along with its corresponding standard error bands with a confidence interval of 95\%, is portrayed in figure \ref{fig:ST_pos_news} to support the analysis from a visual perspective. The y-axis depicts the abnormal return and the x-axis before and after an event. The effect of positive events on average stock behavior is presented by the blue line in the graph, and is mostly positive leading up to an event, which indicates a leakage effect. The positive AAR is especially pronounced between $t =-8$ and $t=-4$ before an event, and with a spike on the event date. However, when adjusting for the uncertainty of the mean with assistance from the error bands, the AAR is only significantly positive and different from zero on $t= 0$ with an average abnormal return of 0.07\%. 
 
 \begin{figure} [H] 
     \centering
@@ -36,6 +36,32 @@ Only positive events involving SDG 8 (decent work and economic growth) are assoc
     \caption{$CAAR_{t=10}$: short term positive events}
     \label{fig:ST_pos_bar}
 \end{figure}
+
+The insignificance of the results in relation to positive events is summarised in table \ref{tab: ST_significace}, which presents the cumulative average abnormal return on $t=10$ along with related statistical measures. The significance of both positive and negative cumulative sums are measured with a z-test and presented along with the Standard Deviation, Standard Error, Z-score and the corresponding P-value of the test
+
+
+
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{lcc}
+  \hline
+  & Positive events & Negative events  \\
+ \hline
+$CAAR_{t=10}$ & -0.1641216   & -0.88  \\ 
+SD & 9.029 & 8.89 \\ 
+ SE & 0.1503 & 0.2702  \\ 
+ Z-score  & -1.0914 & -3.2881 \\ 
+ P-value  & 0.2751 & 0.0010  \\ 
+ Significance &  & *** \\ 
+ 
+   \hline
+\end{tabular}
+\caption{AAR and CAAR over event window (in percentage)} 
+\label{tab: ST_significace}
+\end{table}
+
+
 
 
 \input{Projekt/1.Figures analysis/test} \label{ST_tab}
