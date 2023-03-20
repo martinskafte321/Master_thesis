@@ -39,6 +39,8 @@ cumulative product of the daily excess return leading up to or following the eve
 
 The inspection of short-term abnormal return behavior covers (2n+1) trading days surrounding a corporate event: n days before to catch possible insiders information, the day of the event, and n days after. The short term analysis will use N = 10, which leaves a total window of 21 days [-10,+10] to investigate effect from an event. The effect of an event is expressed in terms of the abnormal return, defined as the difference between the realized ex-post return and the expected return, with the latter characterized as the expected return conditional on the event not taking place \citep{Event_studies}. Several models have been applied in the literature to estimate the short-term abnormal returns in event studies, which includes the CAPM, the Market Model, and multi-factor models. According to \cite{holler2014event} the most widely used is the Market Model, which assumes a linear relationship between the individual stock return and the market return. 
 
+Tilføj noget om short term risk fra Kothari s. 22
+
 \subsubsection{The Market Model}
 
 The Market Model is a single factor statistical model, which relates the return of a given security to the return of the market portfolio. The linear specification follows from the assumed joint normality of asset returns. For any given stock the model is defined as:
@@ -66,9 +68,53 @@ The Market Model is a single factor statistical model, which relates the return 
 
 \subsection{Long-term abnormal returns}
 
-\subsubsection{Portfolio sorts / Calendar Time Portfolio Approach}
+An increasing number of studies in finance literature have documented evidence of firms earning abnormal returns over a long term time period after encountering specific corporate events \citep{kothari}. Evidence of long-term abnormal returns negate the Efficient Market Hypothesis, which states that security prices fully adjust within a narrow time period to new information becoming available to the market. To accommodate the contradiction \cite{fama1998_events} argues that "Most important, consistent with the market efficiency prediction that apparent anomalies can be due to methodology, most long-term return anomalies tend to disappear with reasonable changes in technique". According to \cite{kothari} inferences from long-horizon tests require severe caution when handling abnormal returns. Following, the question of whether long-term abnormal returns are arising from mispricing or as a result of measurement problems is still unresolved, since long-term event studies generally have lower power to detect abnormal performance. 
 
-\cite{event_studies_method}
+When moving from short-term measurement horizons to long-term, two consideration are important to incorporate in the estimation of risk-adjusted returns; namely an appropriate adjustment for risk and the model for expected returns. First, in a multi-year test, even small errors in risk-adjustment can make significant discrepancies in measured abnormal performance, whereas the same issues become negligible for short-horizon studies. An important aspect of risk adjustment is the consideration of whether historical or post-event risk estimates should be incorporated in the calculation of abnormal returns. Events might follow unusual apriori performance, which possibly impair and bias the risk estimation from historical estimates. Hence, \cite{kothari} argues that abnormal-performance measurement bo on the basis of post-event estimates. \\
+Second, the choice of a relevant model for the expected returns is still an open question in the literature. From the standpoint of event study research, the purpose is to isolate the impact of an event on stock price performance. Hence, the researcher needs to differentiate the performance associated with the event itself from other known determinants of performance. The \cite{Fama_french_3fac} three-factor model is a popular choice. 
 
 
+Moreover, the measurement of long-term abnormal returns are challenged by misspecification of test statistics. \cite{Lyon_1997_test_stats} studies the empirical power in long-term abnormal stock returns and identifies three sources for misspecification: 1) New listing bias\footnote{The new listing bias arises since sample firms in event studies often have a long post-event history of returns, while the constituents of the reference portfolio may include firms that began trading subsequent to the event period.}, 2) rebalancing bias\footnote{The rebalancing bias emerge since the compound returns of a reference portfolio, such as a weighed market index, are typically calculated assuming periodic rebalancing, while the returns of sample firms are compounded without rebalancing. }, and 3) skewness bias\footnote{ the skewness bias arises because long-run returns are typically positively skewed. Whether these biases give rise to misspecification depends on the method used in identifying abnormal returns.}. Additionally, approaches might also suffer from cross-correlation bias and the bad model bias (\citep{fama1998_events}; \citep{mitchell2000managerial}. The cross-correlation bias arises because matching on firm characteristics may fail to completely fail to remove the correlation between event firm's returns. The bad model bias occurs since no benchmark will provide a perfect estimate of the counter factual (i.e., if no event had happened) return of an event firm, and benchmark errors are accumulated in calculating long-term buy-and-hold returns. 
 
+In their evaluation of the methodology behind long-horizon event studies, \cite{Ang_event_method} examines the performance of various testing procedures. They highlight two approaches that have been utilized substantially in the finance literature. The buy-and-hold approach calculates the abnormal returns as the difference between the return from the event firm in the sample and a benchmark, and tests if the abnormal return is different from zero. The calendar-time-portfolio (CTP) approach forms a portfolio each period consisting of firms that have experiences an event, and tests the null hypothesis that the intercept is zero in a regression against the factors in an asset-pricing model.
+
+The buy-and-hold approach is sensitive to biases connected with cross-correlation, insufficient matching, new equity issues, periodic rebalancing and skewed distribution of long-term returns, while the CTP approach might encounter issues with the choice of asset pricing model and heteroskedasticity in portfolio returns \citep{Ang_event_method}.  
+
+
+\textcolor{red}{ This paper will apply CTP approach. Moreover, we will apply the Parametric Portfolio Policy by xxx as a new way of measuring the abnormal returns.} 
+
+\subsubsection{Calendar Time Portfolio}
+
+The calendar-time portfolio Approach (or the Jensen-alpha approach) is used to calculate calendar-time portfolio returns for firms experiencing an event, and test whether they are abnormal in a factor regression model. The estimated intercept (alpha) from the regression is the post-event risk-adjusted abnormal return from the sample event firms. \\
+Since the stock price impact of negative and positive events can be spread over a longer period, the method can assist in measuring the long term abnormal returns following an event. This paper seeks to investigate the impact on stock prices from events over a period of three months to one year $(T = 3, 6, 12 \text{ months})$ following an event for each sample firm. 
+
+To implement the method a portfolio is constructed each calendar month consisting of all firms experiencing an event within the preceding \textit{T} months. As the number of firms encountering an event is not uniformly distributed through the sample period, the amount of firms in the portfolio is not constant. 
+
+\cite{fama1998_events} outlines the advantages of the CTP approach as emerging from the use of monthly returns and rebalancing. He argues that monthly returns are less skewed, which makes the model less sensitive to the bad model problem. Further, the time-series variation of the rebalanced portfolio captures the effect of the cross-correlation between event stocks returns. 
+
+Due to the changes in the composition of the portfolio, heteroskedasticity might be introduced in the error term. For example, \cite{ritter1995} argues that anomalies can be understated if events bunch in time due to e.g. timing of events. However, the issue of heteroskedasticity can be addressed by using the weighted least squares (WLS) technique with the monthly amount of firms as weights \cite{Ang_event_method}.
+
+The calculation of monthly portfolio returns can be based on value or equal weights. \cite{fama1998_events} suggests that apparent anomalies might shrink when event firms are value-weighted, which possibly yield the right perspective because it more accurately captures the wealth-effect experienced by an investor. Moreover, an equal-weighted portfolio will put more weight on small stocks, which might increase the the bad-model bias, as asset-pricing models have systemic issues explaining the average return of small stocks. However, as the amount of firms in the portfolio may be relatively small, the portfolio return may be dominated by the outcome of large firms. As this is unfavorably when trying to estimate a relationship between specific events and stock returns, the equal-weighted portfolio returns will be applied in the analysis. 
+
+The portfolio return is calculated as the average return of firms that experienced an event within the preceding T months:
+
+\begin{equation}
+    R_{p,t} = \sum_{t = 1} ^{T} \frac{1}{N_t} R_{i,t}.
+\end{equation}
+
+Where $R_{i,t}$ is the stock \textit{i} return in period \textit{t} and \textit{N} is the amount of stocks in the portfolio in period \textit{t}. Hence, firms experiencing more than one event in the preceding T months will only be included once, which assists in keeping the portfolio equal-weighted. 
+
+The portfolio returns are regressed against the factors in the \cite{Fama_french_3fac} three-factor model to determine whether the portfolio has achieved abnormal returns when adjusting for the underlying risk. Under the assumption that the three-factor model present a full description of the expected stock returns, the intercept, $\alpha$, measures the risk-adjusted average abnormal return of the portfolio, which should be zero under the hypothesis of no abnormal returns. Thus, the accuracy of the description depends on the models ability to explain the risk factors in the market. The model aims to describe the risk of the market through three factors; 1) the market risk premium, 2) out-performance of small companies relative to large companies (small-minus-big), and 3) the out-performance of high book-to-market value firms  relative to low book-to-market value firms (high-minus-low). 
+
+The representation of the Fama-French three-factor model is:
+
+\begin{equation}
+    R_{p,t} - R_{rf,t} = \alpha_p + \beta_1(R_{m,t} - R_{rf,t}) + \beta_2 SMB_t + \beta_3 HML_t + \epsilon_{p,t} 
+\end{equation}
+
+with $R_{rf,t}$ being the risk-free rate\footnote{US treasuries / EUR treasuries} at time \textit{t} and the $\beta$'s representing the sensitivity of the portfolio return towards the market risk premium, and the return of, respectively, small-minus-big (SMB) and high-minus-low (HML) portfolios for developed markets in Europe.   
+
+\subsubsection{Parametric Portfolio Policy}
+
+Notes:
+\textcolor{red}{The PPP could incorporate all firms in the sample - I think this is necessary. We should add a column with a characteristic of whether a firm has experienced an event in the foregoing month.}
