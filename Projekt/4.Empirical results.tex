@@ -15,13 +15,16 @@ To test hypothesis #1 and #2 of whether negative and positive SDG related events
 
 \subsubsection{Negative news}
 
-The average abnormal returns and cumulative average abnormal returns retrieved from the Market Model are illustrated in table \ref{ST_tab}. The development in AAR and CAAR, along with its corresponding standard error bands with a confidence interval of 95\%, is portrayed in figure \ref{fig:ST_neg_news} to support the analysis from a visual perspective. The y-axis depicts the abnormal return and the x-axis before and after an event. The effect of negative events on average stock behavior is presented by the blue line in the graph, and is mostly negative leading up to an event, which indicates a leakage effect. The impact from negative events is approximately zero until $t = -6$ upon which the AAR decreases steadily until $t=0$, where it bottoms at $-0.36\%$. Subsequently, after the negative event at $t=0$ the AAR increases towards neutrality at zero and remains there for the rest of the window. The CAAR stays negative during the full event window and bottoms on $t=2$ after a large decline of approximately $1.2\%$ from  $t=-5$.
+The average abnormal returns and development in cumulative average abnormal returns calculated from the Market Model are illustrated in figure \ref{fig:ST_neg_news}. 
+
+evelopment in AAR and CAAR, along with its corresponding standard error bands with a confidence interval of 95\%, is portrayed in figure  to support the analysis from a visual perspective. The y-axis depicts the abnormal return and the x-axis before and after an event. The effect of negative events on average stock behavior is presented by the blue line in the graph, and is mostly negative leading up to an event, which indicates a leakage effect. The impact from negative events is approximately zero until $t = -6$ upon which the AAR decreases steadily until $t=0$, where it bottoms at $-0.36\%$. Subsequently, after the negative event at $t=0$ the AAR increases towards neutrality at zero and remains there for the rest of the window. The CAAR stays negative during the full event window and bottoms on $t=2$ after a large decline of approximately $1.2\%$ from  $t=-5$.
 Moreover, the AAR is significantly negative between $t=-2$ and $t=0$ at $95\%$. The same goes for the CAAR after $t=-2$ and the remaining window. Generally, negative news seems to be priced in leading up to and including the identified event day, after which they have limited impact. 
 
 \begin{figure} [H]
     \centering
-    \includegraphics[scale=0.6]{Projekt/1.Figures analysis/ST_negative_all_CI.png}
     \caption{Short term negative news: AAR and CAAR}
+    \includegraphics[scale=0.6]{Projekt/1.Figures analysis/ST_negative_all_CI.png}
+     \caption*{\footnotesize The figure illustrates the average abnormal return (AAR) and cumulative AAR (CAAR) around the event date (t = 0) of negative news. The lines (left axis) represent the average and the ribbons represent the 95th confidence intervals. The bars (right axis) represent the amount of events on a given day relative to t = 0. }
     \label{fig:ST_neg_news}
 \end{figure}
 
@@ -29,8 +32,8 @@ Examining the average effect from, respectively, positive and negative events pr
 
 \begin{figure} [H]
     \centering
-    \includegraphics[scale=0.6]{Projekt/1.Figures analysis/ST_negative_sdg_bar.png}
     \caption{CAAR short term negative news}
+    \includegraphics[scale=0.6]{Projekt/1.Figures analysis/ST_negative_sdg_bar.png}
     \label{fig:ST_neg_bar}
 \end{figure}
 
@@ -46,8 +49,9 @@ The identified positive events doesn't seem to be associated with any reaction f
 
 \begin{figure} [H] 
     \centering
-    \includegraphics[scale=0.6]{Projekt/1.Figures analysis/ST_positive_all_CI.png}
     \caption{Short term positive news: AAR and CAAR}
+    \includegraphics[scale=0.6]{Projekt/1.Figures analysis/ST_positive_all_CI.png}
+    \caption*{\footnotesize The figure illustrates the average abnormal return (AAR) and cumulative AAR (CAAR) around the event date (t = 0) of positive news. The lines (left axis) represent the average and the ribbons represent the 95th confidence intervals. The bars (right axis) represent the amount of events on a given day relative to t = 0. }
     \label{fig:ST_pos_news}
 \end{figure}
 
@@ -56,8 +60,8 @@ The tendency of insignificance related to positive events is further reinforced 
  
 \begin{figure} [H]
     \centering
-    \includegraphics[scale=0.6]{Projekt/1.Figures analysis/ST_positive_sdg_bar.png}
     \caption{$CAAR_{t=10}$: short term positive events}
+    \includegraphics[scale=0.6]{Projekt/1.Figures analysis/ST_positive_sdg_bar.png}
     \label{fig:ST_pos_bar}
 \end{figure}
 
@@ -70,16 +74,15 @@ Generally, the short term empirical evidence demonstrate a non-verifiable relati
 
 \begin{table}[ht]
 \centering
+\caption{AAR and CAAR over event window (in percentage)} 
 \begin{tabular}{lllll}
    \hline  \hline
   & $AAR_{t=0}$ & $CAAR_{[-2;+2]}$ & $CAAR_{[-5;+5]}$ & $CAAR_{[-10;+10]}$  \\
  \hline
 Positive news & $\underset{(1.973)^{**}}{0.073}$  & $\underset{(-0.211)}{-0.016}$    & $\underset{(-0.379)}{-0.043}$ & $\underset{(-1.091)}{-0.164}$  \\ 
 Negative news & $\underset{(-3.457)^{***}}{-0.360}$  & $\underset{(-5.749)^{***}}{-0.917}$    & $\underset{(-4.761)^{***}}{-0.955}$ & $\underset{(-3.288)^{***}}{-0.888}$  \\ 
-
    \hline
 \end{tabular}
-\caption{AAR and CAAR over event window (in percentage)} 
 \label{tab: ST_significace}
 \end{table}
 
