@@ -1,0 +1,442 @@
+---
+title: "Extra code"
+author: "Martin Andersen"
+date: "2023-03-21"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+################ 
+
+Short term abnormal return 2/5 days before-after an individual event - Daily split on SDG's \################
+
+```{r}
+ # Use the data from above chunk
+
+short_term_data_sdg <- short_term_data_nested %>% 
+  left_join(data_daily, by = c("date","isin")) %>%
+  
+  left_join(
+    sentiment_daily %>%
+      mutate(date = as.Date(date)),
+      # select(date,isin,sdg_not_relevant_negative_count,sdg_not_relevant_positive_count,sentiment_negative_count,sentiment_positive_count), 
+            by = c("date","isin")) %>%
+  
+  group_by(isin) %>%
+  mutate(
+      pred_ret = alpha + beta*mkt_excess,
+      abnormal_ret = W_RETURN - pred_ret
+  ) %>%
+  select(-c(beta,alpha,pred_ret,sdg_not_relevant_positive_count,sdg_not_relevant_negative_count))
+
+
+short_term_data_event_sdg = short_term_data_sdg %>% 
+  select(isin,date,abnormal_ret, contains("sdg")) %>% 
+  select(isin,date,abnormal_ret, contains("tive"),-c(sdg_broad_negative_count,sdg_broad_neutral_count,sdg_broad_positive_count))
+
+remove(short_term_data_nested,short_term_data_sdg,sentiment_daily,data_daily)
+# Create columns that represent the lagged and leading values in relation to the event date:
+
+for (i in 1:10) {
+  short_term_data_event_sdg[paste0("-",i)] <- short_term_data_event_sdg %>% group_by(isin) %>% transmute(t = lag(abnormal_ret,i)) %>% ungroup() %>% select(-isin)
+  short_term_data_event_sdg[paste0("",i)] <- short_term_data_event_sdg %>% group_by(isin) %>% transmute(t = lead(abnormal_ret,i)) %>% ungroup() %>% select(-isin)
+}
+
+  short_term_return_sdg_2 = short_term_return_sdg %>%
+  select(isin,date,"-5","-4","-3","-2","-1","0", "1", "2","3","4","5",sdg,event,group)
+ 
+
+# Splitting up positive and negative events:
+
+positive_index_sdg_5 = short_term_return_sdg_5 %>%
+  filter(group == 'positive') %>%
+  mutate_at("sdg", str_replace, "_positive_count", "") %>%
+  mutate_at("sdg", str_replace, "_", " ") %>%
+  mutate(sdg = factor(sdg, levels = c("sdg 1", "sdg 2","sdg 3","sdg 4","sdg 5","sdg 6","sdg 7","sdg 8","sdg 9","sdg 10","sdg 11", 
+                                        "sdg 12", "sdg 13","sdg 14","sdg 15","sdg 16","sdg 17"))) %>%
+  select(-c(event,group)) %>%
+  pivot_longer(!c(date,isin,sdg), names_to = "period", values_to = "abnormal_ret") %>% na.omit(abnormal_ret) %>%
+  group_by(sdg,period) %>%
+    mutate(period = as.factor(period)) %>%
+  summarise(AAR = mean(abnormal_ret)) %>%
+  mutate( event = "positive",
+    period = factor(period, levels = c("-5","-4","-3","-2","-1","0", "1", "2","3","4","5"))) %>%
+  arrange(sdg,period) %>%
+  mutate(CAAR = cumsum(AAR))
+
+
+negative_index_sdg_5 = short_term_return_sdg_5 %>%
+  filter(group == 'negative') %>%
+  mutate_at("sdg", str_replace, "_negative_count", "") %>%
+  mutate_at("sdg", str_replace, "_", " ") %>%
+  mutate(sdg = factor(sdg, levels = c("sdg 1", "sdg 2","sdg 3","sdg 4","sdg 5","sdg 6","sdg 7","sdg 8","sdg 9","sdg 10","sdg 11", 
+                                        "sdg 12", "sdg 13","sdg 14","sdg 15","sdg 16","sdg 17"))) %>%
+  select(-c(event,group)) %>%
+  pivot_longer(!c(date,isin,sdg), names_to = "period", values_to = "abnormal_ret") %>% na.omit(abnormal_ret) %>%
+  group_by(sdg,period) %>%
+    mutate(period = as.factor(period)) %>%
+  summarise(AAR = mean(abnormal_ret)) %>%
+  mutate( event = "negative",
+    period = factor(period, levels = c("-5","-4","-3","-2","-1","0", "1", "2","3","4","5"))) %>%
+  arrange(sdg,period) %>%
+  mutate(CAAR = cumsum(AAR))
+
+
+### Bar plot of all SDGs
+
+se_pos_bar = short_term_return_sdg_5 %>%
+  filter(group == 'positive') %>%
+  mutate_at("sdg", str_replace, "_positive_count", "") %>%
+  mutate_at("sdg", str_replace, "_", " ") %>%
+  mutate(sdg = factor(sdg, levels = c("sdg 1", "sdg 2","sdg 3","sdg 4","sdg 5","sdg 6","sdg 7","sdg 8","sdg 9","sdg 10","sdg 11", 
+                                        "sdg 12", "sdg 13","sdg 14","sdg 15","sdg 16","sdg 17"))) %>%
+  select(-c(event,group)) %>%
+  pivot_longer(!c(date,isin,sdg), names_to = "period", values_to = "abnormal_ret") %>% na.omit(abnormal_ret) %>%
+  mutate(period = factor(period, levels = c("-5","-4","-3","-2","-1","0", "1", "2","3","4","5"))) %>%
+  arrange(isin,sdg,date,period) %>%
+  group_by(isin,sdg,date) %>%
+  mutate(CAAR = cumsum(abnormal_ret)) %>%
+  group_by(sdg) %>% filter(period == '5') %>%
+  summarise(n = n(),
+            sd = sd(CAAR),
+            se = sd/sqrt(n),
+            t = 1.96,
+            CI=t*se
+            )
+      
+positive_index_sdg_5 %>% 
+  group_by(sdg) %>% 
+  summarise(
+  sum = sum(AAR)) %>%
+  left_join(se_pos_bar, by = "sdg") %>%
+  ggplot(
+    aes(x = sdg, y = sum, color= sdg,group = sdg, fill = sdg)) + 
+  geom_bar(stat="identity") +
+  geom_errorbar( aes(x=sdg, ymin=sum-CI, ymax=sum+CI), colour = "orange", width=0.5, alpha=0.8, size=0.7) + 
+  scale_y_continuous(name ="Abnormal return",
+                     labels = scales::percent) +
+  theme(legend.title = element_blank(),
+        legend.key.size = unit(0.5, 'cm'),
+        axis.text.x = element_text(angle=45))
+ggsave("ST_positive_sdg_bar_5.png")
+
+se_neg_bar = short_term_return_sdg_5 %>%
+  filter(group == 'negative') %>% 
+  mutate_at("sdg", str_replace, "_negative_count", "") %>%
+  mutate_at("sdg", str_replace, "_", " ") %>%
+  mutate(sdg = factor(sdg, levels = c("sdg 1", "sdg 2","sdg 3","sdg 4","sdg 5","sdg 6","sdg 7","sdg 8","sdg 9","sdg 10","sdg 11", 
+                                        "sdg 12", "sdg 13","sdg 14","sdg 15","sdg 16","sdg 17","sdg broad"))) %>%
+  select(-c(event,group)) %>%
+  pivot_longer(!c(date,isin,sdg), names_to = "period", values_to = "abnormal_ret") %>% na.omit(abnormal_ret) %>%
+  mutate(period = factor(period, levels = c("-10", "-9","-8","-7","-6","-5","-4","-3","-2","-1","0", "1", "2","3","4","5","6","7","8","9","10"))) %>%
+  arrange(isin,sdg,date,period) %>%
+  group_by(isin,sdg,date) %>% 
+  mutate(CAAR = cumsum(abnormal_ret)) %>%
+  group_by(sdg) %>% filter(period == '5') %>%
+  summarise(n = n(),
+            sd = sd(CAAR),
+            se = sd/sqrt(n),
+            t = 1.96,
+            CI=t*se
+            )
+      
+negative_index_sdg_5 %>% 
+  group_by(sdg) %>% 
+  summarise(
+  sum = sum(AAR)) %>% 
+  left_join(se_neg_bar, by = "sdg") %>%
+  ggplot(
+    aes(x = sdg, y = sum, color= sdg,group = sdg, fill = sdg)) + 
+  geom_bar(stat="identity") +
+  geom_errorbar( aes(x=sdg, ymin=sum-CI, ymax=sum+CI), colour = "orange", width=0.5, alpha=0.8, size=0.7) + 
+  scale_y_continuous(name ="Abnormal return",
+                     labels = scales::percent,
+                     breaks = c(-0.08,-0.06,-0.04,-0.02,0,0.02,0.04)) +
+  theme(legend.title = element_blank(),
+        legend.key.size = unit(0.5, 'cm'),
+        axis.text.x = element_text(angle=45))
+ggsave("ST_negative_sdg_bar_5.png")
+
+
+```
+
+
+#######
+Sorting the SDGs into five groups to see if they become significant (not the case for now). 
+```{r}
+
+
+
+all = short_term_return_sdg_5 %>%
+  filter(group == 'negative') %>%
+  mutate_at("sdg", str_replace, "_negative_count", "") %>%
+  mutate_at("sdg", str_replace, "_", " ") %>%
+  mutate(sdg = factor(sdg, levels = c("sdg 1", "sdg 2","sdg 3","sdg 4","sdg 5","sdg 6","sdg 7","sdg 8","sdg 9","sdg 10","sdg 11", 
+                                        "sdg 12", "sdg 13","sdg 14","sdg 15","sdg 16","sdg 17"))) %>%
+  select(-c(event,group)) %>%
+  pivot_longer(!c(date,isin,sdg), names_to = "period", values_to = "abnormal_ret") %>% na.omit(abnormal_ret) %>%
+   mutate(sdg = as.character(sdg)) %>%
+   mutate(sdg = case_when(
+    sdg == "sdg 1" | sdg == "sdg 2" | sdg == "sdg 3" | sdg == "sdg 4" | sdg == "sdg 5"  ~ "People",
+    sdg == "sdg 7" | sdg == "sdg 8" | sdg == "sdg 9" | sdg == "sdg 10" | sdg == "sdg 11"  ~ "prosperity",
+    sdg == "sdg 6" | sdg == "sdg 12" | sdg == "sdg 13" | sdg == "sdg 14" | sdg == "sdg 15"  ~ "planet",
+    sdg == "sdg 16"  ~ "peace",
+    sdg == "sdg 17" ~ "partnership")
+         ) %>%
+  mutate(period = as.factor(period),
+           sdg = as.factor(sdg)) %>%
+  mutate(period = factor(period, levels = c("-5","-4","-3","-2","-1","0", "1", "2","3","4","5")))
+
+
+bands = all %>%
+   arrange(isin,sdg,date,period) %>%
+  group_by(isin,sdg,date) %>% 
+  mutate(CAAR = cumsum(abnormal_ret)) %>%
+  group_by(sdg) %>% filter(period == '5') %>%
+  summarise(n = n(),
+            sd = sd(CAAR),
+            se = sd/sqrt(n),
+            t = 1.96,
+            CI=t*se
+            )
+
+all %>%
+  group_by(sdg,period) %>%
+  summarise(AAR = mean(abnormal_ret)) %>%
+  group_by(sdg) %>% 
+  summarise(sum = sum(AAR)) %>%
+  left_join(bands, by = "sdg") %>%
+  ggplot(
+    aes(x = sdg, y = sum, color= sdg,group = sdg, fill = sdg)) + 
+  geom_bar(stat="identity") +
+  geom_errorbar( aes(x=sdg, ymin=sum-CI, ymax=sum+CI), colour = "orange", width=0.5, alpha=0.8, size=0.7) + 
+  scale_y_continuous(name ="Abnormal return",
+                     labels = scales::percent) +
+  theme(legend.title = element_blank(),
+        legend.key.size = unit(0.5, 'cm'),
+        axis.text.x = element_text(angle=45))
+
+```
+
+
+################ 
+Short term significance tests; 
+################
+
+```{r}
+ # Use the data from the "Speciale_analysis" file:
+
+# Tables to Overleaf
+
+
+positive_table = positive_index_10 %>% 
+  select(type,AAR,CAAR) %>%
+  mutate(AAR = 100*AAR,
+         CAAR = 100*CAAR) %>%
+  arrange(type)
+
+negative_table = negative_index %>% 
+  mutate(AAR = 100*AAR,
+         CAAR = 100*CAAR) %>%
+  arrange(type) %>%  select(AAR,CAAR)
+
+st_table = cbind(positive_table,negative_table)
+
+addtorow <- list() 
+addtorow$pos <- list(0, 0) 
+addtorow$command <- c(" & \\multicolumn{2}{c}{Positive news} & \\multicolumn{2}{c}{Negative news}  \\\\\n", " Time & AAR & CAAR & AAR & CAAR \\\\\n" )
+
+print(xtable(st_table,type="latex",
+             caption="AAR and CAAR over event window (in percentage)",
+             digits=c(0,0,4,4,4,4),
+             hline.after=c(-1,0),
+             floating=FALSE,latex.environments=NULL),
+      add.to.row = addtorow,
+      include.rownames=FALSE,
+      include.colnames = FALSE) %>% 
+  write(file="test.tex")
+
+
+ # Test of significance:
+
+significance_pos_10 = positive_index %>% 
+  mutate(csum = 100*cumsum(value)) %>%
+  filter(type == '+10')
+   
+ se_pos_10 = significance_pos_10 %>%
+  group_by(type) %>%
+  summarise(sd = sd(csum, na.rm = TRUE))
+
+
+z.test(significance_pos_10 %>% ungroup() %>% select(csum),y = NULL,
+mu = 0,
+sigma.x = se_pos_10[[2]],
+conf.level = 0.95
+)
+
+
+significance_neg_10 = negative_index %>% 
+  mutate(csum = 100*cumsum(value)) %>%
+  filter(type == '+10')
+   
+ se_neg_10 = significance_neg_10 %>%
+  group_by(type) %>%
+  summarise(sd = sd(csum, na.rm = TRUE))
+
+
+z.test(significance_neg_10 %>% ungroup() %>% select(csum),y = NULL,
+mu = 0,
+sigma.x = se_neg_10[[2]],
+conf.level = 0.95
+)
+
+################
+### 5 days around the event
+################
+
+positive_index_5 = positive_index %>% 
+  mutate(type = as.numeric(as.character(type))) %>%
+  filter(type >= -5) %>%
+  filter(type <= 5)
+
+
+negative_index_5 = negative_index %>% 
+  mutate(type = as.numeric(as.character(type))) %>%
+  filter(type >= -5) %>%
+  filter(type <= 5) %>%
+  mutate(csum = cumsum(value)) 
+
+# Test of significance
+significance_pos_5 = positive_index_5 %>% 
+  mutate(csum = 100*cumsum(value)) %>%
+  filter(type == 5)
+   
+ se_pos_5 = significance_pos_5 %>%
+  group_by(type) %>%
+  summarise(sd = sd(csum, na.rm = TRUE))
+
+
+z.test(significance_pos_5 %>% ungroup() %>% select(csum),y = NULL,
+mu = 0,
+sigma.x = se_pos_5[[2]],
+conf.level = 0.95
+)
+
+
+significance_neg_5 = negative_index_5 %>% 
+  mutate(csum = 100*cumsum(value)) %>%
+  filter(type == 5)
+   
+ se_neg_5 = significance_neg_5 %>%
+  group_by(type) %>%
+  summarise(sd = sd(csum, na.rm = TRUE))
+
+
+z.test(significance_neg_5 %>% ungroup() %>% select(csum),y = NULL,
+mu = 0,
+sigma.x = se_neg_5[[2]],
+conf.level = 0.95
+)
+
+
+
+################
+### 2 days around the event
+################
+
+positive_index_2 = positive_index %>% 
+  mutate(type = as.numeric(as.character(type))) %>%
+  filter(type >= -2) %>%
+  filter(type <= 2)
+
+
+negative_index_2 = negative_index %>% 
+  mutate(type = as.numeric(as.character(type))) %>%
+  filter(type >= -2) %>%
+  filter(type <= 2) %>%
+  mutate(csum = cumsum(value)) 
+
+# Test of significance
+significance_pos_2 = positive_index_2 %>% 
+  mutate(csum = 100*cumsum(value)) %>%
+  filter(type == 2)
+   
+ se_pos_2 = significance_pos_2 %>%
+  group_by(type) %>%
+  summarise(sd = sd(csum, na.rm = TRUE))
+
+
+z.test(significance_pos_2 %>% ungroup() %>% select(csum),y = NULL,
+mu = 0,
+sigma.x = se_pos_2[[2]],
+conf.level = 0.95
+)
+
+
+significance_neg_2 = negative_index_2 %>% 
+  mutate(csum = 100*cumsum(value)) %>%
+  filter(type == 2)
+   
+ se_neg_2 = significance_neg_2 %>%
+  group_by(type) %>%
+  summarise(sd = sd(csum, na.rm = TRUE))
+
+
+z.test(significance_neg_2 %>% ungroup() %>% select(csum),y = NULL,
+mu = 0,
+sigma.x = se_neg_2[[2]],
+conf.level = 0.95
+)
+
+
+
+
+################
+### Day t = 0 (the event day)
+################
+
+positive_index_0 = positive_index %>% 
+  mutate(type = as.numeric(as.character(type))) %>%
+  filter(type == 0) 
+
+
+negative_index_0 = negative_index %>% 
+  mutate(type = as.numeric(as.character(type))) %>%
+  filter(type == 0) %>%
+  mutate(csum = cumsum(value)) 
+
+# Test of significance
+significance_pos_0 = positive_index_0 %>% 
+  mutate(csum = 100*cumsum(value)) %>%
+  filter(type == 0)
+   
+ se_pos_0 = significance_pos_0 %>%
+  group_by(type) %>%
+  summarise(sd = sd(csum, na.rm = TRUE))
+
+
+z.test(significance_pos_0 %>% ungroup() %>% select(csum),y = NULL,
+mu = 0,
+sigma.x = se_pos_0[[2]],
+conf.level = 0.95
+)
+
+
+significance_neg_0 = negative_index_0 %>% 
+  mutate(csum = 100*cumsum(value)) %>%
+  filter(type == 0)
+   
+ se_neg_0 = significance_neg_0 %>%
+  group_by(type) %>%
+  summarise(sd = sd(csum, na.rm = TRUE))
+
+
+z.test(significance_neg_0 %>% ungroup() %>% select(csum),y = NULL,
+mu = 0,
+sigma.x = se_neg_0[[2]],
+conf.level = 0.95
+)
+```
