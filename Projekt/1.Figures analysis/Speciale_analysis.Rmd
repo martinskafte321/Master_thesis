@@ -56,16 +56,16 @@ eu_factors_daily <- read.csv("C:/Users/Marti/OneDrive - University of Copenhagen
 
 
 long_term_data_weekly <- data_weekly %>%
-  transmute(date,isin, 
+  transmute(date,isin,MKT_CAP, 
             ret = W_RETURN, 
             norm_positive_sum = sentiment_positive_count - sdg_not_relevant_positive_count,
             norm_negative_sum = sentiment_negative_count - sdg_not_relevant_negative_count,
             ) %>%
   group_by(isin) %>%
-  transmute(date,isin,ret,
+  transmute(date,isin,ret,MKT_CAP,
     norm_positive_sum = replace_na(norm_positive_sum,0),
     norm_negative_sum = replace_na(norm_negative_sum,0),
-    roll_mean = across(!c(date,ret),
+    roll_mean = across(!c(date,ret,MKT_CAP),
                       ~ rollmean(.x, k = 4, fill = NA, align = "right"))) %>%
   unnest(roll_mean,names_sep = "_") %>% arrange(isin) %>%
   group_by(isin) %>%
@@ -93,8 +93,8 @@ long_term_data_weekly_positive = long_term_data_weekly
   }
 
 
-long_term_data = long_term_data_weekly_positive %>% select(date,isin,ret,contains("-")) %>%
-  pivot_longer(!c(date,isin,ret), names_to = "period", values_to = "event") %>%
+long_term_data = long_term_data_weekly_positive %>% select(date,isin,ret,MKT_CAP,contains("-")) %>%
+  pivot_longer(!c(date,isin,ret,MKT_CAP), names_to = "period", values_to = "event") %>%
   mutate(period = as.numeric(period)) %>%
   filter(event == '1') %>%
     # Remove duplicate rows of the returns in case one ISIN pops up on several dates. 
@@ -107,7 +107,7 @@ long_term_data_1M = long_term_data %>%
   # Only include the last 1 months:
   filter(period >= -1) %>%
   group_by(date) %>%
-  summarise(ret = mean(ret)) %>%
+  summarise(ret = weighted.mean(ret,MKT_CAP)) %>%
   left_join(eu_factors_daily, by = "date")
 
 # Calculate alpha of portfolios:
@@ -141,7 +141,7 @@ long_term_data_3M = long_term_data %>%
   # Only include the last 1 months:
   filter(period >= -3) %>%
   group_by(date) %>%
-  summarise(ret = mean(ret)) %>%
+  summarise(ret = weighted.mean(ret,MKT_CAP)) %>%
   left_join(eu_factors_daily, by = "date")
 
 alpha_3M = long_term_data_3M %>%  
@@ -169,7 +169,7 @@ long_term_data_6M = long_term_data %>%
   # Only include the last 6 months:
   filter(period >= -6) %>%
   group_by(date) %>%
-  summarise(ret = mean(ret)) %>%
+  summarise(ret = weighted.mean(ret,MKT_CAP)) %>%
   left_join(eu_factors_daily, by = "date")
 
 alpha_6M = long_term_data_6M %>%  
@@ -197,7 +197,7 @@ long_term_data_12M = long_term_data %>%
   # Only include the last 1 months:
   filter(period >= -12) %>%
   group_by(date) %>%
-  summarise(ret = mean(ret)) %>%
+  summarise(ret = weighted.mean(ret,MKT_CAP)) %>%
   left_join(eu_factors_daily, by = "date")
 
 alpha_12M = long_term_data_12M %>%  
@@ -222,7 +222,7 @@ long_term_data_12M %>%
       
 table_positive = rbind(alpha_1M,alpha_3M,alpha_6M,alpha_12M) %>% relocate(model)
 
-print(xtable(table_negative,type="latex",
+print(xtable(table_positive,type="latex",
              digits=c(0,4,4,4,4),
              hline.after=c(-1,0),
              floating=FALSE,latex.environments=NULL),
@@ -242,9 +242,9 @@ long_term_data_weekly_negative = long_term_data_weekly
   }
 
 
-long_term_data_negative = long_term_data_weekly_negative %>% select(date,isin,ret,contains("-")) %>%
-  pivot_longer(!c(date,isin,ret), names_to = "period", values_to = "event") %>%
-  mutate(period = as.numeric(period)) %>%
+long_term_data_negative = long_term_data_weekly_negative %>% select(date,isin,ret,MKT_CAP,neg_event,contains("-")) %>%
+  pivot_longer(!c(date,isin,ret,MKT_CAP), names_to = "period", values_to = "event") %>%
+  mutate(period = as.numeric(period)) %>% 
   filter(event == '1') %>%
     # Remove duplicate rows of the returns in case one ISIN pops up on several dates. 
   group_by(date,isin) %>% distinct(ret, .keep_all = TRUE)
@@ -256,7 +256,7 @@ long_term_data_1M_negative = long_term_data_negative %>%
   # Only include the last 1 months:
   filter(period >= -1) %>%
   group_by(date) %>%
-  summarise(ret = mean(ret)) %>%
+  summarise(ret = weighted.mean(ret,MKT_CAP)) %>%
   left_join(eu_factors_daily, by = "date")
 
 # Calculate alpha of portfolios:
@@ -290,7 +290,7 @@ long_term_data_3M_negative = long_term_data_negative %>%
   # Only include the last 1 months:
   filter(period >= -3) %>%
   group_by(date) %>%
-  summarise(ret = mean(ret)) %>%
+  summarise(ret = weighted.mean(ret,MKT_CAP)) %>%
   left_join(eu_factors_daily, by = "date")
 
 alpha_3M_negative = long_term_data_3M_negative %>%  
@@ -318,7 +318,7 @@ long_term_data_6M_negative = long_term_data_negative %>%
   # Only include the last 6 months:
   filter(period >= -6) %>%
   group_by(date) %>%
-  summarise(ret = mean(ret)) %>%
+  summarise(ret = weighted.mean(ret,MKT_CAP)) %>%
   left_join(eu_factors_daily, by = "date")
 
 alpha_6M_negative = long_term_data_6M_negative %>%  
@@ -346,7 +346,7 @@ long_term_data_12M_negative = long_term_data_negative %>%
   # Only include the last 1 months:
   filter(period >= -12) %>%
   group_by(date) %>%
-  summarise(ret = mean(ret)) %>%
+  summarise(ret = weighted.mean(ret,MKT_CAP)) %>%
   left_join(eu_factors_daily, by = "date")
 
 alpha_12M_negative = long_term_data_12M_negative %>%  
