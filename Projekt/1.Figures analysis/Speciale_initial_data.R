@@ -17,7 +17,7 @@ setwd("C:/Users/Marti/OneDrive - University of Copenhagen/KU/Speciale/Data behan
 
 # Read stock data from:
 ISIN <- read_excel("ISIN numbers.xlsx")
-stock <- read_excel("SXXP_stock_data.xlsx")
+stock <- read_excel("SXXP_stock_data_weekly.xlsx")
 
 # Clean up the stock market data: Remove the two first rows 
 stocks <- stock %>%
@@ -65,17 +65,6 @@ sentiment <- read.csv("SXXP_sentiment.csv", sep = ",") %>%
   filter(aggregate_time_period_start >= ' 2018-01-01') %>%
   rename("date" = aggregate_time_period_start) %>%
   select(-c(aggregate_type,aggregate_key,aggregate_updated_ts,aggregate_time_period_end,day,week,month,year,match_identity)) 
-
-
-  # Read Sentiment data from CSV
-  sentiment_nasdaq <- read.csv("nasdaq_global_large_cap.csv", sep = ",") %>%
-    # Get the correct date format and cut the series by 2018. 
-    mutate(
-      aggregate_time_period_start = as_datetime(aggregate_time_period_start)) %>%
-    filter(aggregate_time_period_start >= ' 2018-01-01') %>%
-    rename("date" = aggregate_time_period_start) %>%
-    select(-c(aggregate_type,aggregate_key,aggregate_updated_ts,aggregate_time_period_end,day,week,month,year,match_identity)) 
-
 
 # Remove unnecessary items:
 remove(stock,ISIN)
@@ -155,17 +144,16 @@ sentiment_weekly <- sentiment %>%
     sdg_15_positive_count = sum(sdg_15_positive_count),
     sdg_broad_negative_count  = sum(sdg_broad_negative_count),
     sdg_broad_neutral_count   = sum(sdg_broad_neutral_count),
-    sdg_broad_positive_count = sum(sdg_broad_positive_count)
+    sdg_broad_positive_count = sum(sdg_broad_positive_count),
+    sdg_not_relevant_negative_count = sum(sdg_not_relevant_negative_count),
+    sdg_not_relevant_positive_count = sum(sdg_not_relevant_positive_count)
+  ) %>% 
+  mutate(date = as.Date(date, format = "%Y-%m-%d"))
   
-  )
 
-# Add a variable that contains the sum of all, respectively, positive, negative and neutral signals wrt. SGD's: 
-sentiment_weekly <- sentiment_weekly %>% group_by(date,isin) %>%
-  mutate(
-    negative_sum = sum(c_across(contains("sdg") & contains("negative_count"))),
-    neutral_sum = sum(c_across(contains("sdg") & contains("neutral_count"))),
-    positive_sum = sum(c_across(contains("sdg") & contains("positive_count")))
-  ) 
+stocks_weekly = read.csv("clean_stock_data_weekly.csv") %>%
+  select(-X)  %>%
+  mutate(date = as.Date(date, format = "%Y-%m-%d"))
 
 # Join the weekly sentiment data with the stock prices
 all_data_week <- stocks_weekly %>%
@@ -173,8 +161,8 @@ all_data_week <- stocks_weekly %>%
   # drop_na(observations) 
 
 # Write to CSV to keep in nice format:
-       sentiment_weekly %>%
-           write.csv(file = "data_weekly.csv")
+all_data_week %>%
+           write.csv(file = "all_data_week.csv")
 
        
        ###############################################################
@@ -218,6 +206,7 @@ all_data_week <- stocks_weekly %>%
          write.csv(file = "clean_stock_data_daily.csv")
        
        remove(ISIN,stock,stocks)
+       
        ###############################################################
        ############# Get Sentiment data daily ##############################
        ###############################################################
