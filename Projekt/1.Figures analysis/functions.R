@@ -112,3 +112,105 @@ winsorize <- function(x, cut) {
   )
   return(x)
 }
+
+
+compute_portfolio_weights <- function(theta,
+                                      data,
+                                      value_weighting = TRUE,
+                                      allow_short_selling = TRUE) {
+  data |>
+    group_by(date) |>
+    bind_cols(
+      characteristic_tilt = data |>
+        transmute(across(contains("lag"), ~ . / n)) |>
+        as.matrix() %*% theta |> as.numeric()
+    ) |>
+    mutate(
+      # Definition of benchmark weight
+      weight_benchmark = case_when(
+        value_weighting == TRUE ~ relative_mktcap,
+        value_weighting == FALSE ~ 1 / n
+      ),
+      # Parametric portfolio weights
+      weight_tilt = weight_benchmark + characteristic_tilt,
+      # Short-sell constraint
+      weight_tilt = case_when(
+        allow_short_selling == TRUE ~ weight_tilt,
+        allow_short_selling == FALSE ~ pmax(0, weight_tilt)
+      ),
+      # Weights sum up to 1
+      weight_tilt = weight_tilt / sum(weight_tilt)
+    ) |>
+    ungroup()
+}
+
+evaluate_portfolio <- function(weights_crsp,
+                               full_evaluation = TRUE) {
+  evaluation <- weights_crsp |>
+    group_by(date) |>
+    summarize(
+      return_tilt = weighted.mean(ret, weight_tilt),
+      return_benchmark = weighted.mean(ret, weight_benchmark)
+    ) |>
+    pivot_longer(-date,
+                 values_to = "portfolio_return",
+                 names_to = "model"
+    ) |>
+    group_by(model) |>
+    left_join(eu_3factors_daily, by = "date") |>
+    summarize(tibble(
+      "Expected utility" = mean(power_utility(portfolio_return)),
+      "Average return" = 100 * mean(12 * portfolio_return),
+      "SD return" = 100 * sqrt(12) * sd(portfolio_return),
+      "Sharpe ratio" = sqrt(12) * mean(portfolio_return) / sd(portfolio_return),
+      "CAPM alpha" = coefficients(lm(portfolio_return ~ mkt_excess))[1],
+      "Market beta" = coefficients(lm(portfolio_return ~ mkt_excess))[2]
+    )) |>
+    mutate(model = str_remove(model, "return_")) |>
+    pivot_longer(-model, names_to = "measure") |>
+    pivot_wider(names_from = model, values_from = value)
+  
+  if (full_evaluation) {
+    weight_evaluation <- weights_crsp |>
+      select(date, contains("weight")) |>
+      pivot_longer(-date, values_to = "weight", names_to = "model") |>
+      group_by(model, date) |>
+      transmute(tibble(
+        "Absolute weight" = abs(weight),
+        "Max. weight" = max(weight),
+        "Min. weight" = min(weight),
+        "Avg. sum of negative weights" = -sum(weight[weight < 0]),
+        "Avg. fraction of negative weights" = sum(weight < 0) / n()
+      )) |>
+      group_by(model) |>
+      summarize(across(-date, ~ 100 * mean(.))) |>
+      mutate(model = str_remove(model, "weight_")) |>
+      pivot_longer(-model, names_to = "measure") |>
+      pivot_wider(names_from = model, values_from = value)
+    evaluation <- bind_rows(evaluation, weight_evaluation)
+  }
+  return(evaluation)
+}
+
+
+
+compute_objective_function <- function(theta,
+                                       data,
+                                       objective_measure = "Expected utility",
+                                       value_weighting = TRUE,
+                                       allow_short_selling = TRUE) {
+  processed_data <- compute_portfolio_weights(
+    theta,
+    data,
+    value_weighting,
+    allow_short_selling
+  )
+  
+  objective_function <- evaluate_portfolio(processed_data,
+                                           full_evaluation = FALSE
+  ) |>
+    filter(measure == objective_measure) |>
+    pull(tilt)
+  
+  return(-objective_function)
+}
