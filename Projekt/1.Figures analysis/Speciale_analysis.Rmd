@@ -51,8 +51,22 @@ Calendar-time portfolio approach 1 week sentiment data: ################
 ```{r}
 # Data connection to get STOXX 600 Europe sentiment and stock data. Joined on stock data, so there will be NA's in the sentiment.  
  
-eu_factors_daily <- read.csv("C:/Users/Marti/OneDrive - University of Copenhagen/KU/Speciale/Data behandling/Europe_3_Factors_Daily.csv", 
-  sep = ",") %>% mutate(date = as.Date(date)) %>% select(-X)
+eu_3factors_daily <- read.csv("C:/Users/Marti/OneDrive - University of Copenhagen/KU/Speciale/Data behandling/Europe_3_Factors_Daily.csv", sep = ",") %>% 
+  transmute(date = as.Date(ymd(X)),
+         mkt_excess = Mkt.RF/100,
+         SMB = SMB/100,
+         HML = HML/100,
+         RF = RF/100)
+
+eu_5factors_daily <- read.csv("C:/Users/Marti/OneDrive - University of Copenhagen/KU/Speciale/Data behandling/Europe_5_Factors_Daily.csv", sep = ",") %>% 
+  transmute(date = as.Date(ymd(X)),
+         mkt_excess = Mkt.RF/100,
+         SMB = SMB/100,
+         HML = HML/100,
+         RMW = RMW/100,
+         CMA = CMA/100,
+         RF = RF/100)
+
 
 
 long_term_data_weekly <- data_weekly %>%
@@ -66,7 +80,7 @@ long_term_data_weekly <- data_weekly %>%
     norm_positive_sum = replace_na(norm_positive_sum,0),
     norm_negative_sum = replace_na(norm_negative_sum,0),
     roll_mean = across(!c(date,ret,MKT_CAP),
-                      ~ rollmean(.x, k = 4, fill = NA, align = "right"))) %>%
+                      ~ rollmean(.x, k = 3, fill = NA, align = "right"))) %>%
   unnest(roll_mean,names_sep = "_") %>% arrange(isin) %>%
   group_by(isin) %>%
     mutate(
@@ -78,13 +92,16 @@ long_term_data_weekly <- data_weekly %>%
   group_by(date,isin) %>%
   # Make sure that we only calculate the cutoff value of periods with actual observations. 
   mutate(pos_event = 
-    case_when(roll_mean_positive > positive_threshold & roll_mean_positive > 5 & roll_mean_positive > 2*roll_mean_norm_negative_sum ~ 1,
+    case_when(roll_mean_positive > positive_threshold & roll_mean_positive > 5 & roll_mean_positive > 1*roll_mean_norm_negative_sum ~ 1,
               TRUE ~ 0),
     neg_event = 
-    case_when(roll_mean_negative > negative_threshold & roll_mean_negative > 5 & roll_mean_negative > 2*roll_mean_norm_positive_sum ~ 1, 
+    case_when(roll_mean_negative > negative_threshold & roll_mean_negative > 5 & roll_mean_negative > 1*roll_mean_norm_positive_sum ~ 1, 
               TRUE ~ 0)
     ) 
 
+###########################
+# Positive events:
+###########################
 long_term_data_weekly_positive = long_term_data_weekly
 
 # Add lagged values of the events to sort whether an event has happened in the last X months. 
@@ -108,7 +125,7 @@ long_term_data_1M = long_term_data %>%
   filter(period >= -1) %>%
   group_by(date) %>%
   summarise(ret = weighted.mean(ret,MKT_CAP)) %>%
-  left_join(eu_factors_daily, by = "date")
+  left_join(eu_3factors_daily, by = "date")
 
 # Calculate alpha of portfolios:
 
@@ -126,7 +143,6 @@ long_term_data_1M %>%
    geom_bar(stat = 'identity') + 
    geom_smooth(method = "lm") +
     theme_bw() +
-    scale_color_tq() +
    labs(title = "T = 1",
          x = "", y = "Monthly Returns") +
     scale_y_continuous(breaks = pretty_breaks(),
@@ -142,7 +158,7 @@ long_term_data_3M = long_term_data %>%
   filter(period >= -3) %>%
   group_by(date) %>%
   summarise(ret = weighted.mean(ret,MKT_CAP)) %>%
-  left_join(eu_factors_daily, by = "date")
+  left_join(eu_3factors_daily, by = "date")
 
 alpha_3M = long_term_data_3M %>%  
   summarise(alpha = tidy(lm(ret ~ 1 + mkt_excess + SMB + HML))$estimate[1],
@@ -156,7 +172,6 @@ long_term_data_3M %>%
    geom_bar(stat = 'identity') + 
    geom_smooth(method = "lm") +
     theme_bw() +
-    scale_color_tq() +
    labs(title = "T = 3",
          x = "", y = "Monthly Returns") +
     scale_y_continuous(breaks = pretty_breaks(),
@@ -170,7 +185,7 @@ long_term_data_6M = long_term_data %>%
   filter(period >= -6) %>%
   group_by(date) %>%
   summarise(ret = weighted.mean(ret,MKT_CAP)) %>%
-  left_join(eu_factors_daily, by = "date")
+  left_join(eu_3factors_daily, by = "date")
 
 alpha_6M = long_term_data_6M %>%  
   summarise(alpha = tidy(lm(ret ~ 1 + mkt_excess + SMB + HML))$estimate[1],
@@ -184,7 +199,6 @@ long_term_data_6M %>%
    geom_bar(stat = 'identity') + 
    geom_smooth(method = "lm") +
     theme_bw() +
-    scale_color_tq() +
    labs(title = "T = 6",
          x = "", y = "Monthly Returns") +
     scale_y_continuous(breaks = pretty_breaks(),
@@ -198,7 +212,7 @@ long_term_data_12M = long_term_data %>%
   filter(period >= -12) %>%
   group_by(date) %>%
   summarise(ret = weighted.mean(ret,MKT_CAP)) %>%
-  left_join(eu_factors_daily, by = "date")
+  left_join(eu_3factors_daily, by = "date")
 
 alpha_12M = long_term_data_12M %>%  
   summarise(alpha = tidy(lm(ret ~ 1 + mkt_excess + SMB + HML))$estimate[1],
@@ -212,7 +226,6 @@ long_term_data_12M %>%
    geom_bar(stat = 'identity') + 
    geom_smooth(method = "lm") +
     theme_bw() +
-    scale_color_tq() +
    labs(title = "T = 12",
          x = "", y = "Monthly Returns") +
     scale_y_continuous(breaks = pretty_breaks(),
@@ -241,13 +254,15 @@ long_term_data_weekly_negative = long_term_data_weekly
   long_term_data_weekly_negative[paste0("-",i)] <- long_term_data_weekly_negative %>% group_by(isin) %>% transmute(t = lag(neg_event,i)) %>% ungroup() %>% select(-isin)
   }
 
+ long_term_data_weekly_negative %>% select(date,isin,ret,MKT_CAP,neg_event,t = "-1") %>% filter(t == '1') %>% ungroup() %>% summarise(mean(ret))
 
-long_term_data_negative = long_term_data_weekly_negative %>% select(date,isin,ret,MKT_CAP,neg_event,contains("-")) %>%
+long_term_data_negative = long_term_data_weekly_negative %>% select(date,isin,ret,MKT_CAP,contains("-")) %>%
   pivot_longer(!c(date,isin,ret,MKT_CAP), names_to = "period", values_to = "event") %>%
   mutate(period = as.numeric(period)) %>% 
   filter(event == '1') %>%
     # Remove duplicate rows of the returns in case one ISIN pops up on several dates. 
   group_by(date,isin) %>% distinct(ret, .keep_all = TRUE)
+
 
 
 # 1 Month portfolio returns:
@@ -257,17 +272,16 @@ long_term_data_1M_negative = long_term_data_negative %>%
   filter(period >= -1) %>%
   group_by(date) %>%
   summarise(ret = weighted.mean(ret,MKT_CAP)) %>%
-  left_join(eu_factors_daily, by = "date")
+  left_join(eu_3factors_daily, by = "date")
 
 # Calculate alpha of portfolios:
-
   
-alpha_1M_negative = long_term_data_1M_negative %>%  
+alpha_1M_negative = long_term_data_1M_negative %>% 
   summarise(alpha = tidy(lm(ret ~ 1 + mkt_excess + SMB + HML))$estimate[1],
             t = tidy(lm(ret ~ 1 + mkt_excess + SMB + HML))$statistic[1],
-            p = tidy(lm(ret ~ 1 + mkt_excess + SMB + HML))$p.value[1]) %>%
-  mutate(model = "1M"
-  )
+            p = tidy(lm(ret ~ 1 + mkt_excess + SMB + HML))$p.value[1],
+            return = mean(ret)) %>%
+  mutate(model = "1M") 
 
 # Plot the returns:
 long_term_data_1M_negative %>%
@@ -275,7 +289,6 @@ long_term_data_1M_negative %>%
    geom_bar(stat = 'identity') + 
    geom_smooth(method = "lm") +
     theme_bw() +
-    scale_color_tq() +
    labs(title = "T = 1",
          x = "", y = "Monthly Returns") +
     scale_y_continuous(breaks = pretty_breaks(),
@@ -291,12 +304,13 @@ long_term_data_3M_negative = long_term_data_negative %>%
   filter(period >= -3) %>%
   group_by(date) %>%
   summarise(ret = weighted.mean(ret,MKT_CAP)) %>%
-  left_join(eu_factors_daily, by = "date")
+  left_join(eu_3factors_daily, by = "date")
 
 alpha_3M_negative = long_term_data_3M_negative %>%  
   summarise(alpha = tidy(lm(ret ~ 1 + mkt_excess + SMB + HML))$estimate[1],
             t = tidy(lm(ret ~ 1 + mkt_excess + SMB + HML))$statistic[1],
-            p = tidy(lm(ret ~ 1 + mkt_excess + SMB + HML))$p.value[1]) %>%
+            p = tidy(lm(ret ~ 1 + mkt_excess + SMB + HML))$p.value[1],
+            return = mean(ret)) %>%
   mutate(model = "3M"
   )
 
@@ -305,7 +319,6 @@ long_term_data_3M_negative %>%
    geom_bar(stat = 'identity') + 
    geom_smooth(method = "lm") +
     theme_bw() +
-    scale_color_tq() +
    labs(title = "T = 3",
          x = "", y = "Monthly Returns") +
     scale_y_continuous(breaks = pretty_breaks(),
@@ -319,12 +332,13 @@ long_term_data_6M_negative = long_term_data_negative %>%
   filter(period >= -6) %>%
   group_by(date) %>%
   summarise(ret = weighted.mean(ret,MKT_CAP)) %>%
-  left_join(eu_factors_daily, by = "date")
+  left_join(eu_3factors_daily, by = "date")
 
 alpha_6M_negative = long_term_data_6M_negative %>%  
   summarise(alpha = tidy(lm(ret ~ 1 + mkt_excess + SMB + HML))$estimate[1],
             t = tidy(lm(ret ~ 1 + mkt_excess + SMB + HML))$statistic[1],
-            p = tidy(lm(ret ~ 1 + mkt_excess + SMB + HML))$p.value[1]) %>%
+            p = tidy(lm(ret ~ 1 + mkt_excess + SMB + HML))$p.value[1],
+            return = mean(ret)) %>%
   mutate(model = "6M"
   )
 
@@ -333,7 +347,6 @@ long_term_data_6M_negative %>%
    geom_bar(stat = 'identity') + 
    geom_smooth(method = "lm") +
     theme_bw() +
-    scale_color_tq() +
    labs(title = "T = 6",
          x = "", y = "Monthly Returns") +
     scale_y_continuous(breaks = pretty_breaks(),
@@ -347,12 +360,13 @@ long_term_data_12M_negative = long_term_data_negative %>%
   filter(period >= -12) %>%
   group_by(date) %>%
   summarise(ret = weighted.mean(ret,MKT_CAP)) %>%
-  left_join(eu_factors_daily, by = "date")
+  left_join(eu_3factors_daily, by = "date")
 
 alpha_12M_negative = long_term_data_12M_negative %>%  
   summarise(alpha = tidy(lm(ret ~ 1 + mkt_excess + SMB + HML))$estimate[1],
             t = tidy(lm(ret ~ 1 + mkt_excess + SMB + HML))$statistic[1],
-            p = tidy(lm(ret ~ 1 + mkt_excess + SMB + HML))$p.value[1]) %>%
+            p = tidy(lm(ret ~ 1 + mkt_excess + SMB + HML))$p.value[1],
+            return = mean(ret)) %>%
   mutate(model = "12M"
   )
 
@@ -361,7 +375,6 @@ long_term_data_12M_negative %>%
    geom_bar(stat = 'identity') + 
    geom_smooth(method = "lm") +
     theme_bw() +
-    scale_color_tq() +
    labs(title = "T = 12",
          x = "", y = "Monthly Returns") +
     scale_y_continuous(breaks = pretty_breaks(),
