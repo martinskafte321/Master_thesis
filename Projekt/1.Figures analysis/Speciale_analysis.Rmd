@@ -31,12 +31,14 @@ library(generics)
 source("functions.R")
 
 # STOXX 600 Europe index 
-sxxp_index_daily <- read.csv("C:/Users/Marti/OneDrive - University of Copenhagen/KU/Speciale/Data behandling/STOXX600_index_daily.csv", sep = ",") %>%
-  transmute(mkt_excess, date = as.Date(date, format = "%Y-%m-%d"))
+sxxp_index_daily <- read.csv("C:/Users/Marti/OneDrive - University of Copenhagen/KU/Speciale/Data behandling/STOXX_600_INDEX.csv", 
+                             sep = ",") %>%
+  transmute(date = as.Date(Date, format = "%m/%d/%Y"),
+         mkt_excess = as.numeric(gsub('%','',Change..))/100)
 
 # Sentiment and stock data merged together with daily observations
 data_daily <- read.csv("C:/Users/Marti/OneDrive - University of Copenhagen/KU/Speciale/Data behandling/data_daily.csv", sep = ",")  %>% 
-  mutate(date = as.Date(date))
+  mutate(date = as.Date(date)) %>% select(-X)
 
 # Sentiment and stock data merged together with weekly observations
 data_weekly <- read.csv("C:/Users/Marti/OneDrive - University of Copenhagen/KU/Speciale/Data behandling/all_data_week.csv", sep = ",") %>%
@@ -85,8 +87,8 @@ long_term_data_weekly <- data_weekly %>%
     mutate(
     roll_mean_positive = na_if(roll_mean_norm_positive_sum, 0), 
     roll_mean_negative = na_if(roll_mean_norm_negative_sum, 0),
-    positive_threshold = mean(roll_mean_positive,na.rm = TRUE) + 1*sd(roll_mean_positive,na.rm = TRUE),
-    negative_threshold = mean(roll_mean_negative,na.rm = TRUE) + 1*sd(roll_mean_negative,na.rm = TRUE)
+    positive_threshold = mean(roll_mean_positive,na.rm = TRUE) + 2*sd(roll_mean_positive,na.rm = TRUE),
+    negative_threshold = mean(roll_mean_negative,na.rm = TRUE) + 2*sd(roll_mean_negative,na.rm = TRUE)
     ) %>%
   group_by(date,isin) %>%
   # Make sure that we only calculate the cutoff value of periods with actual observations. 
@@ -254,7 +256,13 @@ Parametric portfolio approach 1 week sentiment data:
 
 pp_data = long_term_data_weekly %>% select(date, isin, ret, MKT_CAP, pos_event,neg_event) %>%
   group_by(isin) %>%
-  mutate(mktcap_lag = lag(MKT_CAP))
+  mutate(
+    month = date,
+    ret_excess = ret,
+    permno = isin,
+    MKT_CAP = MKT_CAP/1000000000,
+    mktcap_lag = lag(MKT_CAP)) %>%
+  na.omit()
   
 pp_monthly_lags = pp_data %>% 
   group_by(isin) %>%
@@ -270,7 +278,8 @@ pp_data = pp_data %>%
 data_portfolios = pp_data %>%
   mutate(
     momentum_lag = mktcap_lag / MKT_CAP_5,
-    size_lag = log(mktcap_lag)
+    size_lag = log(mktcap_lag),
+    event = neg_event
     ) %>%
   drop_na(contains("lag"))
 
@@ -280,25 +289,21 @@ data_portfolios = data_portfolios %>%
   mutate(
     n = n(),
     relative_mktcap = mktcap_lag / sum(mktcap_lag),
-    across(contains("lag"), ~ (. - mean(.)) / sd(.))
+    across(contains("lag"), ~ (. - mean(.)) / sd(.)),
     ) %>%
   ungroup() %>%
   select(-mktcap_lag)
 
-
-n_parameters <- sum(str_detect(
-  colnames(data_portfolios), "lag"
-))
+n_parameters <- sum(str_detect(colnames(data_portfolios), "lag"))
 
 theta <- rep(1.5, n_parameters)
 
 names(theta) <- colnames(data_portfolios)[str_detect(
-  colnames(data_portfolios), "lag"
-)]
+  colnames(data_portfolios), "lag")]
 
 
 weights <- compute_portfolio_weights(
-  theta,
+  optimal_theta,
   data_portfolios,
   value_weighting = TRUE,
   allow_short_selling = FALSE
@@ -317,13 +322,13 @@ evaluate_portfolio(weights) |>
 optimal_theta <- optim(
   par = theta,
   compute_objective_function,
-  objective_measure = "Average return",
+  objective_measure = "Expected utility",
   data = data_portfolios,
   value_weighting = TRUE,
   allow_short_selling = FALSE
 )
 
-optimal_theta$par
+optimal_theta = optimal_theta$par
 ```
 
 
@@ -338,22 +343,23 @@ Short term abnormal return after an individual event - Daily
 short_term_data_daily = data_daily %>% 
   mutate(date = as.Date(date)) %>% 
   right_join(sxxp_index_daily %>% select(date, mkt_excess), by = "date")
-  
-# 
-# plan(multisession, workers = availableCores())
-# 
-# short_term_data_nested <- data_daily %>% ungroup() %>% 
-#   select(date,isin,W_RETURN,mkt_excess) %>%
-#   nest(data = -c(isin)) %>%
-#   mutate(beta = future_map(
-#     data, ~ roll_capm_estimation(., window = 120, min_obs = 60, period = "day")
-#   )) %>%
-#   unnest(c(beta)) %>%
-#   na.omit(beta,alpha) %>% select(-data)
 
-# # Write to CSV to keep in nice format:
-        # short_term_data_nested %>%
-        #   write.csv(file = "C:/Users/Marti/OneDrive - University of Copenhagen/KU/Speciale/Data behandling/nested_daily_for_capm_sxxp.csv")
+# 
+#  plan(multisession, workers = availableCores())
+# 
+#  short_term_data_nested <- short_term_data_daily %>% ungroup() %>%
+#    select(date,isin,W_RETURN,mkt_excess) %>%
+#    nest(data = -c(isin)) %>%
+#    mutate(beta = future_map(
+#      data, ~ roll_capm_estimation(., window = 120, min_obs = 80, period = "day")
+#    )) %>%
+#    unnest(c(beta)) %>%
+#    na.omit(beta,alpha) %>% select(-data)
+
+
+  # Write to CSV to keep in nice format:
+       short_term_data_nested %>%
+           write.csv(file = "C:/Users/Marti/OneDrive - University of Copenhagen/KU/Speciale/Data behandling/nested_daily_for_capm_sxxp.csv")
 
  betas <- read.csv("C:/Users/Marti/OneDrive - University of Copenhagen/KU/Speciale/Data behandling/nested_daily_for_capm_sxxp.csv", sep = ",") %>%
    select(-X) %>%
@@ -375,11 +381,9 @@ short_term_data <- betas %>%
   # unnest(roll_sum,names_sep = "_") %>%
      
   ) %>%
-  
   select(-c(beta,alpha,pred_ret,sdg_not_relevant_positive_count,sdg_not_relevant_negative_count))
 
-
-remove(short_term_data_nested,short_term_data_sdg,sentiment_daily,data_daily,sxxp_index_daily,msci_index_daily)
+remove(short_term_data_daily,short_term_data_nested,betas,short_term_data_sdg,sentiment_daily,data_daily,sxxp_index_daily,msci_index_daily)
 
 # Create columns that represent the lagged and leading values in relation to the event date:
 
@@ -395,7 +399,7 @@ for (i in 1:10) {
   short_term_data[paste0("pos_event_+",i)] <- short_term_data %>% group_by(isin) %>% transmute(l = lead(norm_positive_sum,i)) %>% ungroup() %>% select(-isin)
 }
 
-short_term_data_event = short_term_data %>% 
+short_term_data_event = short_term_data %>%
   group_by(isin) %>%
   mutate(
     norm_positive_sum = na_if(norm_positive_sum, 0),
@@ -453,6 +457,8 @@ positive_index_all = positive_index %>%
   arrange(isin,date,type) %>%
   group_by(isin,date)
 
+remove(positive_index_events_mean,positive_index_events)
+
 
 
 ### negative 
@@ -486,7 +492,7 @@ negative_index_all = negative_index %>%
   arrange(isin,date,type) %>%
   group_by(isin,date)
 
-
+remove(negative_index_events_mean,negative_index_events)
 
 ### 10 days around the event: 
 
@@ -608,7 +614,7 @@ short_term_data_event_sdg = short_term_data_sdg %>%
   select(isin,date,abnormal_ret, contains("sdg")) %>% 
   select(isin,date,abnormal_ret, contains("tive"),-c(sdg_broad_negative_count,sdg_broad_neutral_count,sdg_broad_positive_count))
 
-remove(short_term_data_sdg,sentiment_daily,data_daily)
+remove(short_term_data_sdg,sentiment_daily,data_daily,betas,)
 # Create columns that represent the lagged and leading values in relation to the event date:
 
 for (i in 1:10) {

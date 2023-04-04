@@ -77,7 +77,7 @@ roll_capm_estimation <- function(data, window, min_obs, period = "day" ) {
     .x = data,
     .i = data$date,
     .period = period,
-    .f = ~ estimate_capm(., min_obs),
+    .f = ~ estimate_capm(data = ., min_obs),
     .before = window - 1,
     .complete = FALSE
   )
@@ -119,7 +119,7 @@ compute_portfolio_weights <- function(theta,
                                       value_weighting = TRUE,
                                       allow_short_selling = TRUE) {
   data |>
-    group_by(date) |>
+    group_by(month) |>
     bind_cols(
       characteristic_tilt = data |>
         transmute(across(contains("lag"), ~ . / n)) |>
@@ -144,20 +144,23 @@ compute_portfolio_weights <- function(theta,
     ungroup()
 }
 
+
+
+
 evaluate_portfolio <- function(weights_crsp,
                                full_evaluation = TRUE) {
   evaluation <- weights_crsp |>
-    group_by(date) |>
+    group_by(month) |>
     summarize(
-      return_tilt = weighted.mean(ret, weight_tilt),
-      return_benchmark = weighted.mean(ret, weight_benchmark)
+      return_tilt = weighted.mean(ret_excess, weight_tilt),
+      return_benchmark = weighted.mean(ret_excess, weight_benchmark)
     ) |>
-    pivot_longer(-date,
+    pivot_longer(-month,
                  values_to = "portfolio_return",
                  names_to = "model"
     ) |>
     group_by(model) |>
-    left_join(eu_3factors_daily, by = "date") |>
+    left_join(factors_ff_monthly, by = "month") |>
     summarize(tibble(
       "Expected utility" = mean(power_utility(portfolio_return)),
       "Average return" = 100 * mean(12 * portfolio_return),
@@ -172,9 +175,9 @@ evaluate_portfolio <- function(weights_crsp,
   
   if (full_evaluation) {
     weight_evaluation <- weights_crsp |>
-      select(date, contains("weight")) |>
-      pivot_longer(-date, values_to = "weight", names_to = "model") |>
-      group_by(model, date) |>
+      select(month, contains("weight")) |>
+      pivot_longer(-month, values_to = "weight", names_to = "model") |>
+      group_by(model, month) |>
       transmute(tibble(
         "Absolute weight" = abs(weight),
         "Max. weight" = max(weight),
@@ -183,7 +186,7 @@ evaluate_portfolio <- function(weights_crsp,
         "Avg. fraction of negative weights" = sum(weight < 0) / n()
       )) |>
       group_by(model) |>
-      summarize(across(-date, ~ 100 * mean(.))) |>
+      summarize(across(-month, ~ 100 * mean(.))) |>
       mutate(model = str_remove(model, "weight_")) |>
       pivot_longer(-model, names_to = "measure") |>
       pivot_wider(names_from = model, values_from = value)
@@ -191,7 +194,6 @@ evaluate_portfolio <- function(weights_crsp,
   }
   return(evaluation)
 }
-
 
 
 compute_objective_function <- function(theta,

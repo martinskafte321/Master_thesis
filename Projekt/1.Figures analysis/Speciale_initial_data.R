@@ -17,7 +17,7 @@ setwd("C:/Users/Marti/OneDrive - University of Copenhagen/KU/Speciale/Data behan
 
 # Read stock data from:
 ISIN <- read_excel("ISIN numbers.xlsx")
-stock <- read_excel("SXXP_stock_data_weekly.xlsx")
+stock <- read_excel("SXXP_monthly.xlsx")
 
 # Clean up the stock market data: Remove the two first rows 
 stocks <- stock %>%
@@ -40,21 +40,20 @@ stocks <- stock %>%
 
 
 # Summarize the stocks to index by date and isin
-stocks_weekly <- stocks %>%
+stocks_monthly <- stocks %>%
   pivot_wider(
     names_from = type,
     values_from = value
-  ) %>% na.omit()
+  ) %>% unnest(c(PX_LAST,MKT_CAP,W_RETURN)) %>% na.omit()
 
 
 # Write to CSV to keep in nice format:
-  stocks_weekly %>%
-      write.csv(file = "clean_stock_data_weekly.csv")
+stocks_monthly %>%
+      write.csv(file = "clean_stock_data_monthly.csv")
   
 
-
 ###############################################################
-############# Get Sentiment data weekly ##############################
+############# Get Sentiment data monthly ##############################
 ###############################################################
 
 # Read Sentiment data from CSV
@@ -71,98 +70,22 @@ remove(stock,ISIN)
 
 # Compute the last business day of the week, then sum the amount of observations for that week
 # Summarize sentiment data into weekly observations to match the stock market data: countable items are summed, averages are averaged (runtime: 1 min)
-sentiment_weekly <- sentiment %>%
-  mutate(date = ceiling_date(date, "week", week_start = getOption("lubridate.week.start", 5))) %>%
+sentiment_monthly <- sentiment %>%
+  group_by(isin) %>%
+  mutate(date = ceiling_date(date + 1, "month") - 1) %>%
+  mutate(date = as.Date(date, format = "%Y-%m-%d")) %>%
   group_by(date,isin) %>%
-  summarise(
-    observations = sum(observations),
-    observations_unique_sentences = sum(observations_unique_sentences),
-    observations_unique_articles  = sum(observations_unique_articles),
-    observations_unique_sources   = sum(observations_unique_sources ),
-    global_unique_sentences   = sum(global_unique_sentences ),
-    global_unique_articles  = sum(global_unique_articles),
-    global_unique_sources   = sum(global_unique_sources ),
-    sentiment_negative_count   = sum(sentiment_negative_count ),
-    sentiment_neutral_count   = sum(observations_unique_articles),
-    sentiment_positive_count   = sum(sentiment_positive_count ),
-    
-    sentiment_negative_mean   = mean(sentiment_negative_mean ),
-    sentiment_neutral_mean   = mean(sentiment_neutral_mean ),
-    sentiment_positive_mean   = mean(sentiment_positive_mean ),
-    # sentiment_negative_max   = mean(sentiment_negative_max ),
-    # sentiment_neutral_max   = mean(sentiment_neutral_max ),
-    # sentiment_positive_max   = mean(sentiment_positive_max ),
-    sentiment_negative_weighted_mean   = mean(sentiment_negative_weighted_mean ),
-    sentiment_positive_weighted_mean   = mean(sentiment_positive_weighted_mean ),
-    sentiment_negative_weighted_max   = mean(sentiment_negative_weighted_max ),
-    sentiment_positive_weighted_max   = mean(sentiment_positive_weighted_max ),
-    
-    sdg_1_negative_count = sum(sdg_1_negative_count),
-    sdg_1_neutral_count = sum(sdg_1_neutral_count),
-    sdg_1_positive_count = sum(sdg_1_positive_count),
-    sdg_2_negative_count = sum(sdg_2_negative_count),
-    sdg_2_neutral_count = sum(sdg_2_neutral_count),
-    sdg_2_positive_count = sum(sdg_2_positive_count),
-    sdg_3_negative_count = sum(sdg_3_negative_count),
-    sdg_3_neutral_count = sum(sdg_3_neutral_count),
-    sdg_3_positive_count = sum(sdg_3_positive_count),
-    sdg_4_negative_count = sum(sdg_4_negative_count),
-    sdg_4_neutral_count = sum(sdg_4_neutral_count),
-    sdg_4_positive_count = sum(sdg_4_positive_count),
-    sdg_5_negative_count = sum(sdg_5_negative_count),
-    sdg_5_neutral_count = sum(sdg_5_neutral_count),
-    sdg_5_positive_count = sum(sdg_5_positive_count),
-    sdg_6_negative_count = sum(sdg_6_negative_count),
-    sdg_6_neutral_count = sum(sdg_6_neutral_count),
-    sdg_6_positive_count = sum(sdg_6_positive_count),
-    sdg_7_negative_count = sum(sdg_7_negative_count),
-    sdg_7_neutral_count = sum(sdg_7_neutral_count),
-    sdg_7_positive_count = sum(sdg_7_positive_count),
-    sdg_8_negative_count = sum(sdg_8_negative_count),
-    sdg_8_neutral_count = sum(sdg_8_neutral_count),
-    sdg_8_positive_count = sum(sdg_8_positive_count),
-    sdg_9_negative_count = sum(sdg_9_negative_count),
-    sdg_9_neutral_count = sum(sdg_9_neutral_count),
-    sdg_9_positive_count = sum(sdg_9_positive_count),
-    sdg_10_negative_count = sum(sdg_10_negative_count),
-    sdg_10_neutral_count = sum(sdg_10_neutral_count),
-    sdg_10_positive_count = sum(sdg_10_positive_count),
-    sdg_11_negative_count = sum(sdg_11_negative_count),
-    sdg_11_neutral_count = sum(sdg_11_neutral_count),
-    sdg_11_positive_count = sum(sdg_11_positive_count),
-    sdg_12_negative_count = sum(sdg_12_negative_count),
-    sdg_12_neutral_count = sum(sdg_12_neutral_count),
-    sdg_12_positive_count = sum(sdg_12_positive_count),
-    sdg_13_negative_count = sum(sdg_13_negative_count),
-    sdg_13_neutral_count = sum(sdg_13_neutral_count),
-    sdg_13_positive_count = sum(sdg_13_positive_count),
-    sdg_14_negative_count = sum(sdg_14_negative_count),
-    sdg_14_neutral_count = sum(sdg_14_neutral_count),
-    sdg_14_positive_count = sum(sdg_14_positive_count),
-    sdg_15_negative_count = sum(sdg_15_negative_count),
-    sdg_15_neutral_count = sum(sdg_15_neutral_count),
-    sdg_15_positive_count = sum(sdg_15_positive_count),
-    sdg_broad_negative_count  = sum(sdg_broad_negative_count),
-    sdg_broad_neutral_count   = sum(sdg_broad_neutral_count),
-    sdg_broad_positive_count = sum(sdg_broad_positive_count),
-    sdg_not_relevant_negative_count = sum(sdg_not_relevant_negative_count),
-    sdg_not_relevant_positive_count = sum(sdg_not_relevant_positive_count)
-  ) %>% 
-  mutate(date = as.Date(date, format = "%Y-%m-%d"))
-  
-
-stocks_weekly = read.csv("clean_stock_data_weekly.csv") %>%
-  select(-X)  %>%
-  mutate(date = as.Date(date, format = "%Y-%m-%d"))
+  summarise_if(is.numeric, sum, na.rm = TRUE)  %>%
+  group_by(isin) %>%
+  mutate(date = lead(date)) 
 
 # Join the weekly sentiment data with the stock prices
-all_data_week <- stocks_weekly %>%
-  left_join(sentiment_weekly, by = c("date","isin")) #%>%
-  # drop_na(observations) 
+all_data_monthly <- stocks_monthly %>%
+  left_join(sentiment_monthly, by = c("date","isin"))
 
 # Write to CSV to keep in nice format:
-all_data_week %>%
-           write.csv(file = "all_data_week.csv")
+all_data_monthly %>%
+           write.csv(file = "all_data_month.csv")
 
        
        ###############################################################
@@ -173,8 +96,9 @@ all_data_week %>%
        ISIN <- read_excel("ISIN numbers.xlsx")
        stock <- read_excel("SXXP_daily.xlsx")
        
+       
        # Clean up the stock market data: Remove the two first rows 
-       stocks <- stock %>%
+       stocks_clean <- stock %>%
          filter(!row_number() %in% c(1,2)) %>% 
          # Make the data set a long matrix instead of wide
          pivot_longer(!DATES, names_to = "firm",values_to = "value")  %>% 
@@ -194,18 +118,21 @@ all_data_week %>%
        
        
        # Summarize the stocks to index by date and isin
-       stocks_daily <- stocks %>%
+       stocks_daily <- stocks_clean %>%
          pivot_wider(
            names_from = type,
            values_from = value
-         ) %>% na.omit()
+         )  %>% na.omit() 
+       
+       stocks_daily = stocks_daily %>% rbind(stocks_daily_2017)
        
        
        # Write to CSV to keep in nice format:
        stocks_daily %>%
          write.csv(file = "clean_stock_data_daily.csv")
        
-       remove(ISIN,stock,stocks)
+       remove(ISIN,stock,stocks_clean)
+      
        
        ###############################################################
        ############# Get Sentiment data daily ##############################
@@ -222,30 +149,36 @@ all_data_week %>%
        
        
        # Add a variable that contains the sum of all, respectively, positive, negative and neutral signals wrt. SGD's: 
-       sentiment_daily <- sentiment %>% group_by(date,isin) %>%
-         mutate(
-           negative_sum = sum(c_across(contains("sdg") & contains("negative_count"))),
-           neutral_sum = sum(c_across(contains("sdg") & contains("neutral_count"))),
-           positive_sum = sum(c_across(contains("sdg") & contains("positive_count")))
-         )  %>%
-         # Make sure that if a news article is published on a weekend, then it should show as Friday, because we measure the return on Monday. 
+       sentiment_daily <- sentiment %>% 
+         group_by(isin) %>%
+         # Lead the sentiment data with respect to stock market data, so we can measure t = -1 news with t = 0 returns. 
          mutate(date = date(date),
                 Day = weekdays(date), 
-                date = case_when(Day == "lørdag" ~ date - 1, 
-                                 Day == "søndag" ~ date - 2, 
-                                 TRUE ~ date)) %>%
-         select(-Day) %>% select(-match_names) %>%
+                date = case_when(Day == "lørdag" ~ date + days(2), 
+                                 Day == "søndag" ~ date + days(1), 
+                                 TRUE ~ date)
+                ) %>% 
+       select(-Day) %>%
          group_by(date,isin) %>%
-         summarise_all(sum)
+         summarise_all(mean)
+       
        
        # Write to CSV to keep in nice format:
        sentiment_daily %>%
          write.csv(file = "clean_sentiment_daily.csv")
        
+       
+       stocks <- read.csv("clean_stock_data_daily.csv", sep = ",") %>%
+         select(-X)
+       
+       sentiment_daily_test <- read.csv("clean_sentiment_daily.csv", sep = ",") %>%
+         select(-X)
+       
+       
+       
        # Join the weekly sentiment data with the stock prices
-       all_data_daily <- stocks_daily %>%
-         left_join(sentiment_daily, by = c("date","isin")) #%>%
-       # drop_na(observations) 
+       all_data_daily <- stocks %>% mutate(date = as.Date(date)) %>% 
+         left_join(sentiment_daily %>% mutate(date = as.Date(date)), by = c("date","isin"))
        
        # Write to CSV to keep in nice format:
        all_data_daily %>%
