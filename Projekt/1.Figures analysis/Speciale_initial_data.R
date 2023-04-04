@@ -44,14 +44,16 @@ stocks_monthly <- stocks %>%
   pivot_wider(
     names_from = type,
     values_from = value
-  ) %>% unnest(c(PX_LAST,MKT_CAP,W_RETURN)) %>% na.omit()
+  ) %>% unnest(c(PX_LAST,MKT_CAP,W_RETURN)) %>% na.omit() %>%
+  mutate(date = ceiling_date(date, "month")-1)
 
 
 # Write to CSV to keep in nice format:
 stocks_monthly %>%
       write.csv(file = "clean_stock_data_monthly.csv")
   
-
+stocks_monthly <- read.csv("clean_stock_data_monthly.csv", sep = ",") %>%
+  select(-X)
 ###############################################################
 ############# Get Sentiment data monthly ##############################
 ###############################################################
@@ -72,25 +74,24 @@ remove(stock,ISIN)
 # Summarize sentiment data into weekly observations to match the stock market data: countable items are summed, averages are averaged (runtime: 1 min)
 sentiment_monthly <- sentiment %>%
   group_by(isin) %>%
-  mutate(date = ceiling_date(date + 1, "month") - 1) %>%
-  mutate(date = as.Date(date, format = "%Y-%m-%d")) %>%
+  mutate(date = as.Date(date, format = "%Y-%m-%d"),
+         date = ceiling_date(date + 1, "month")-1) %>%
   group_by(date,isin) %>%
   summarise_if(is.numeric, sum, na.rm = TRUE)  %>%
-  group_by(isin) %>%
-  mutate(date = lead(date)) 
+  group_by(isin)
 
-# Join the weekly sentiment data with the stock prices
-all_data_monthly <- stocks_monthly %>%
-  left_join(sentiment_monthly, by = c("date","isin"))
+# Join the monthly sentiment data with the stock prices
+all_data_monthly <- stocks_monthly %>% mutate(date = as.Date(date)) %>% 
+  left_join(sentiment_monthly %>% mutate(date = as.Date(date)), by = c("date","isin"))
 
 # Write to CSV to keep in nice format:
 all_data_monthly %>%
            write.csv(file = "all_data_month.csv")
 
        
-       ###############################################################
-       ############# Get stock market data daily ###########################
-       ###############################################################
+###############################################################
+############# Get stock market data daily ###########################
+###############################################################
        
        # Read stock data from:
        ISIN <- read_excel("ISIN numbers.xlsx")

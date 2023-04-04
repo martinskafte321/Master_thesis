@@ -164,8 +164,8 @@ Sorting the SDGs into five groups to see if they become significant (not the cas
 
 
 all = short_term_return_sdg_5 %>%
-  filter(group == 'positive') %>%
-  mutate_at("sdg", str_replace, "_positive_count", "") %>%
+  filter(group == 'negative') %>%
+  mutate_at("sdg", str_replace, "_negative_count", "") %>%
   mutate_at("sdg", str_replace, "_", " ") %>%
   mutate(sdg = factor(sdg, levels = c("sdg 1", "sdg 2","sdg 3","sdg 4","sdg 5","sdg 6","sdg 7","sdg 8","sdg 9","sdg 10","sdg 11", 
                                         "sdg 12", "sdg 13","sdg 14","sdg 15","sdg 16","sdg 17"))) %>%
@@ -174,10 +174,10 @@ all = short_term_return_sdg_5 %>%
    mutate(sdg = as.character(sdg)) %>%
    mutate(sdg = case_when(
     sdg == "sdg 1" | sdg == "sdg 2" | sdg == "sdg 3" | sdg == "sdg 4" | sdg == "sdg 5"  ~ "People",
-    sdg == "sdg 7" | sdg == "sdg 8" | sdg == "sdg 9" | sdg == "sdg 10" | sdg == "sdg 11"  ~ "prosperity",
-    sdg == "sdg 6" | sdg == "sdg 12" | sdg == "sdg 13" | sdg == "sdg 14" | sdg == "sdg 15"  ~ "planet",
-    sdg == "sdg 16"  ~ "peace",
-    sdg == "sdg 17" ~ "partnership")
+    sdg == "sdg 7" | sdg == "sdg 8" | sdg == "sdg 9" | sdg == "sdg 10" | sdg == "sdg 11"  ~ "Prosperity",
+    sdg == "sdg 6" | sdg == "sdg 12" | sdg == "sdg 13" | sdg == "sdg 14" | sdg == "sdg 15"  ~ "Planet",
+    sdg == "sdg 16"  ~ "Peace",
+    sdg == "sdg 17" ~ "Partnership")
          ) %>%
   mutate(period = as.factor(period),
            sdg = as.factor(sdg)) %>%
@@ -208,10 +208,13 @@ all %>%
   geom_errorbar( aes(x=sdg, ymin=sum-CI, ymax=sum+CI), colour = "orange", width=0.5, alpha=0.8, size=0.7) + 
   scale_y_continuous(name ="Abnormal return",
                      labels = scales::percent) +
+  labs(x = "SDG group") +
   theme(legend.title = element_blank(),
         legend.key.size = unit(0.5, 'cm'),
-        axis.text.x = element_text(angle=45))
-ggsave("ST_positive_sdg_bar_groups_0.png")
+        axis.text.x = element_text(angle=45))+
+  theme_bw() + 
+  theme(legend.position = "none")
+ggsave("ST_negative_sdg_bar_groups_0.png")
 
 ```
 
