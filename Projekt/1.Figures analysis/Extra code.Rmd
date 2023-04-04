@@ -16,15 +16,8 @@ Short term abnormal return 2/5 days before-after an individual event - Daily spl
 ```{r}
  # Use the data from above chunk
 
-short_term_data_sdg <- short_term_data_nested %>% 
-  left_join(data_daily, by = c("date","isin")) %>%
-  
-  left_join(
-    sentiment_daily %>%
-      mutate(date = as.Date(date)),
-      # select(date,isin,sdg_not_relevant_negative_count,sdg_not_relevant_positive_count,sentiment_negative_count,sentiment_positive_count), 
-            by = c("date","isin")) %>%
-  
+short_term_data_sdg <- betas %>% 
+  left_join(short_term_data_daily, by = c("date","isin")) %>%
   group_by(isin) %>%
   mutate(
       pred_ret = alpha + beta*mkt_excess,
@@ -45,8 +38,8 @@ for (i in 1:10) {
   short_term_data_event_sdg[paste0("",i)] <- short_term_data_event_sdg %>% group_by(isin) %>% transmute(t = lead(abnormal_ret,i)) %>% ungroup() %>% select(-isin)
 }
 
-  short_term_return_sdg_2 = short_term_return_sdg %>%
-  select(isin,date,"-5","-4","-3","-2","-1","0", "1", "2","3","4","5",sdg,event,group)
+  short_term_return_sdg_5 = short_term_return_sdg %>%
+  select(isin,date,"0",sdg,event,group)
  
 
 # Splitting up positive and negative events:
@@ -99,7 +92,7 @@ se_pos_bar = short_term_return_sdg_5 %>%
   arrange(isin,sdg,date,period) %>%
   group_by(isin,sdg,date) %>%
   mutate(CAAR = cumsum(abnormal_ret)) %>%
-  group_by(sdg) %>% filter(period == '5') %>%
+  group_by(sdg) %>% filter(period == '0') %>%
   summarise(n = n(),
             sd = sd(CAAR),
             se = sd/sqrt(n),
@@ -121,7 +114,7 @@ positive_index_sdg_5 %>%
   theme(legend.title = element_blank(),
         legend.key.size = unit(0.5, 'cm'),
         axis.text.x = element_text(angle=45))
-ggsave("ST_positive_sdg_bar_5.png")
+ggsave("ST_positive_sdg_bar_0.png")
 
 se_neg_bar = short_term_return_sdg_5 %>%
   filter(group == 'negative') %>% 
@@ -135,7 +128,7 @@ se_neg_bar = short_term_return_sdg_5 %>%
   arrange(isin,sdg,date,period) %>%
   group_by(isin,sdg,date) %>% 
   mutate(CAAR = cumsum(abnormal_ret)) %>%
-  group_by(sdg) %>% filter(period == '5') %>%
+  group_by(sdg) %>% filter(period == '0') %>%
   summarise(n = n(),
             sd = sd(CAAR),
             se = sd/sqrt(n),
@@ -158,7 +151,7 @@ negative_index_sdg_5 %>%
   theme(legend.title = element_blank(),
         legend.key.size = unit(0.5, 'cm'),
         axis.text.x = element_text(angle=45))
-ggsave("ST_negative_sdg_bar_5.png")
+ggsave("ST_negative_sdg_bar_0.png")
 
 
 ```
@@ -171,8 +164,8 @@ Sorting the SDGs into five groups to see if they become significant (not the cas
 
 
 all = short_term_return_sdg_5 %>%
-  filter(group == 'negative') %>%
-  mutate_at("sdg", str_replace, "_negative_count", "") %>%
+  filter(group == 'positive') %>%
+  mutate_at("sdg", str_replace, "_positive_count", "") %>%
   mutate_at("sdg", str_replace, "_", " ") %>%
   mutate(sdg = factor(sdg, levels = c("sdg 1", "sdg 2","sdg 3","sdg 4","sdg 5","sdg 6","sdg 7","sdg 8","sdg 9","sdg 10","sdg 11", 
                                         "sdg 12", "sdg 13","sdg 14","sdg 15","sdg 16","sdg 17"))) %>%
@@ -195,7 +188,7 @@ bands = all %>%
    arrange(isin,sdg,date,period) %>%
   group_by(isin,sdg,date) %>% 
   mutate(CAAR = cumsum(abnormal_ret)) %>%
-  group_by(sdg) %>% filter(period == '5') %>%
+  group_by(sdg) %>% filter(period == '0') %>%
   summarise(n = n(),
             sd = sd(CAAR),
             se = sd/sqrt(n),
@@ -218,6 +211,7 @@ all %>%
   theme(legend.title = element_blank(),
         legend.key.size = unit(0.5, 'cm'),
         axis.text.x = element_text(angle=45))
+ggsave("ST_positive_sdg_bar_groups_0.png")
 
 ```
 
