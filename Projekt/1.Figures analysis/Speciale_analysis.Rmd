@@ -67,7 +67,7 @@ eu_3factors_monthly = read.csv("C:/Users/Marti/OneDrive - University of Copenhag
   filter(date >= '2018-01-01')
 
 eu_5factors_monthly = read.csv("C:/Users/Marti/OneDrive - University of Copenhagen/KU/Speciale/Data behandling/eu_5factors_monthly.csv", sep = ",") %>%
-  na.omit() %>% select(-X,-w_ret) %>%
+  na.omit() %>% select(-X) %>%
   mutate(date = as.Date(date)) %>%
   filter(date >= '2018-01-01')
 
@@ -117,7 +117,7 @@ long_term_data_monthly <- data_monthly %>%
     ) 
 
 ############################
-# Negative events:
+# Positive events:
 ############################
 
 # Add lagged values of the events to sort whether an event has happened in the last X months. 
@@ -149,14 +149,14 @@ long_term_data_M_positive = long_term_data_positive %>%
   group_by(date) %>%
   summarise(ret = weighted.mean(ret,free_float_mkt_cap),
             n = n_distinct(isin)) %>%
-  left_join(eu_5factors_monthly, by = "date")
+  left_join(eu_3factors_monthly, by = "date")
 
 # Calculate alpha of portfolios:
   
 alpha_M_positive = long_term_data_M_positive %>% 
-   summarise(alpha = tidy(lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML + RMW + CMA))$estimate[1],
-             t = tidy(lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML + RMW + CMA))$statistic[1],
-             p = tidy(lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML + RMW + CMA))$p.value[1],
+  summarise(alpha = tidy(lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML, weights = n))$estimate[1],
+             t = tidy(lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML, weights = n))$statistic[1],
+             p = tidy(lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML, weights = n))$p.value[1],
              return = 100*mean(12*(ret-RF)),
              index_return = 100*mean(12*mkt_excess_ret),
              ave_N = mean(n)) %>%
@@ -173,7 +173,7 @@ emptylist_pos_1[[z]] = alpha_positive
 emptylist_pos_2[[y]] = emptylist_pos_1
 }
 
-  emptylist2[[2]][3]
+  emptylist_pos_2[[2]][3]
 
 # Plot the returns:
 # long_term_data_M_positive %>%
@@ -188,13 +188,13 @@ emptylist_pos_2[[y]] = emptylist_pos_1
 #       ggsave(paste0("LT_positive_returns_", i,".png"))
 #}
 
-print(xtable(as.data.frame(emptylist2[[2]][3]),type="latex",
-             digits=c(0,4,2,2,2,0,1,1,1,1),
+print(xtable(as.data.frame(emptylist_pos_2[[5]][2]),type="latex",
+             digits=c(0,4,2,3,2,0,1,1,1,1),
              hline.after=c(-1,0),
              floating=FALSE,latex.environments=NULL),
       include.rownames=FALSE,
       include.colnames = TRUE) %>% 
-  write(file="alpha_positive_FF3_1.tex")
+  write(file="alpha_positive_FF3_2.tex")
 ```
 
 ```{r}
@@ -276,9 +276,9 @@ long_term_data_M_negative = long_term_data_negative %>%
 # Calculate alpha of portfolios:
   
 alpha_M_negative = long_term_data_M_negative %>% 
-   summarise(alpha = tidy(lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML))$estimate[1],
-             t = tidy(lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML))$statistic[1],
-             p = tidy(lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML))$p.value[1],
+   summarise(alpha = tidy(lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML, weights = n))$estimate[1],
+             t = tidy(lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML, weights = n))$statistic[1],
+             p = tidy(lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML, weights = n))$p.value[1],
              return = 100*mean(12*(ret-RF)),
              index_return = 100*mean(12*mkt_excess_ret),
              ave_N = mean(n)) %>%
@@ -310,13 +310,13 @@ emptylist_neg_2[[y]] = emptylist_neg_1
 #}
 
 
-print(xtable(as.data.frame(emptylist_neg_2[[5]][2]),type="latex",
+print(xtable(as.data.frame(emptylist_neg_2[[1]][3]),type="latex",
              digits=c(0,4,2,3,2,0,1,1,1,1),
              hline.after=c(-1,0),
              floating=FALSE,latex.environments=NULL),
       include.rownames=FALSE,
       include.colnames = TRUE) %>% 
-  write(file="alpha_negative_FF3_5.tex")
+  write(file="alpha_negative_FF3_1.tex")
 
 
 ```
