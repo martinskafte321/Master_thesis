@@ -24,11 +24,20 @@ library(xtable)
 library(purrr)
 library(stringr)
 library(magrittr)
-library(BSDA)
+#library(BSDA)
 library(scales)
 library(generics)
 
 source("functions.R")
+
+
+
+```
+
+#################################
+### Data for daily returns:
+#################################
+```{r}
 
 # STOXX 600 Europe index 
 sxxp_index_daily <- read.csv("C:/Users/Marti/OneDrive - University of Copenhagen/KU/Speciale/Data behandling/STOXX_600_INDEX.csv", 
@@ -39,12 +48,6 @@ sxxp_index_daily <- read.csv("C:/Users/Marti/OneDrive - University of Copenhagen
 # Sentiment and stock data merged together with daily observations
 data_daily <- read.csv("C:/Users/Marti/OneDrive - University of Copenhagen/KU/Speciale/Data behandling/data_daily.csv", sep = ",")  %>% 
   mutate(date = as.Date(date)) %>% select(-X)
-
-# Sentiment and stock data merged together with weekly observations
-data_monthly <- read.csv("C:/Users/Marti/OneDrive - University of Copenhagen/KU/Speciale/Data behandling/all_data_month.csv", sep = ",") %>%
-  mutate(date = as.Date(date)) %>% select(date,isin, MKT_CAP,W_RETURN, sentiment_negative_count,sentiment_positive_count,sdg_not_relevant_negative_count, sdg_not_relevant_positive_count)
-
-
 ```
 
 #################################
@@ -53,55 +56,20 @@ data_monthly <- read.csv("C:/Users/Marti/OneDrive - University of Copenhagen/KU/
 ```{r} 
 # Data connection to get STOXX 600 Europe sentiment and stock data. Joined on stock data, so there will be NA's in the sentiment.  
  
-eu_3factors_monthly <- read.csv("C:/Users/Marti/OneDrive - University of Copenhagen/KU/Speciale/Data behandling/Eu_3_Factors.csv", sep = ",") %>% 
-  transmute(
-        date = as.Date(ym(X)),
-        date = ceiling_date(date, "month")-1,
-        mkt_excess = as.numeric(Mkt.RF)/100,
-        SMB = as.numeric(SMB)/100,
-        HML = as.numeric(HML)/100,
-        RF = as.numeric(RF)/100) %>%
+# Sentiment and stock data merged together with weekly observations
+data_monthly <- read.csv("C:/Users/Marti/OneDrive - University of Copenhagen/KU/Speciale/Data behandling/all_data_month.csv", sep = ",") %>%
+  mutate(date = as.Date(date)) %>% select(date,isin, MKT_CAP,free_float_mkt_cap,W_RETURN, sentiment_negative_count,sentiment_positive_count,sdg_not_relevant_negative_count, sdg_not_relevant_positive_count)
+
+eu_3factors_monthly = read.csv("C:/Users/Marti/OneDrive - University of Copenhagen/KU/Speciale/Data behandling/eu_3factors_monthly.csv", sep = ",") %>%
+  na.omit() %>% select(-X) %>%
+  mutate(date = as.Date(date)) %>%
   filter(date >= '2018-01-01')
 
+eu_5factors_monthly = read.csv("C:/Users/Marti/OneDrive - University of Copenhagen/KU/Speciale/Data behandling/eu_5factors_monthly.csv", sep = ",") %>%
+  na.omit() %>% select(-X) %>%
+  mutate(date = as.Date(date)) %>%
+  filter(date >= '2018-01-01')
 
-eu_5factors_daily <- read.csv("C:/Users/Marti/OneDrive - University of Copenhagen/KU/Speciale/Data behandling/Europe_5_Factors_Daily.csv", sep = ",") %>% 
-  transmute(date = as.Date(ym(X)),
-         mkt_excess = as.numeric(Mkt.RF)/100,
-         SMB = as.numeric(SMB)/100,
-         HML = as.numeric(HML)/100,
-         RF = as.numeric(RF)/100)
-
-
-
-long_term_data_monthly <- data_monthly %>%
-  transmute(date,isin,MKT_CAP, 
-            ret = W_RETURN, 
-            norm_positive_sum = sentiment_positive_count - sdg_not_relevant_positive_count,
-            norm_negative_sum = sentiment_negative_count - sdg_not_relevant_negative_count,
-            ) %>%
-  group_by(isin) %>%
-  transmute(date,isin,ret,MKT_CAP,
-    norm_positive_sum = replace_na(norm_positive_sum,0),
-    norm_negative_sum = replace_na(norm_negative_sum,0),
-    roll_mean = across(!c(date,ret,MKT_CAP),
-                      ~ rollmean(.x, k = 1, fill = NA, align = "right"))) %>%
-  unnest(roll_mean,names_sep = "_") %>% arrange(isin) %>%
-  group_by(isin) %>%
-    mutate(
-    roll_mean_positive = na_if(roll_mean_norm_positive_sum, 0), 
-    roll_mean_negative = na_if(roll_mean_norm_negative_sum, 0),
-    positive_threshold = mean(roll_mean_positive,na.rm = TRUE) + 2*sd(roll_mean_positive,na.rm = TRUE),
-    negative_threshold = mean(roll_mean_negative,na.rm = TRUE) + 1*sd(roll_mean_negative,na.rm = TRUE)
-    ) %>%
-  group_by(date,isin) %>%
-  # Make sure that we only calculate the cutoff value of periods with actual observations. 
-  mutate(pos_event = 
-    case_when(roll_mean_positive > positive_threshold & roll_mean_positive > 5 & roll_mean_positive > 2*roll_mean_norm_negative_sum ~ 1,
-              TRUE ~ 0),
-    neg_event = 
-    case_when(roll_mean_negative > negative_threshold & roll_mean_negative > 5 & roll_mean_negative > 0.5*roll_mean_norm_positive_sum ~ 1, 
-              TRUE ~ 0)
-    ) 
 ```
 
 ################ 
@@ -109,11 +77,52 @@ Calendar-time portfolio approach 1 month sentiment data:
 ################
 
 ```{r}
+looplist = list(1,2)
+looplist2 = list(1,2)
+emptylist1 = list()
+emptylist2 = list()
+
+
+for (y in 1:length(looplist)) {
+  
+  for (z in 1:length(looplist2)) { 
+
+long_term_data_monthly <- data_monthly %>%
+  transmute(date,isin,MKT_CAP, free_float_mkt_cap,
+            ret = W_RETURN, 
+            norm_positive_sum = sentiment_positive_count - sdg_not_relevant_positive_count,
+            norm_negative_sum = sentiment_negative_count - sdg_not_relevant_negative_count,
+            ) %>%
+  group_by(isin) %>%
+  transmute(date,isin,ret,MKT_CAP,free_float_mkt_cap,
+    norm_positive_sum = replace_na(norm_positive_sum,0),
+    norm_negative_sum = replace_na(norm_negative_sum,0),
+    roll_mean = across(!c(date,ret,MKT_CAP,free_float_mkt_cap),
+                      ~ rollmean(.x, k = y, fill = NA, align = "right"))) %>%
+  unnest(roll_mean,names_sep = "_") %>% arrange(isin) %>%
+  group_by(isin) %>%
+    mutate(
+    roll_mean_positive = na_if(roll_mean_norm_positive_sum, 0), 
+    roll_mean_negative = na_if(roll_mean_norm_negative_sum, 0),
+    positive_threshold = mean(roll_mean_positive,na.rm = TRUE) + z*sd(roll_mean_positive,na.rm = TRUE),
+    negative_threshold = mean(roll_mean_negative,na.rm = TRUE) + 2*sd(roll_mean_negative,na.rm = TRUE)
+    ) %>%
+  group_by(date,isin) %>%
+  # Make sure that we only calculate the cutoff value of periods with actual observations. 
+  mutate(pos_event = 
+    case_when(roll_mean_positive > positive_threshold & roll_mean_positive > 5 & roll_mean_positive > 2*roll_mean_norm_negative_sum ~ 1,
+              TRUE ~ 0),
+    neg_event = 
+    case_when(roll_mean_negative > negative_threshold & roll_mean_negative > 5 #& roll_mean_negative > 0.5*roll_mean_norm_positive_sum 
+              ~ 1, 
+              TRUE ~ 0)
+    ) 
 
 
 ###########################
 # Positive events:
 ###########################
+
 
 long_term_data_monthly_positive = long_term_data_monthly 
 
@@ -123,8 +132,8 @@ long_term_data_monthly_positive = long_term_data_monthly
   }
 
 
-long_term_data_positive = long_term_data_monthly_positive %>% select(date,isin,ret,MKT_CAP,contains("-")) %>%
-  pivot_longer(!c(date,isin,ret,MKT_CAP), names_to = "period", values_to = "event") %>%
+long_term_data_positive = long_term_data_monthly_positive %>% select(date,isin,ret,MKT_CAP,free_float_mkt_cap,contains("-")) %>%
+  pivot_longer(!c(date,isin,ret,MKT_CAP,free_float_mkt_cap), names_to = "period", values_to = "event") %>%
   mutate(period = as.numeric(period)) %>%
   filter(event == '1') %>% 
     # Remove duplicate rows of the returns in case one ISIN pops up on several dates. 
@@ -133,8 +142,8 @@ long_term_data_positive = long_term_data_monthly_positive %>% select(date,isin,r
 # x Month portfolio returns:
 
 list = list(1,4,8,12)
-alpha_positive <- data.frame(matrix(nrow=4, ncol=5)) 
-colnames(alpha_positive)<-c("Alpha","t","p" ,"return", "model")
+alpha_positive <- data.frame(matrix(nrow=4, ncol=6)) 
+colnames(alpha_positive)<-c("Alpha","t","p" ,"return","index_return", "model")
 
 for (x in 1:length(list)) {
   
@@ -144,31 +153,42 @@ long_term_data_M_positive = long_term_data_positive %>%
   # Only include the last i months:
   filter(period >= -i) %>%
   group_by(date) %>%
-  summarise(ret = weighted.mean(ret,MKT_CAP)) %>%
+  summarise(ret = weighted.mean(ret,free_float_mkt_cap),
+            n = n_distinct(isin)) %>%
   left_join(eu_3factors_monthly, by = "date")
+
 
 # Calculate alpha of portfolios:
 alpha_M_positive = long_term_data_M_positive %>% 
-   summarise(alpha = tidy(lm(ret ~ 1 + mkt_excess + SMB + HML))$estimate[1],
-             t = tidy(lm(ret ~ 1 + mkt_excess + SMB + HML))$statistic[1],
-             p = tidy(lm(ret ~ 1 + mkt_excess + SMB + HML))$p.value[1],
-             return = 100*mean(12*ret)) %>%
-   mutate(model = paste0(i,"M")) 
+   summarise(alpha = tidy(lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML))$estimate[1],
+             t = tidy(lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML))$statistic[1],
+             p = tidy(lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML))$p.value[1],
+             return = 100*mean(12*(ret-RF)),
+             index_return = 100*mean(12*mkt_excess_ret)) %>%
+   mutate(model = paste0(z,y,i,"M")) 
 
 alpha_positive[x,] = alpha_M_positive
 
-# Plot the returns:
-long_term_data_M_positive %>%
-  ggplot(aes(x = date, y = ret)) +
-   geom_bar(stat = 'identity') +
-   geom_smooth(method = "lm") +
-    theme_bw() +
-   labs(x = "", y = "Monthly Returns") +
-    scale_y_continuous(breaks = pretty_breaks(),
-                     labels = scales::percent) +
-   scale_x_date(date_breaks = "1 years", date_labels = "%Y")
-      ggsave(paste0("LT_positive_returns_", i,".png"))
 }
+emptylist1[[z]] = alpha_positive
+}
+emptylist2[[y]] = emptylist1
+}
+
+
+
+# Plot the returns:
+# long_term_data_M_positive %>%
+#   ggplot(aes(x = date, y = ret)) +
+#    geom_bar(stat = 'identity') +
+#    geom_smooth(method = "lm") +
+#     theme_bw() +
+#    labs(x = "", y = "Monthly Returns") +
+#     scale_y_continuous(breaks = pretty_breaks(),
+#                      labels = scales::percent) +
+#    scale_x_date(date_breaks = "1 years", date_labels = "%Y")
+#       ggsave(paste0("LT_positive_returns_", i,".png"))
+#}
 
 print(xtable(alpha_positive %>% relocate(model),type="latex",
              digits=c(0,4,4,4,4,4),
@@ -177,6 +197,50 @@ print(xtable(alpha_positive %>% relocate(model),type="latex",
       include.rownames=FALSE,
       include.colnames = TRUE) %>% 
   write(file="alpha_positive.tex")
+```
+
+```{r}
+
+looplist = list(1,2)
+looplist2 = list(1,2)
+emptylist1 = list()
+emptylist2 = list()
+
+
+for (y in 1:length(looplist)) {
+  
+  for (z in 1:length(looplist2)) { 
+
+long_term_data_monthly <- data_monthly %>%
+  transmute(date,isin,MKT_CAP, free_float_mkt_cap,
+            ret = W_RETURN, 
+            norm_positive_sum = sentiment_positive_count - sdg_not_relevant_positive_count,
+            norm_negative_sum = sentiment_negative_count - sdg_not_relevant_negative_count,
+            ) %>%
+  group_by(isin) %>%
+  transmute(date,isin,ret,MKT_CAP,free_float_mkt_cap,
+    norm_positive_sum = replace_na(norm_positive_sum,0),
+    norm_negative_sum = replace_na(norm_negative_sum,0),
+    roll_mean = across(!c(date,ret,MKT_CAP,free_float_mkt_cap),
+                      ~ rollmean(.x, k = y, fill = NA, align = "right"))) %>%
+  unnest(roll_mean,names_sep = "_") %>% arrange(isin) %>%
+  group_by(isin) %>%
+    mutate(
+    roll_mean_positive = na_if(roll_mean_norm_positive_sum, 0), 
+    roll_mean_negative = na_if(roll_mean_norm_negative_sum, 0),
+    positive_threshold = mean(roll_mean_positive,na.rm = TRUE) + 2*sd(roll_mean_positive,na.rm = TRUE),
+    negative_threshold = mean(roll_mean_negative,na.rm = TRUE) + z*sd(roll_mean_negative,na.rm = TRUE)
+    ) %>%
+  group_by(date,isin) %>%
+  # Make sure that we only calculate the cutoff value of periods with actual observations. 
+  mutate(pos_event = 
+    case_when(roll_mean_positive > positive_threshold & roll_mean_positive > 5 & roll_mean_positive > 2*roll_mean_norm_negative_sum ~ 1,
+              TRUE ~ 0),
+    neg_event = 
+    case_when(roll_mean_negative > negative_threshold & roll_mean_negative > 5 #& roll_mean_negative > 0.5*roll_mean_norm_positive_sum 
+              ~ 1, 
+              TRUE ~ 0)
+    ) 
 
 
 
@@ -191,8 +255,8 @@ long_term_data_monthly_negative = long_term_data_monthly
   long_term_data_monthly_negative[paste0("-",i)] <- long_term_data_monthly_negative %>% group_by(isin) %>% transmute(t = lag(neg_event,i)) %>% ungroup() %>% select(-isin)
   }
 
-long_term_data_negative = long_term_data_monthly_negative %>% select(date,isin,ret,MKT_CAP,contains("-")) %>%
-  pivot_longer(!c(date,isin,ret,MKT_CAP), names_to = "period", values_to = "event") %>%
+long_term_data_negative = long_term_data_monthly_negative %>% select(date,isin,ret,MKT_CAP,free_float_mkt_cap,contains("-")) %>%
+  pivot_longer(!c(date,isin,ret,MKT_CAP,free_float_mkt_cap), names_to = "period", values_to = "event") %>%
   mutate(period = as.numeric(period)) %>% 
   filter(event == '1') %>%
     # Remove duplicate rows of the returns in case one ISIN pops up on several dates. 
@@ -201,9 +265,9 @@ long_term_data_negative = long_term_data_monthly_negative %>% select(date,isin,r
 
 # x Month portfolio returns:
 
-list = list(1,2,3,4,5,6,7,8,9,10,11,12)
-alpha_negative <- data.frame(matrix(nrow=4, ncol=5)) 
-colnames(alpha_negative)<-c("Alpha","t","p" ,"return", "model")
+list = list(1,4,8,12)
+alpha_negative <- data.frame(matrix(nrow=4, ncol=6)) 
+colnames(alpha_negative)<-c("Alpha","t","p" ,"return","index_return", "model")
 
 for (x in 1:length(list)) {
   
@@ -213,19 +277,28 @@ long_term_data_M_negative = long_term_data_negative %>%
   # Only include the last 1 months:
   filter(period >= -i) %>% 
   group_by(date) %>%
-  summarise(ret = weighted.mean(ret,MKT_CAP)) %>%
+  summarise(ret = weighted.mean(ret,free_float_mkt_cap),
+            n = n_distinct(isin)) %>%
   left_join(eu_3factors_monthly, by = "date")
 
 # Calculate alpha of portfolios:
   
 alpha_M_negative = long_term_data_M_negative %>% 
-   summarise(alpha = tidy(lm(ret ~ 1 + mkt_excess + SMB + HML))$estimate[1],
-             t = tidy(lm(ret ~ 1 + mkt_excess + SMB + HML))$statistic[1],
-             p = tidy(lm(ret ~ 1 + mkt_excess + SMB + HML))$p.value[1],
-             return = 100*mean(12*ret)) %>%
-   mutate(model = paste0(i,"M")) 
+   summarise(alpha = tidy(lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML))$estimate[1],
+             t = tidy(lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML))$statistic[1],
+             p = tidy(lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML))$p.value[1],
+             return = 100*mean(12*(ret-RF)),
+             index_return = 100*mean(12*mkt_excess_ret)) %>%
+   mutate(model = paste0(z,y,i,"M")) 
 
 alpha_negative[x,] = alpha_M_negative
+
+}
+emptylist1[[z]] = alpha_negative
+}
+emptylist2[[y]] = emptylist1
+}
+
 # 
 # # Plot the returns:
 # long_term_data_M_negative %>%
@@ -238,7 +311,7 @@ alpha_negative[x,] = alpha_M_negative
 #                      labels = scales::percent) +
 #    scale_x_date(date_breaks = "1 years", date_labels = "%Y" )
 #       ggsave(paste0("LT_negative_returns_", i,".png"))
-}
+#}
 
 print(xtable(alpha_negative %>% relocate(model),type="latex",
              digits=c(0,4,4,4,4,4),
@@ -249,7 +322,7 @@ print(xtable(alpha_negative %>% relocate(model),type="latex",
   write(file="alpha_negative.tex")
 
 
-long_term_data_negative %>% arrange(date)
+long_term_data_monthly %>% filter(date >= '2018-01-01') %>% group_by(date) %>% summarise(ret = 100*weighted.mean(ret,MKT_CAP)) %>% arrange(desc(date)) %>%left_join(eu_3factors_monthly, by = "date") %>% transmute(date, ret = ret - RF, mkt_excess = 100*mkt_excess) %>% ungroup() %>% summarise(ret = mean(ret), excess = mean(mkt_excess))
 ```
 
 ################ 

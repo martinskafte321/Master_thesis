@@ -155,7 +155,31 @@ ggsave("ST_negative_sdg_bar_0.png")
 
 
 ```
+#############
+Code for extracting the Fama-French numbers from Excel 
+```{r}
+eu_3factors_monthly <- read.csv("C:/Users/Marti/OneDrive - University of Copenhagen/KU/Speciale/Data behandling/Eu_3_Factors.csv", sep = ",") %>% 
+  transmute(date = as.Date(ym(X), format = "%Y-%m-%d"),
+        date = ceiling_date(date, "month")-1,
+        mkt_excess = as.numeric(Mkt.RF)/100,
+        SMB = as.numeric(SMB)/100,
+        HML = as.numeric(HML)/100,
+        RF = as.numeric(RF)/100) %>%
+  filter(date >= '2018-01-01')
 
+eu_5factors_monthly <- read.csv("C:/Users/Marti/OneDrive - University of Copenhagen/KU/Speciale/Data behandling/Europe_5_Factors.csv", sep = ",") %>% 
+   transmute(
+        date = as.Date(ym(X)),
+        date = ceiling_date(date, "month")-1,
+        mkt_excess = as.numeric(Mkt.RF)/100,
+        SMB = as.numeric(SMB)/100,
+        HML = as.numeric(HML)/100,
+        RMW = as.numeric(RMW)/100,
+        CMA = as.numeric(CMA)/100,
+        RF = as.numeric(RF)/100) %>%
+  filter(date >= '2018-01-01')
+
+```
 
 #######
 Sorting the SDGs into five groups to see if they become significant (not the case for now). 

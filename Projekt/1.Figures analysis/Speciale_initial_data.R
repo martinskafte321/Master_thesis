@@ -12,12 +12,25 @@ setwd("C:/Users/Marti/OneDrive - University of Copenhagen/KU/Speciale/Data behan
 
 
 ###############################################################
-############# Get stock market data weekly ###########################
+############# Get stock market data monthly ###################
 ###############################################################
 
 # Read stock data from:
 ISIN <- read_excel("ISIN numbers.xlsx")
-stock <- read_excel("SXXP_monthly.xlsx")
+stock <- read_excel("SXXP_MONTHLY_EUR.xlsx")
+free_float_data <- read_excel("free_float_sxxp.xlsx")
+
+free_float = free_float_data %>%
+  filter(!row_number() %in% c(1,2)) %>% 
+  # Make the data set a long matrix instead of wide
+  pivot_longer(!DATES, names_to = "firm",values_to = "free_float") %>%
+  mutate(
+    type = str_split_fixed(firm, "_", 2)[,2],
+    ID = str_split_fixed(firm, "_", 2)[,1],
+    date = as.Date(as.numeric(DATES), origin = "1899-12-30"),
+    free_float = as.numeric(free_float)
+  ) %>% 
+  select(-DATES,-firm)
 
 # Clean up the stock market data: Remove the two first rows 
 stocks <- stock %>%
@@ -31,29 +44,26 @@ stocks <- stock %>%
     value = as.numeric(value)
     ) %>% 
   select(-DATES,-firm) %>%
-  relocate(type, .after = ID) %>%
-  relocate(date, .before = ID) %>%
   # And join the stock information with the ISIN number:
-  left_join(ISIN, by = "ID") %>% rename("isin" = id_isin) %>%
-  select(-ID) %>%
-  relocate(value, .after = isin)
-
+  left_join(ISIN, by = "ID") %>% rename("isin" = id_isin)
 
 # Summarize the stocks to index by date and isin
-stocks_monthly <- stocks %>%
+stocks_monthly <- stocks %>% 
   pivot_wider(
     names_from = type,
     values_from = value
-  ) %>% unnest(c(PX_LAST,MKT_CAP,W_RETURN)) %>% na.omit() %>%
-  mutate(date = ceiling_date(date, "month")-1)
+  ) %>% unnest(c(PX_LAST,MKT_CAP,W_RETURN)) %>% 
+  left_join(free_float, by = c("date","ID")) %>%
+  na.omit() %>% 
+  mutate(date = (ceiling_date(date, "month")-1),
+         free_float_mkt_cap = MKT_CAP * (free_float/100)) %>%
+  select(-c(ID,free_float,type))
 
 
 # Write to CSV to keep in nice format:
 stocks_monthly %>%
       write.csv(file = "clean_stock_data_monthly.csv")
   
-stocks_monthly <- read.csv("clean_stock_data_monthly.csv", sep = ",") %>%
-  select(-X)
 ###############################################################
 ############# Get Sentiment data monthly ##############################
 ###############################################################
@@ -68,7 +78,7 @@ sentiment <- read.csv("SXXP_sentiment.csv", sep = ",") %>%
   select(-c(aggregate_type,aggregate_key,aggregate_updated_ts,aggregate_time_period_end,day,week,month,year,match_identity)) 
 
 # Remove unnecessary items:
-remove(stock,ISIN)
+remove(stock,stocks,ISIN,free_float,free_float_data)
 
 # Compute the last business day of the week, then sum the amount of observations for that week
 # Summarize sentiment data into weekly observations to match the stock market data: countable items are summed, averages are averaged (runtime: 1 min)
@@ -84,6 +94,7 @@ sentiment_monthly <- sentiment %>%
 all_data_monthly <- stocks_monthly %>% mutate(date = as.Date(date)) %>% 
   left_join(sentiment_monthly %>% mutate(date = as.Date(date)), by = c("date","isin"))
 
+
 # Write to CSV to keep in nice format:
 all_data_monthly %>%
            write.csv(file = "all_data_month.csv")
@@ -95,7 +106,7 @@ all_data_monthly %>%
        
        # Read stock data from:
        ISIN <- read_excel("ISIN numbers.xlsx")
-       stock <- read_excel("SXXP_daily.xlsx")
+       stock <- read_excel("SXXP_daily_2017.xlsx")
        
        
        # Clean up the stock market data: Remove the two first rows 
@@ -119,11 +130,13 @@ all_data_monthly %>%
        
        
        # Summarize the stocks to index by date and isin
-       stocks_daily <- stocks_clean %>%
+       stocks_daily <- stocks_clean_2017 %>%
          pivot_wider(
            names_from = type,
            values_from = value
          )  %>% na.omit() 
+       
+       
        
        stocks_daily = stocks_daily %>% rbind(stocks_daily_2017)
        
@@ -134,6 +147,7 @@ all_data_monthly %>%
        
        remove(ISIN,stock,stocks_clean)
       
+       stocks_daily <- read.csv("clean_stock_data_daily.csv", sep = ",") %>% select(-X)
        
        ###############################################################
        ############# Get Sentiment data daily ##############################
@@ -168,17 +182,15 @@ all_data_monthly %>%
        sentiment_daily %>%
          write.csv(file = "clean_sentiment_daily.csv")
        
-       
-       stocks <- read.csv("clean_stock_data_daily.csv", sep = ",") %>%
-         select(-X)
-       
-       sentiment_daily_test <- read.csv("clean_sentiment_daily.csv", sep = ",") %>%
+    
+       # Load the sentiment data:
+       sentiment_daily <- read.csv("clean_sentiment_daily.csv", sep = ",") %>%
          select(-X)
        
        
        
        # Join the weekly sentiment data with the stock prices
-       all_data_daily <- stocks %>% mutate(date = as.Date(date)) %>% 
+       all_data_daily <- stocks_daily %>% mutate(date = as.Date(date)) %>% 
          left_join(sentiment_daily %>% mutate(date = as.Date(date)), by = c("date","isin"))
        
        # Write to CSV to keep in nice format:
