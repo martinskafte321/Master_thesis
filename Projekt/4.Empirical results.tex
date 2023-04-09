@@ -91,76 +91,54 @@ Generally, the short term empirical evidence demonstrate a non-verifiable relati
 
 \subsection{Long term abnormal returns}
 
-
-\begin{figure}
-     \centering
-     \caption{Long run portfolio returns from positive events}
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{Projekt/1.Figures analysis/LT_positive_returns_1.png}
-         \caption{$T = 1$}
-         \label{fig:y equals x}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{Projekt/1.Figures analysis/LT_positive_returns_3.png}
-         \caption{$T = 3$}
-         \label{fig:three sin x}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{Projekt/1.Figures analysis/LT_positive_returns_6.png}
-         \caption{$T = 6$}
-         \label{fig:five over x}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{Projekt/1.Figures analysis/LT_positive_returns_12.png}
-         \caption{$T = 12$}
-         \label{fig:five over x}
-     \end{subfigure}
-        
-        \label{fig:three graphs}
-\end{figure}
+\begin{table}[]
+\begin{tabular}{llllllll}
+\hline \hline
+\textbf{} & \multicolumn{3}{c}{FF-3 Factor} &  & \multicolumn{3}{c}{FF-5 Factor} \\ \cline{2-4} \cline{6-8} 
+          & 1 sd       & 2sd     & 3 sd     &  & 1 sd      & 2sd      & 3 sd     \\ \cline{2-4} \cline{6-8} 
+          &            &         &          &  &           &          &          \\
+          & \multicolumn{7}{c}{T = 1M}                                           \\ \hline
+Alpha     & 90.264     & 0.0     & 0.0      &  & 0,4       & 0.5      & 0.3      \\
+t-value   & 90.264     & 0.0     & 0.0      &  & 0,4       & 0.5      & 0.3      \\
+p-value   & 90.264     & 0.0     & 0.0      &  & 0,4       & 0.5      & 0.3      \\
+N         & 10         & 10      & 10       &  & 10        & 10       & 10       \\ \hline
+          &            &         &          &  &           &          &          \\
+          & \multicolumn{7}{c}{T = 4M}                                           \\ \hline
+Alpha     & 90.264     & 0.0     & 0.0      &  & 0,4       & 0.5      & 0.3      \\
+t-value   & 90.264     & 0.0     & 0.0      &  & 0,4       & 0.5      & 0.3      \\
+p-value   & 90.264     & 0.0     & 0.0      &  & 0,4       & 0.5      & 0.3      \\
+N         & 10         & 10      & 10       &  & 10        & 10       & 10       \\
+          &            &         &          &  &           &          &          \\
+          & \multicolumn{7}{c}{T = 8M}                                           \\ \hline
+Alpha     & 90.264     & 0.0     & 0.0      &  & 0,4       & 0.5      & 0.3      \\
+t-value   & 90.264     & 0.0     & 0.0      &  & 0,4       & 0.5      & 0.3      \\
+p-value   & 90.264     & 0.0     & 0.0      &  & 0,4       & 0.5      & 0.3      \\
+N         & 10         & 10      & 10       &  & 10        & 10       & 10       \\
+          &            &         &          &  &           &          &          \\
+          & \multicolumn{7}{c}{T = 12M}                                          \\ \hline
+Alpha     & 90.264     & 0.0     & 0.0      &  & 0,4       & 0.5      & 0.3      \\
+t-value   & 90.264     & 0.0     & 0.0      &  & 0,4       & 0.5      & 0.3      \\
+p-value   & 90.264     & 0.0     & 0.0      &  & 0,4       & 0.5      & 0.3      \\
+N         & 10         & 10      & 10       &  & 10        & 10       & 10       \\ \hline
+\end{tabular}
+\end{table}
 
 
-\begin{figure}
-     \centering
-     \caption{Long run portfolio returns from negative events}
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{Projekt/1.Figures analysis/LT_negative_returns_1.png}
-         \caption{$T = 1$}
-         \label{fig:y equals x}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{Projekt/1.Figures analysis/LT_negative_returns_3.png}
-         \caption{$T = 3$}
-         \label{fig:three sin x}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{Projekt/1.Figures analysis/LT_negative_returns_6.png}
-         \caption{$T = 6$}
-         \label{fig:five over x}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{Projekt/1.Figures analysis/LT_negative_returns_12.png}
-         \caption{$T = 12$}
-         \label{fig:five over x}
-     \end{subfigure}
-        \label{fig:three graphs}
-\end{figure}
-
-\input{Projekt/1.Figures analysis/alpha_negative}
 
 
-\input{Projekt/1.Figures analysis/alpha_positive}
+\begin{table}[]
+\begin{tabular}{rlllllllll}
+\hline \hline
+\textbf{} & \multicolumn{4}{c}{FF-3 Factor}                    &  & \multicolumn{4}{c}{FF-5 Factor} \\ \cline{2-5} \cline{7-10} 
+          &                           &         &         &    &  &        &         &         &    \\
+          & \multicolumn{1}{c}{Alpha} & t-value & p-value & N  &  & Alpha  & t-value & p-value & N  \\ \hline
+1M        & 90.264                    & 0.0     & 0.0     & 10 &  & 0,4    & 0.5     & 0.3     & 10 \\
+4M        & 90.264                    & 0.0     & 0.0     & 10 &  & 0,4    & 0.5     & 0.3     & 10 \\
+8M        & 90.264                    & 0.0     & 0.0     & 10 &  & 0,4    & 0.5     & 0.3     & 10 \\
+12M       & 90.264                    & 0.0     & 0.0     & 10 &  & 0,4    & 0.5     & 0.3     & 10 \\
+18M       & 90.264                    & 0.0     & 0.0     & 10 &  & 0,4    & 0.5     & 0.3     & 10 \\
+24M       & 10                        & 10      & 10      & 10 &  & 10     & 10      & 10      & 10 \\
+\hline \hline 
+
+\end{tabular}
+\end{table}
