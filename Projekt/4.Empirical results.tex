@@ -91,54 +91,74 @@ Generally, the short term empirical evidence demonstrate a non-verifiable relati
 
 \subsection{Long term abnormal returns}
 
+\subsubsection{Negative news}
+
+\setlength{\tabcolsep}{12pt}
 \begin{table}[]
-\begin{tabular}{llllllll}
+\small
+\centering
+\caption{Fama-French 3 factor model alpha (\%) from negative news } 
+\begin{tabular}{ccccc}
+
 \hline \hline
-\textbf{} & \multicolumn{3}{c}{FF-3 Factor} &  & \multicolumn{3}{c}{FF-5 Factor} \\ \cline{2-4} \cline{6-8} 
-          & 1 sd       & 2sd     & 3 sd     &  & 1 sd      & 2sd      & 3 sd     \\ \cline{2-4} \cline{6-8} 
-          &            &         &          &  &           &          &          \\
-          & \multicolumn{7}{c}{T = 1M}                                           \\ \hline
-Alpha     & 90.264     & 0.0     & 0.0      &  & 0,4       & 0.5      & 0.3      \\
-t-value   & 90.264     & 0.0     & 0.0      &  & 0,4       & 0.5      & 0.3      \\
-p-value   & 90.264     & 0.0     & 0.0      &  & 0,4       & 0.5      & 0.3      \\
-N         & 10         & 10      & 10       &  & 10        & 10       & 10       \\ \hline
-          &            &         &          &  &           &          &          \\
-          & \multicolumn{7}{c}{T = 4M}                                           \\ \hline
-Alpha     & 90.264     & 0.0     & 0.0      &  & 0,4       & 0.5      & 0.3      \\
-t-value   & 90.264     & 0.0     & 0.0      &  & 0,4       & 0.5      & 0.3      \\
-p-value   & 90.264     & 0.0     & 0.0      &  & 0,4       & 0.5      & 0.3      \\
-N         & 10         & 10      & 10       &  & 10        & 10       & 10       \\
-          &            &         &          &  &           &          &          \\
-          & \multicolumn{7}{c}{T = 8M}                                           \\ \hline
-Alpha     & 90.264     & 0.0     & 0.0      &  & 0,4       & 0.5      & 0.3      \\
-t-value   & 90.264     & 0.0     & 0.0      &  & 0,4       & 0.5      & 0.3      \\
-p-value   & 90.264     & 0.0     & 0.0      &  & 0,4       & 0.5      & 0.3      \\
-N         & 10         & 10      & 10       &  & 10        & 10       & 10       \\
-          &            &         &          &  &           &          &          \\
-          & \multicolumn{7}{c}{T = 12M}                                          \\ \hline
-Alpha     & 90.264     & 0.0     & 0.0      &  & 0,4       & 0.5      & 0.3      \\
-t-value   & 90.264     & 0.0     & 0.0      &  & 0,4       & 0.5      & 0.3      \\
-p-value   & 90.264     & 0.0     & 0.0      &  & 0,4       & 0.5      & 0.3      \\
-N         & 10         & 10      & 10       &  & 10        & 10       & 10       \\ \hline
+\\ 
+      &  &    1 SD  &  2 SD  &  3 SD    \\ \cline{3-5} 
+& & \multicolumn{3}{c}{ T = 1M} \\ \hline 
+Alpha   &  & -0.82  & -0.55  & -0.73  \\
+t-value &  & -3.03^{***} & -1.57  & -1.59  \\
+N       &  &  19    & 10  & 5  \\
+        &  &                          &      &      \\
+& & \multicolumn{3}{c}{ T = 4M}\\ \hline
+Alpha   &  & -0.41  & -0.50  &  -0.35 \\
+t-value &  & -2.59^{**} & -2.39^{**}  & -1.36  \\
+N       &  & 60      & 35  & 18  \\
+        &  &           &      &      \\
+& & \multicolumn{3}{c}{ T = 8M} \\ \hline
+Alpha   &  & -0.19   & -0.19  & -0.19  \\
+t-value &  & -1.58  & -1.25 & -1.07  \\
+N       &  & 100 & 63   & 34  \\
+        &  &                          &      &      \\
+& & \multicolumn{3}{c}{ T = 12M} \\ \hline
+Alpha   &  & -0.15  & -0.22  & -0.24  \\
+t-value &  & -1.50  & -1.63 & -1.40  \\
+N       &  & 130    & 86  & 48 \\\hline \hline
+ \multicolumn{5}{l}{ \footnotesize $^* \; p\; <\; 0.1$, $ ^{**} \; p\; <\; 0.05$, $ ^{***} \; p\; <\; 0.01$  } \\ \multicolumn{5}{l}{ \footnotesize The alpha is the regression intercept } \\ 
 \end{tabular}
 \end{table}
 
+\subsubsection{Positive news}
 
 
-
+\setlength{\tabcolsep}{12pt}
 \begin{table}[]
-\begin{tabular}{rlllllllll}
-\hline \hline
-\textbf{} & \multicolumn{4}{c}{FF-3 Factor}                    &  & \multicolumn{4}{c}{FF-5 Factor} \\ \cline{2-5} \cline{7-10} 
-          &                           &         &         &    &  &        &         &         &    \\
-          & \multicolumn{1}{c}{Alpha} & t-value & p-value & N  &  & Alpha  & t-value & p-value & N  \\ \hline
-1M        & 90.264                    & 0.0     & 0.0     & 10 &  & 0,4    & 0.5     & 0.3     & 10 \\
-4M        & 90.264                    & 0.0     & 0.0     & 10 &  & 0,4    & 0.5     & 0.3     & 10 \\
-8M        & 90.264                    & 0.0     & 0.0     & 10 &  & 0,4    & 0.5     & 0.3     & 10 \\
-12M       & 90.264                    & 0.0     & 0.0     & 10 &  & 0,4    & 0.5     & 0.3     & 10 \\
-18M       & 90.264                    & 0.0     & 0.0     & 10 &  & 0,4    & 0.5     & 0.3     & 10 \\
-24M       & 10                        & 10      & 10      & 10 &  & 10     & 10      & 10      & 10 \\
-\hline \hline 
+\small
+\centering
+\caption{Fama-French 3 factor model alpha (\%) from negative news } 
+\begin{tabular}{ccccc}
 
+\hline \hline
+\\ 
+      &  &    1 SD  &  2 SD  &  3 SD    \\ \cline{3-5} 
+& & \multicolumn{3}{c}{ T = 1M} \\ \hline 
+Alpha   &  & -0.82  & -0.55  & -0.73  \\
+t-value &  & -3.03^{***} & -1.57  & -1.59  \\
+N       &  &  19    & 10  & 5  \\
+        &  &                          &      &      \\
+& & \multicolumn{3}{c}{ T = 4M}\\ \hline
+Alpha   &  & -0.41  & -0.50  &  -0.35 \\
+t-value &  & -2.59^{**} & -2.39^{**}  & -1.36  \\
+N       &  & 60      & 35  & 18  \\
+        &  &           &      &      \\
+& & \multicolumn{3}{c}{ T = 8M} \\ \hline
+Alpha   &  & -0.19   & -0.19  & -0.19  \\
+t-value &  & -1.58  & -1.25 & -1.07  \\
+N       &  & 100 & 63   & 34  \\
+        &  &                          &      &      \\
+& & \multicolumn{3}{c}{ T = 12M} \\ \hline
+Alpha   &  & -0.15  & -0.22  & -0.24  \\
+t-value &  & -1.50  & -1.63 & -1.40  \\
+N       &  & 130    & 86  & 48 \\\hline \hline
+ \multicolumn{5}{l}{ \footnotesize $^* \; p\; <\; 0.1$, $ ^{**} \; p\; <\; 0.05$, $ ^{***} \; p\; <\; 0.01$  } \\ \multicolumn{5}{l}{ \footnotesize The alpha is the regression intercept } \\ 
 \end{tabular}
 \end{table}
+
