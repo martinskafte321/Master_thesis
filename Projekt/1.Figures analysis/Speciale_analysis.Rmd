@@ -121,7 +121,7 @@ long_term_data_monthly <- data_monthly %>%
 ############################
 
 # Add lagged values of the events to sort whether an event has happened in the last X months. 
-  for (i in 1:12) {
+  for (i in 1:24) {
   long_term_data_monthly[paste0("-",i)] <- long_term_data_monthly %>% group_by(isin) %>% transmute(t = lag(neg_event,i)) %>% ungroup() %>% select(-isin)
   }
 
@@ -135,7 +135,7 @@ long_term_data_positive = long_term_data_monthly %>% select(date,isin,ret,MKT_CA
 
 # x Month portfolio returns:
 
-list = list(1,4,8,12)
+list = list(1,4,8,12,18,24)
 alpha_positive <- data.frame(matrix(nrow=4, ncol=9)) 
 colnames(alpha_positive)<-c("Alpha","t","p" ,"return","index_return", "ave_N","holding_period","rolling_mean","SD_thres")
 
@@ -243,7 +243,7 @@ long_term_data_monthly <- data_monthly %>%
 ############################
 
 # Add lagged values of the events to sort whether an event has happened in the last X months. 
-  for (i in 1:12) {
+  for (i in 1:24) {
   long_term_data_monthly[paste0("-",i)] <- long_term_data_monthly %>% group_by(isin) %>% transmute(t = lag(neg_event,i)) %>% ungroup() %>% select(-isin)
   }
 
@@ -257,7 +257,7 @@ long_term_data_negative = long_term_data_monthly %>% select(date,isin,ret,MKT_CA
 
 # x Month portfolio returns:
 
-list = list(1,4,8,12)
+list = list(1,4,8,12,16,24)
 alpha_negative <- data.frame(matrix(nrow=4, ncol=9)) 
 colnames(alpha_negative)<-c("Alpha","t","p" ,"return","index_return", "ave_N","holding_period","rolling_mean","SD_thres")
 
@@ -271,14 +271,14 @@ long_term_data_M_negative = long_term_data_negative %>%
   group_by(date) %>%
   summarise(ret = weighted.mean(ret,free_float_mkt_cap),
             n = n_distinct(isin)) %>%
-  left_join(eu_3factors_monthly, by = "date")
+  left_join(eu_5factors_monthly, by = "date")
 
 # Calculate alpha of portfolios:
   
 alpha_M_negative = long_term_data_M_negative %>% 
-   summarise(alpha = tidy(lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML, weights = n))$estimate[1],
-             t = tidy(lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML, weights = n))$statistic[1],
-             p = tidy(lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML, weights = n))$p.value[1],
+   summarise(alpha = tidy(lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML + RMW + CMA, weights = n))$estimate[1],
+             t = tidy(lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML + RMW + CMA, weights = n))$statistic[1],
+             p = tidy(lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML + RMW + CMA, weights = n))$p.value[1],
              return = 100*mean(12*(ret-RF)),
              index_return = 100*mean(12*mkt_excess_ret),
              ave_N = mean(n)) %>%
@@ -310,13 +310,13 @@ emptylist_neg_2[[y]] = emptylist_neg_1
 #}
 
 
-print(xtable(as.data.frame(emptylist_neg_2[[1]][3]),type="latex",
+print(xtable(as.data.frame(emptylist_neg_2[[5]][3]),type="latex",
              digits=c(0,4,2,3,2,0,1,1,1,1),
              hline.after=c(-1,0),
              floating=FALSE,latex.environments=NULL),
       include.rownames=FALSE,
       include.colnames = TRUE) %>% 
-  write(file="alpha_negative_FF3_1.tex")
+  write(file="alpha_negative_FF5_15.tex")
 
 
 ```
