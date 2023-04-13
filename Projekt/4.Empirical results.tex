@@ -4,21 +4,20 @@
 
 \subsection{Estimation methodology}
 
-\subsection{Abnormal returns in the market adjusted model}
+\subsection{Abnormal returns: The Market Adjusted Model}
 
 
 \subsection{Short term abnormal returns in the Market Model}
 
-To test hypothesis #1 and #2 of whether negative and positive SDG related events impacts firm value on the short term, we set apart negative and positive events and assess the aggregated development in abnormal returns 10 days before and 10 days after an event. Moreover, we isolate the effect of the individual SDGs to test hypothesis #4 of whether events on some sustainability goals are more relevant for investors than other. We apply the Market Model to measure abnormal returns around an event.   
-
-
+To test hypothesis #1 and #2 of whether negative and positive SDG related events impacts firm value on the short term, I separate negative and positive events and assess the aggregated development in abnormal returns 10 days before and 10 days after an event has occurred. Moreover, I isolate the effect of the individual SDGs to test hypothesis #4 of whether events on specific sustainability goals are more relevant for investors than other. The Market Model is applied to measure abnormal returns around an event.   
 
 \subsubsection{Negative news}
 
-The average abnormal returns and development in cumulative average abnormal returns calculated from the Market Model are illustrated on aggregate in figure \ref{fig:ST_neg_news}. To support the analysis, the AAR and CAAR are portrayed along with their respective 95\% confidence intervals and the amount of events on a given day relative to the event date $(t = 0)$ (right y-axis) represented by the barplot in the background. 
+The average abnormal returns and development in cumulative average abnormal returns, inferred from the Market Model, are illustrated in figure \ref{fig:ST_neg_news}. To support the analysis, the AAR and CAAR are portrayed along with their respective 95\% confidence intervals and the amount of events on a given day relative to the event day $(t = 0)$ (right axis) illustrated by the barplot in the background. 
 
-The left y-axis depicts the abnormal return and the x-axis is the number of days before and after an event has occurred. The effect of negative events on average stock behavior is represented by the blue line in the graph, and is mostly negative leading up to an event. The impact from negative events is approximately zero until $t = -6$ upon which the AAR decreases steadily until the event date, where it bottoms at $-0.36\%$. After a negative event at $t=0$ the AAR increases, however still negative until $t=2$, towards neutrality at zero and remains there for the rest of the window. The CAAR stays negative during the full event window and bottoms on $t=2$ after a large decline of approximately $1.2\%$ from  $t=-5$. Moreover, the AAR is significantly negative between $t=-2$ and $t=0$ at $95\%$. The same goes for the CAAR after $t=-2$ and the remaining window. Generally, negative news seems to be priced in leading up to and including the identified event day, after which they have limited impact. \\ 
-The bars offers insights into the extent of observations leading up to an event. The bars begin to increase at $t=-5$ at which the AAR begins to decline, which imply a relation between attention towards negative news and pessimistic investor behavior even before the event date. Furthermore, this is an indication that the specified event time may be lagging the incident of the *true* event, which is a disadvantage of this model setup. 
+The left y-axis depicts the abnormal return and the x-axis is the number of days before and after an event has occurred. The average effect on returns from negative events is represented by the blue line in the graph. 
+The impact from negative events is approximately zero until $t = -5$ upon which the AAR decreases steadily until the event date, where it bottoms at $-0.36\%$. After a negative event has occurred at $t=0$ the AAR surges towards neutrality until $t=2$ and remains there for the rest of the window. The CAAR stays negative during the full event window and bottoms on $t=2$ after a large decline of approximately $1.2\%$ from $t=-5$. Moreover, the AAR is significantly negative between $t=-2$ and $t=0$ at $95\%$. The same goes for the CAAR after $t=-2$ and the remaining window. Generally, negative news seems to be priced in leading up to and including the identified event day, after which they have limited impact. \\ 
+The bars offers insights into the extent of public attention leading up to an event. The bars begin to increase at $t=-5$ at which the AAR begins to decline, which imply a relation between attention towards negative news and pessimistic investor behavior even before the event date. Furthermore, this is an indication that the specified event time may be lagging the incident of the *true* event, which is a disadvantage of this model setup.  
 
 \begin{figure} [H]
     \centering
@@ -28,7 +27,7 @@ The bars offers insights into the extent of observations leading up to an event.
     \label{fig:ST_neg_news}
 \end{figure} 
 
-Examining the average effect from, respectively, positive and negative events provides insights into the overall tendency of the relation between shareholder sentiment and corporate sustainability. By investigating the abnormal returns resulting from events specific to the individual SDGs one can gain a deeper understanding of which themes within corporate sustainability that investors places most emphasis with. Figure \ref{fig:ST_neg_bar} illustrates the aggregated CAAR over the full event window (from $t=-10$ to $t=10$) from events related to specific SDGs along with corresponding confidence intervals. 
+Examining the average effect from, respectively, positive and negative events provides insights into the overall relational tendency between shareholder sentiment and corporate sustainability. By investigating the abnormal returns resulting from events specific to the individual SDGs one can gain a deeper understanding of which themes within corporate sustainability that investors places most emphasis with. Figure \ref{fig:ST_neg_bar} illustrates the aggregated CAAR over the full event window (from $t=-10$ to $t=10$) from events related to specific SDGs along with corresponding confidence intervals. 
 
 \begin{figure} [H]
     \centering
@@ -89,76 +88,85 @@ The insignificance of the abnormal returns associated with positive events are m
 Generally, the short term empirical evidence demonstrate a non-verifiable relation between positive events, related to both broad and specific SDGs, and abnormal returns. Positive news is however associated with an instant reaction from investors on the event date. The evidence point towards an overall negative relationship, but this is not statistically valid.  
 
 
-\subsection{Long term abnormal returns}
+\subsection{Long term abnormal returns: The Calendar Time Portfolio}
+
+In contrast to the short term models, where the returns are measured relative to an event date, the long term portfolios are rebalanced each month and includes all firms, that have experienced an event within the T = 1/4/8/12 preceding months. The strategy resembles that T becomes the holding period for event firms. The portfolio returns are estimated over the full sample period of five years, and are evaluated by a regression on the market excess return and the factors from the Fama-French \citeyear{Fama_french_3fac} three-factor model. 
 
 \subsubsection{Negative news}
 
-\setlength{\tabcolsep}{12pt}
-\begin{table}[]
+The abnormal returns of the portfolios are reflected through the regression intercept from the Fama-French model, presented as the Alpha in table \ref{tab: FF3-neg} along with the corresponding t-value. The table include the mean monthly number of firms in each portfolio as "N". Moreover, the event preconditions are partly disclosed, as the 1, 2 and 3 "sd" gives the required number of standard deviations larger than the mean for an event firm to be identified as consequential and thus selected to the portfolio. Above each horizontal line, the "$T = x$" express the portfolio holding period after an event has occurred. 
+
+In the matter of negative events the alphas are negative for all portfolio specifications. However, they are solely significant in three instances. With a one SD requirement the alpha is significant for holding periods of $T = 1$ and $T = 4$ months at, respectively, -0.82\% at $1\%$ and -0.41\% at $5\%$. For a two SD requirement the alpha with $T=4$ month holding period is significant with an alpha of -0.5\% at $5\%$. The alphas for holding periods larger than $T = 4$ are closer to zero, which is in support of market efficiency over the long term. An implication of the strategy is that portfolios with longer holding periods will accordingly include more firms in each rebalancing, which ultimately will drive the portfolio return closer to the market return. For example with 1 SD, we see the inverse relation between the average N (increases) and the alpha (decreases). In contrast, a higher SD requirement is equivalent to a more strict selection procedure designating that fewer firms will enter the portfolio. A consequence of the strict requirements is the size of the portfolios. A portfolio consisting of 5 or 10 firms will inevitably be exposed to idiosyncratic risks from the individual companies, which means that the portfolio outcome may be driven by specific risks rather than the effect from negative news. A large portfolio consisting of, e.g., 60 firms will not encounter the same risks due to diversification benefits, which enable one to approximately isolate the effect from negative news. 
+
+\setlength{\tabcolsep}{15pt}
+\begin{table}[h]
 \small
 \centering
-\caption{Fama-French 3 factor model alpha (\%) from negative news } 
-\begin{tabular}{ccccc}
-
-\hline \hline
-\\ 
-      &  &    1 SD  &  2 SD  &  3 SD    \\ \cline{3-5} 
-& & \multicolumn{3}{c}{ T = 1M} \\ \hline 
-Alpha   &  & -0.82  & -0.55  & -0.73  \\
-t-value &  & -3.03^{***} & -1.57  & -1.59  \\
-N       &  &  19    & 10  & 5  \\
-        &  &                          &      &      \\
-& & \multicolumn{3}{c}{ T = 4M}\\ \hline
-Alpha   &  & -0.41  & -0.50  &  -0.35 \\
-t-value &  & -2.59^{**} & -2.39^{**}  & -1.36  \\
-N       &  & 60      & 35  & 18  \\
-        &  &           &      &      \\
-& & \multicolumn{3}{c}{ T = 8M} \\ \hline
-Alpha   &  & -0.19   & -0.19  & -0.19  \\
-t-value &  & -1.58  & -1.25 & -1.07  \\
-N       &  & 100 & 63   & 34  \\
-        &  &                          &      &      \\
-& & \multicolumn{3}{c}{ T = 12M} \\ \hline
-Alpha   &  & -0.15  & -0.22  & -0.24  \\
-t-value &  & -1.50  & -1.63 & -1.40  \\
-N       &  & 130    & 86  & 48 \\\hline \hline
- \multicolumn{5}{l}{ \footnotesize $^* \; p\; <\; 0.1$, $ ^{**} \; p\; <\; 0.05$, $ ^{***} \; p\; <\; 0.01$  } \\ \multicolumn{5}{l}{ \footnotesize The alpha is the regression intercept } \\ 
+\caption{Fama-French three-factor model alpha from negative news } 
+\begin{tabular}{llllllc}
+\hline \hline \\ 
+ &     &  &    1 SD  &  2 SD  &  3 SD  &  \\ \cline{4-6} 
+& & & \multicolumn{3}{c}{ T = 1} & \\ \cline{2-6}
+& Alpha (\%)  &  & -0.82^{***}  & -0.55  & -0.73 &  \\ 
+& t-value &  & -3.03 & -1.57  & -1.59 &  \\
+& Mean N       &  &  19    & 10  & 5  & \\
+& & & \multicolumn{3}{c}{ T = 4} & \\ \cline{2-6}
+& Alpha (\%)  &  & -0.41^{**}  & -0.50^{**}  &  -0.35 & \\
+& t-value &  & -2.59 & -2.39  & -1.36 & \\
+& Mean N       &  & 60      & 35  & 18  & \\
+& & & \multicolumn{3}{c}{ T = 8} & \\ \cline{2-6}
+& Alpha (\%)   &  & -0.19   & -0.19  & -0.19 &  \\
+& t-value &  & -1.58  & -1.25 & -1.07 &  \\
+& Mean N       &  & 100 & 63   & 34 & \\
+& & & \multicolumn{3}{c}{ T = 12} & \\ \cline{2-6}
+& Alpha (\%)   &  & -0.15  & -0.22  & -0.24 &  \\
+& t-value &  & -1.50  & -1.63 & -1.40 & \\
+& Mean N       &  & 130    & 86  & 48 \\\hline \hline
+ \multicolumn{7}{l}{ \footnotesize $^* \; p\; <\; 0.1$, $ ^{**} \; p\; <\; 0.05$, $ ^{***} \; p\; <\; 0.01$  } \\
+ \multicolumn{7}{p{11.5cm}}{ \footnotesize Alpha is the WLS-regression intercept (in \%) of the Fama-French 3-factor model, displayed along with the corresponding t-value. N is the average amount of firms included in the portfolio each month, and T is the portfolio holding period. The threshold for event firms to be included in the portfolio is either 1,2 or 3 "SD" (standard deviations) larger than the mean.} \\ 
 \end{tabular}
+\label{tab: FF3-neg}
 \end{table}
+
+Overall, the relation between negative news and returns are most severe within 1-4 months after an event has occurred and with a "loose" selection criteria of 1 SD for event firms to be included in the portfolio. Although most of the alphas are insignificant it is important to note that all are negative, which support the relation between negative news and pessimistic investor behavior.  
+??. 
+
 
 \subsubsection{Positive news}
 
+The impact from positive news on financial performance in the long run is illustrated in table \ref{tab: FF3-pos}. The table applies the same format as table \ref{tab: FF3-neg}. Positive events have no significant impact on returns over any of the portfolio and event constructions. Nevertheless, the long run effect is predominantly negative, which appears in contrast to the short term effect, that indicate a positive relation, nonetheless insignificant. Surprisingly, the performance is most negative when applying a brief holding period of $T=1$ and a strict rule of events with $SD = 3$, which generates alpha of -0.42\%. With $T=1$ and $SD=1$ the portfolio achieves an alpha of -0.3\%.  
 
-\setlength{\tabcolsep}{12pt}
+Applying holding periods longer than $T=1$ generates exclusively alphas close to zero, which resembles a well-diversified portfolio return close to the market portfolio, which is an expected result if positive news are recognized as irrelevant. 
+
+The 
+
+\setlength{\tabcolsep}{15pt}
 \begin{table}[]
 \small
 \centering
-\caption{Fama-French 3 factor model alpha (\%) from negative news } 
-\begin{tabular}{ccccc}
-
-\hline \hline
-\\ 
-      &  &    1 SD  &  2 SD  &  3 SD    \\ \cline{3-5} 
-& & \multicolumn{3}{c}{ T = 1M} \\ \hline 
-Alpha   &  & -0.82  & -0.55  & -0.73  \\
-t-value &  & -3.03^{***} & -1.57  & -1.59  \\
-N       &  &  19    & 10  & 5  \\
-        &  &                          &      &      \\
-& & \multicolumn{3}{c}{ T = 4M}\\ \hline
-Alpha   &  & -0.41  & -0.50  &  -0.35 \\
-t-value &  & -2.59^{**} & -2.39^{**}  & -1.36  \\
-N       &  & 60      & 35  & 18  \\
-        &  &           &      &      \\
-& & \multicolumn{3}{c}{ T = 8M} \\ \hline
-Alpha   &  & -0.19   & -0.19  & -0.19  \\
-t-value &  & -1.58  & -1.25 & -1.07  \\
-N       &  & 100 & 63   & 34  \\
-        &  &                          &      &      \\
-& & \multicolumn{3}{c}{ T = 12M} \\ \hline
-Alpha   &  & -0.15  & -0.22  & -0.24  \\
-t-value &  & -1.50  & -1.63 & -1.40  \\
-N       &  & 130    & 86  & 48 \\\hline \hline
- \multicolumn{5}{l}{ \footnotesize $^* \; p\; <\; 0.1$, $ ^{**} \; p\; <\; 0.05$, $ ^{***} \; p\; <\; 0.01$  } \\ \multicolumn{5}{l}{ \footnotesize The alpha is the regression intercept } \\ 
+\caption{Fama-French 3 factor model alpha from positive news } 
+\begin{tabular}{ccccccc}
+\hline \hline \\ 
+ &     &  &    1 SD  &  2 SD  &  3 SD  &  \\ \cline{4-6} 
+& & & \multicolumn{3}{c}{ T = 1} & \\ \cline{2-6}
+& Alpha (\%)  &  & -0.30  & -0.05  & -0.42 &  \\
+& t-value &  & -1.19 & -0.14  & -0.89 & \\
+& Mean N       &  &  34    & 15 & 7 &\\
+& & & \multicolumn{3}{c}{ T = 4} & \\ \cline{2-6}
+& Alpha (\%)  &  & -0.07  & -0.02  &  -0.09 & \\
+& t-value &  & -0.49 & -0.08  & -0.32 & \\
+& Mean N       &  & 105     & 52  & 25 & \\
+& & & \multicolumn{3}{c}{ T = 8} & \\ \cline{2-6}
+& Alpha (\%)  &  & -0.04   & -0.01  & -0.06 &  \\
+& t-value &  & -0.41  & -0.57 & -0.29 & \\
+& Mean N       &  & 164 & 63   & 47 & \\
+&  & & \multicolumn{3}{c}{ T = 12} & \\ \cline{2-6}
+& Alpha (\%)  &  & -0.01  & 0.04  & 0.08 &  \\
+& t-value &  & -1.03  & 0.33 & 0.47 & \\
+& Mean N       &  & 240    & 122  & 67 & \\ \hline \hline
+ \multicolumn{7}{l}{ \footnotesize $^* \; p\; <\; 0.1$, $ ^{**} \; p\; <\; 0.05$, $ ^{***} \; p\; <\; 0.01$  } \\
+ \multicolumn{7}{p{11.5cm}}{ \footnotesize Alpha is the WLS-regression intercept (in \%) of the Fama-French 3-factor model, displayed along with the corresponding t-value. N is the average amount of firms included in the portfolio each month, and T is the portfolio holding period. The threshold for event firms to be included in the portfolio is either 1,2 or 3 "SD" (standard deviations) larger than the mean.}  \\ 
 \end{tabular}
+\label{tab: FF3-pos}
 \end{table}
 
