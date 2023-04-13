@@ -3,7 +3,6 @@
 On the surface, measuring the effect of an economic event is often a difficult task for economists. However, with frequent and efficient data from the financial markets an event study can be constructed, which has the capabilities of measuring the impact of an isolated event on the value of the firm. 
 
 
-
 The methodology is used to measure investors' reaction to unexpected news. The foundation for event studies emerge from the \textit{efficient market hypothesis} \citep{fama1969_EMH}, which states that security prices reflect all present information. Given rationality on the markets, the effects of an event will be reflected immediately in the price of a security. Consequently, it is possible to measure investors' reaction to specific information by measuring the ex-post realized return relative to the expected return. If investors react adversely to negative and positive events, it should to be reflected in the stock price. The advantage of this procedure is that it is expected to be efficient, since it is based on the overall assessment of many investors who treat the available information. 
 
 Within finance research, event studies has been applied to firm specific events such as mergers and acquisitions and earnings announcements \citep{Event_studies}. The initial task of establishing an event study is to outline the event of interest and determine the window over which the security prices will be inspected. The latter is dependent on the former, as distinct events require different examination time. For example, the impact of an earnings release or a federal interest rate announcement will likely be priced in the market immediately and will thus need a narrow examination window. In contrast, the effects of public news, charges and accusations may require wider windows to reflect all information. 
@@ -20,20 +19,6 @@ The methodology is used to measure investors' reaction to unexpected news. The f
 This paper will apply the event study methodology examine the behavior of stock returns around corporate events, and is used to measure shareholders' reaction to unexpected news. 
 - Something with Fama
 
-
-\subsection{The Market Adjusted Model}
-
-In the context of event studies, an expected return model is a hypothetical prediction of the stock return. The individual stock price return is measured against the market return, as a simple way to control for potential effects of the event on the general market. The model does not adjust for basic CAPM risk and thus abstracts from the individual firm's distinct risk profile. The argument for implementing a simple model is to give a general overview of long and short term return-effects from events, and not to provide statistical conclusions. 
-The daily excess returns are measured as the difference between the stock return and the market return on a given day, with the market return assumed to be the MXWO\footnote{https://www.msci.com/World} index:
-\begin{equation}
-    \text{Abnormal Returns} \:  (AR_{i,t}) = R_{i,t} - R_{M,t} 
-\end{equation}
-Where, $R_{i,t}$ is the return of stock \textit{i} on day \textit{t}, and $R_{M,t}$ is the return of the market on day \textit{t}. 
-
-The returns series for stock \textit{i} is indexed wrt. the event date (t = 0) by setting the value to 100 and expressing the cumulative return of the future and foregoing observations with respect to this value, to isolate the effect of the event from the discrete trading days. 
-
-The argument is that on t = 0 the information becomes available to the market. However, the investor will not be able to trade on the information before the following trading day. The return index is calculated as the 
-cumulative product of the daily excess return leading up to or following the event date multiplied by 100. 
 
 \subsection{Short-term abnormal returns}
 
@@ -92,7 +77,7 @@ To implement the method a portfolio is constructed each calendar month consistin
 
 \cite{fama1998_events} outlines the advantages of the CTP approach as emerging from the use of monthly returns and rebalancing. He argues that monthly returns are less skewed, which makes the model less sensitive to the bad model problem. Further, the time-series variation of the rebalanced portfolio captures the effect of the cross-correlation between event stocks returns. 
 
-Due to the changes in the composition of the portfolio, heteroskedasticity might be introduced in the error term. For example, \cite{ritter1995} argues that anomalies can be understated if events bunch in time due to e.g. timing of events. However, the issue of heteroskedasticity can be addressed by using the weighted least squares (WLS) technique with the monthly amount of firms as weights \cite{Ang_event_method}.
+Due to the changes in the composition of the portfolio, heteroskedasticity might be introduced in the error term. For example, \cite{ritter1995} argues that anomalies can be understated if events bunch in time due to e.g. timing of events. However, the issue of heteroskedasticity can be addressed by using the weighted least squares (WLS) technique with the monthly amount of firms as weights in the regression\cite{Ang_event_method}.
 
 The calculation of monthly portfolio returns can be based on value or equal weights. \cite{fama1998_events} suggests that apparent anomalies might shrink when event firms are value-weighted, which possibly yield the right perspective because it more accurately captures the wealth-effect experienced by an investor. Moreover, an equal-weighted portfolio will put more weight on small stocks, which might increase the the bad-model bias, as asset-pricing models have systemic issues explaining the average return of small stocks. However, as the amount of firms in the portfolio may be relatively small, the portfolio return may be dominated by the outcome of large firms. As this is unfavorably when trying to estimate a relationship between specific events and stock returns, the equal-weighted portfolio returns will be applied in the analysis. 
 
