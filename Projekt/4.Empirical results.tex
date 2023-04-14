@@ -4,7 +4,6 @@
 
 \subsection{Estimation methodology}
 
-\subsection{Abnormal returns: The Market Adjusted Model}
 
 
 \subsection{Short term abnormal returns in the Market Model}
@@ -27,33 +26,31 @@ The bars offers insights into the extent of public attention leading up to an ev
     \label{fig:ST_neg_news}
 \end{figure} 
 
-Examining the average effect from, respectively, positive and negative events provides insights into the overall relational tendency between shareholder sentiment and corporate sustainability. By investigating the abnormal returns resulting from events specific to the individual SDGs one can gain a deeper understanding of which themes within corporate sustainability that investors places most emphasis with. Figure \ref{fig:ST_neg_bar} illustrates the aggregated CAAR over the full event window (from $t=-10$ to $t=10$) from events related to specific SDGs along with corresponding confidence intervals. 
+Examining the average effect from, respectively, positive and negative events provides insights into the overall relational tendency between shareholder sentiment and corporate sustainability. By investigating the abnormal returns resulting from events specific to the individual SDGs one can gain a deeper understanding of which themes within corporate sustainability that investors place most emphasis with. Figure \ref{fig:ST_neg_bar} illustrates the AAR on $t=0$ from events related to specific SDGs along with corresponding confidence intervals. 
 
 \begin{figure} [H]
     \centering
-    \caption{SDG 5 pillars: negative news}
-    \includegraphics[scale=0.6]{Projekt/1.Figures analysis/ST_negative_sdg_bar_groups_0.png}
-    \caption*{\footnotesize The figure illustrates the CAAR on $t = 10$ (the full period) from negative news. The error bars represent the 95\% confidence intervals of the CAAR.}
+    \caption{AAR per SDG: negative news}
+    \includegraphics[scale=0.6]{Projekt/1.Figures analysis/ST_negative_sdg_bar.png}
+    \caption*{\footnotesize The figure illustrates the AAR on $t = 0$ from negative news. The error bars represent the 95\% confidence intervals of the AAR.}
     \label{fig:ST_neg_bar}
 \end{figure}
 
-Splitting the events on SDGs generally illustrate that negative events in most groups are associated with negative abnormal returns. However, the issue of statistical uncertainty in the measurements means that one cannot generate a lot of insights from the aggregated values. Only SDG 15 and 16 provides abnormal returns significantly different from zero. The statistical uncertainty originates from the relatively low amount of observations associated with the individual groups after dividing the events into SDGs. For example, SDG 4 and 9 has only, respectively, 16 and 83 observations, which results in a vast excessively wide confidence interval, whereas SDG 12 and 16 has, respectively, 576 and 1364 observations, and correspondingly very narrow error bands. 
+Splitting the events on SDGs generally illustrate that negative events in most groups are associated with negative abnormal returns. However, the statistical uncertainty in the measurements means that one cannot generate a lot of insights from the aggregated values. Only SDG 10, 15, and 16 provides abnormal returns significantly different from zero at a \% level. The statistical uncertainty originates from the relatively low amount of observations associated with the individual groups after dividing the events into SDGs. For example, SDG 4 and 9 has only, respectively, 16 and 83 observations, which results in excessively wide confidence interval, whereas SDG 12 and 16 has, respectively, 576 and 1364 observations resulting in higher statistical certainty.   
 
 The significance of the results in relation to negative and positive events are summarised with a z-test in table \ref{tab: ST_significace}, which presents the z-scores and significance complementary to the AAR on $t=0$, along with the CAAR on respectively, two, five, and 10 days around the event.  
 
-
-
-The selection method for negative events was proposed to gather cases of severe negative abnormal returns. The CAAR of the full and subset windows from negative events are significantly different from zero at $p \; < 0.01$, which further validates the selection method and that negative abnormal returns are attainable to negative events. However, the method may be late to pick up the signal of negative events or new information on the market.  
+The selection method for negative events was proposed to gather cases of severe negative abnormal returns. The CAAR of the full and subset windows from negative events are significantly different from zero at $p \; < 0.01$, which further validates the selection method, and that negative abnormal returns are attainable to negative events. However, the method may be late to pick up the signal of negative events or new information on the market.  
 
 \begin{table}[ht]
 \centering
 \caption{AAR and CAAR over event window (in percentage)} 
-\begin{tabular}{lllll}
+\begin{tabular}{llllll}
    \hline  \hline
-  & $AAR_{t=0}$ & $CAAR_{[-2;+2]}$ & $CAAR_{[-5;+5]}$ & $CAAR_{[-10;+10]}$  \\
+  & $AAR_{t=0}$ & $CAAR_{[-2;+2]}$ & $CAAR_{[-5;+5]}$ & $CAAR_{[-10;+10]}$ & N \\
  \hline
-Positive news & $\underset{(1.973)^{**}}{0.073}$  & $\underset{(-0.211)}{-0.016}$    & $\underset{(-0.379)}{-0.043}$ & $\underset{(-1.091)}{-0.164}$  \\ 
-Negative news & $\underset{(-3.457)^{***}}{-0.360}$  & $\underset{(-5.749)^{***}}{-0.917}$    & $\underset{(-4.761)^{***}}{-0.955}$ & $\underset{(-3.288)^{***}}{-0.888}$  \\ 
+Positive news & $\underset{(1.973)^{**}}{0.073}$  & $\underset{(-0.211)}{-0.016}$    &  $\underset{(-0.379)}{-0.043}$ & $\underset{(-1.091)}{-0.164}$ & 3.500 \\ 
+Negative news & $\underset{(-3.457)^{***}}{-0.360}$  & $\underset{(-5.749)^{***}}{-0.917}$    & $\underset{(-4.761)^{***}}{-0.955}$ & $\underset{(-3.288)^{***}}{-0.888}$ & 1.500\\ 
    \hline
    \multicolumn{5}{p{12cm}}{\footnotesize  $^* \; p\; <\; 0.1$, $ ^{**} \; p\; <\; 0.05$, $ ^{***} \; p\; <\; 0.01$  } \\ 
 \end{tabular}
@@ -62,7 +59,7 @@ Negative news & $\underset{(-3.457)^{***}}{-0.360}$  & $\underset{(-5.749)^{***}
 
 \subsubsection{Positive news}
 
-According to figure \ref{fig:ST_pos_news} the identified positive events doesn't seem to be associated with any significant reaction from the shareholders on average, as the AAR doesn't fluctuate significantly from zero during the event window besides a marginal deviation at the event date. Following, the statistical uncertainty of the CAAR becomes more widespread through the event window, as indicated by the widening red ribbon. The negative tendency of the CAAR is insignificant since the measure is based on, likewise, insignificant AARs, meaning that one cannot for certain state that the cumulative effect is different from zero. 
+According to figure \ref{fig:ST_pos_news} the identified positive events doesn't seem to be associated with any significant reaction from the shareholders on average, as the AAR doesn't fluctuate significantly from zero during the event window besides a marginally positive deviation at the event date. Following, the statistical uncertainty of the CAAR becomes more widespread through the event window, as indicated by the widening red ribbon. The positive tendency of the CAAR is insignificant since the measure is based on insignificant AARs, meaning that one cannot for certain state that the cumulative return is different from zero. Nonetheless, a positive reaction is inferred at $t=0$ indicating that investor do react instantly to positive news on average, however the gains seems to be depleted in the following weeks.  
 
 \begin{figure} [H] 
     \centering
@@ -73,55 +70,57 @@ According to figure \ref{fig:ST_pos_news} the identified positive events doesn't
 \end{figure}
 
 
-The tendency of insignificance related to positive events is further reinforced by the results from the individual SDGs, as most are statistically indistinguishable from zero. However, the aggregates do indicate that positive events on SDGs in general are associated with negative abnormal returns. In contrast to the case of negative events, where the main issue was the amount of observations, the underlying issue with uncertainty comes with the seemingly random shareholder reaction to positive events. 
+The tendency of insignificance related to positive events is further reinforced by the results from the individual SDGs, as most returns are statistically indistinguishable from zero. In contrast to the case of negative events, where the main issue was the amount of observations, the underlying issue with uncertainty comes with the seemingly random shareholder reaction to positive events, as indicated by the aggregate overview in figure \ref{fig:ST_pos_news}. Only positive news associated with SDG 7, that deals with clean energy, displays a significant, positive abnormal return. 
  
 \begin{figure} [H]
     \centering
-    \caption{SDG 5 pillars: positive news}
-    \includegraphics[scale=0.6]{Projekt/1.Figures analysis/ST_positive_sdg_bar_groups_0.png}
-    \caption*{\footnotesize The figure illustrates the CAAR on $t = 10$ (full period) from positive news. The error bars represent the 95\% confidence intervals of the CAAR.}
+    \caption{AAR per SDG: positive news}
+    \includegraphics[scale=0.6]{Projekt/1.Figures analysis/ST_positive_sdg_bar.png}
+    \caption*{\footnotesize The figure illustrates the AAR on $t = 0$ from positive news. The error bars represent the 95\% confidence intervals of the AAR.}
     \label{fig:ST_pos_bar}
 \end{figure}
 
-The insignificance of the abnormal returns associated with positive events are manifested in table \ref{tab: ST_significace}. The the CAARs on, respectively, two, five and 10 days around the event are all insignificantly different from zero. In contrast the AAR exhibit positive performance at $t = 0$ at 5\% significance. 
+The insignificance of the abnormal returns associated with positive events are manifested in table \ref{tab: ST_significace}. The the CAARs on, respectively, two, five and 10 days around the event are all insignificantly different from zero. However, the AAR does exhibit positive performance at $t = 0$ at 5\% significance.  
 
 Generally, the short term empirical evidence demonstrate a non-verifiable relation between positive events, related to both broad and specific SDGs, and abnormal returns. Positive news is however associated with an instant reaction from investors on the event date. The evidence point towards an overall negative relationship, but this is not statistically valid.  
 
 
+
 \subsection{Long term abnormal returns: The Calendar Time Portfolio}
 
-In contrast to the short term models, where the returns are measured relative to an event date, the long term portfolios are rebalanced each month and includes all firms, that have experienced an event within the T = 1/4/8/12 preceding months. The strategy resembles that T becomes the holding period for event firms. The portfolio returns are estimated over the full sample period of five years, and are evaluated by a regression on the market excess return and the factors from the Fama-French \citeyear{Fama_french_3fac} three-factor model. 
+In contrast to the short term models, where the returns are measured relative to an event date, the long term portfolios are rebalanced each month and includes all firms, that have experienced an event within the T = 1/4/8/12 preceding months. The strategy resembles that T becomes the holding period for event firms. The portfolio returns are estimated over the full sample period of five years, and are evaluated by a regression on the market excess return and the factors from the Fama-French \citeyear{Fama_french_3fac} three-factor model. Full regression statistics including coefficient estimates, r-squared, and standard errors are available in Appendix X. The factor models do generally have high power in explaining the excess return risk exposure, with a r-square coefficient between 73\% to 98\% throughout the various portfolios. The portfolios which hold the least amount of firms on average generally has the lowest r-squared, which generally is a result of increased variance with less observations.  
+
 
 \subsubsection{Negative news}
 
 The abnormal returns of the portfolios are reflected through the regression intercept from the Fama-French model, presented as the Alpha in table \ref{tab: FF3-neg} along with the corresponding t-value. The table include the mean monthly number of firms in each portfolio as "N". Moreover, the event preconditions are partly disclosed, as the 1, 2 and 3 "sd" gives the required number of standard deviations larger than the mean for an event firm to be identified as consequential and thus selected to the portfolio. Above each horizontal line, the "$T = x$" express the portfolio holding period after an event has occurred. 
 
-In the matter of negative events the alphas are negative for all portfolio specifications. However, they are solely significant in three instances. With a one SD requirement the alpha is significant for holding periods of $T = 1$ and $T = 4$ months at, respectively, -0.82\% at $1\%$ and -0.41\% at $5\%$. For a two SD requirement the alpha with $T=4$ month holding period is significant with an alpha of -0.5\% at $5\%$. The alphas for holding periods larger than $T = 4$ are closer to zero, which is in support of market efficiency over the long term. An implication of the strategy is that portfolios with longer holding periods will accordingly include more firms in each rebalancing, which ultimately will drive the portfolio return closer to the market return. For example with 1 SD, we see the inverse relation between the average N (increases) and the alpha (decreases). In contrast, a higher SD requirement is equivalent to a more strict selection procedure designating that fewer firms will enter the portfolio. A consequence of the strict requirements is the size of the portfolios. A portfolio consisting of 5 or 10 firms will inevitably be exposed to idiosyncratic risks from the individual companies, which means that the portfolio outcome may be driven by specific risks rather than the effect from negative news. A large portfolio consisting of, e.g., 60 firms will not encounter the same risks due to diversification benefits, which enable one to approximately isolate the effect from negative news. 
+In the matter of negative events the alphas are negative for all portfolio specifications. However, they are solely significant in three instances. With a one SD requirement the alpha is significant for holding periods of $T = 1$ and $T = 4$ months at, respectively, -0.82\% at $1\%$ and -0.41\% at $5\%$. For a two SD requirement the alpha with $T=4$ month holding period is significant with an alpha of -0.5\% at $5\%$. The alphas for holding periods larger than $T = 4$ are closer to zero, which is in support of market efficiency over the long term. An implication of the strategy is that portfolios with longer holding periods will accordingly include more firms in each rebalancing, which ultimately will drive the portfolio return closer to the market return. For example with 1 SD, we see the inverse relation between the increases in the average N and the correspondingly decreases in alpha. In contrast, a higher SD requirement is equivalent to a more strict selection procedure designating that fewer firms will enter the portfolio. A consequence of the strict requirements is the size of the portfolios. A portfolio consisting of 5 or 10 firms will inevitably be exposed to idiosyncratic risks from the individual companies, which means that the portfolio outcome may be driven by specific risks rather than the effect from negative news. A large portfolio consisting of, e.g., 60 firms will not encounter the same risks due to diversification benefits, which enable one to approximately isolate the effect from negative news. 
 
 \setlength{\tabcolsep}{15pt}
 \begin{table}[h]
 \small
 \centering
-\caption{Fama-French three-factor model alpha from negative news } 
+\caption{Fama-French five-factor model alpha from negative news } 
 \begin{tabular}{llllllc}
 \hline \hline \\ 
  &     &  &    1 SD  &  2 SD  &  3 SD  &  \\ \cline{4-6} 
 & & & \multicolumn{3}{c}{ T = 1} & \\ \cline{2-6}
-& Alpha (\%)  &  & -0.82^{***}  & -0.55  & -0.73 &  \\ 
-& t-value &  & -3.03 & -1.57  & -1.59 &  \\
-& Mean N       &  &  19    & 10  & 5  & \\
+& Alpha (\%)  &  & -0.84^{***}  & -0.47  & -0.78 &  \\ 
+& t-value &  & -2.97 & -1.33  & -1.63 &  \\
+&  N       &  &  19    & 10  & 5  & \\
 & & & \multicolumn{3}{c}{ T = 4} & \\ \cline{2-6}
-& Alpha (\%)  &  & -0.41^{**}  & -0.50^{**}  &  -0.35 & \\
-& t-value &  & -2.59 & -2.39  & -1.36 & \\
-& Mean N       &  & 60      & 35  & 18  & \\
+& Alpha (\%)  &  & -0.36^{**}  & -0.45^{**}  &  -0.27 & \\
+& t-value &  & -2.23 & -2.12  & -1.04 & \\
+&  N       &  & 60      & 35  & 18  & \\
 & & & \multicolumn{3}{c}{ T = 8} & \\ \cline{2-6}
-& Alpha (\%)   &  & -0.19   & -0.19  & -0.19 &  \\
-& t-value &  & -1.58  & -1.25 & -1.07 &  \\
-& Mean N       &  & 100 & 63   & 34 & \\
+& Alpha (\%)   &  & -0.15   & -0.14  & -0.12 &  \\
+& t-value &  & -1.21  & -0.89 & -0.68 &  \\
+& N       &  & 100 & 63   & 34 & \\
 & & & \multicolumn{3}{c}{ T = 12} & \\ \cline{2-6}
-& Alpha (\%)   &  & -0.15  & -0.22  & -0.24 &  \\
-& t-value &  & -1.50  & -1.63 & -1.40 & \\
-& Mean N       &  & 130    & 86  & 48 \\\hline \hline
+& Alpha (\%)   &  & -0.08  & -0.16  & -0.17 &  \\
+& t-value &  & -0.86  & -1.16 & -0.97 & \\
+& N       &  & 130    & 86  & 48 \\\hline \hline
  \multicolumn{7}{l}{ \footnotesize $^* \; p\; <\; 0.1$, $ ^{**} \; p\; <\; 0.05$, $ ^{***} \; p\; <\; 0.01$  } \\
  \multicolumn{7}{p{11.5cm}}{ \footnotesize Alpha is the WLS-regression intercept (in \%) of the Fama-French 3-factor model, displayed along with the corresponding t-value. N is the average amount of firms included in the portfolio each month, and T is the portfolio holding period. The threshold for event firms to be included in the portfolio is either 1,2 or 3 "SD" (standard deviations) larger than the mean.} \\ 
 \end{tabular}
@@ -151,19 +150,19 @@ The
 & & & \multicolumn{3}{c}{ T = 1} & \\ \cline{2-6}
 & Alpha (\%)  &  & -0.30  & -0.05  & -0.42 &  \\
 & t-value &  & -1.19 & -0.14  & -0.89 & \\
-& Mean N       &  &  34    & 15 & 7 &\\
+&  N       &  &  34    & 15 & 7 &\\
 & & & \multicolumn{3}{c}{ T = 4} & \\ \cline{2-6}
 & Alpha (\%)  &  & -0.07  & -0.02  &  -0.09 & \\
 & t-value &  & -0.49 & -0.08  & -0.32 & \\
-& Mean N       &  & 105     & 52  & 25 & \\
+& N       &  & 105     & 52  & 25 & \\
 & & & \multicolumn{3}{c}{ T = 8} & \\ \cline{2-6}
 & Alpha (\%)  &  & -0.04   & -0.01  & -0.06 &  \\
 & t-value &  & -0.41  & -0.57 & -0.29 & \\
-& Mean N       &  & 164 & 63   & 47 & \\
+& N       &  & 164 & 63   & 47 & \\
 &  & & \multicolumn{3}{c}{ T = 12} & \\ \cline{2-6}
 & Alpha (\%)  &  & -0.01  & 0.04  & 0.08 &  \\
 & t-value &  & -1.03  & 0.33 & 0.47 & \\
-& Mean N       &  & 240    & 122  & 67 & \\ \hline \hline
+& N       &  & 240    & 122  & 67 & \\ \hline \hline
  \multicolumn{7}{l}{ \footnotesize $^* \; p\; <\; 0.1$, $ ^{**} \; p\; <\; 0.05$, $ ^{***} \; p\; <\; 0.01$  } \\
  \multicolumn{7}{p{11.5cm}}{ \footnotesize Alpha is the WLS-regression intercept (in \%) of the Fama-French 3-factor model, displayed along with the corresponding t-value. N is the average amount of firms included in the portfolio each month, and T is the portfolio holding period. The threshold for event firms to be included in the portfolio is either 1,2 or 3 "SD" (standard deviations) larger than the mean.}  \\ 
 \end{tabular}
