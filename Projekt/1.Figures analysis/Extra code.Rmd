@@ -277,7 +277,7 @@ positive_table = positive_index_10 %>%
          CAAR = 100*CAAR) %>%
   arrange(type)
 
-negative_table = negative_index %>% 
+negative_table = negative_index_10 %>% 
   mutate(AAR = 100*AAR,
          CAAR = 100*CAAR) %>%
   arrange(type) %>%  select(AAR,CAAR)
@@ -296,7 +296,7 @@ print(xtable(st_table,type="latex",
       add.to.row = addtorow,
       include.rownames=FALSE,
       include.colnames = FALSE) %>% 
-  write(file="test.tex")
+  write(file="st_ab_returns.tex")
 
 
  # Test of significance:

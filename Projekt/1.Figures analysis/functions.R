@@ -79,6 +79,7 @@ roll_capm_estimation <- function(data, window, min_obs, period = "day" ) {
     .period = period,
     .f = ~ estimate_capm(data = ., min_obs),
     .before = window - 1,
+    .after = - 10,
     .complete = FALSE
   )
   
@@ -88,6 +89,7 @@ roll_capm_estimation <- function(data, window, min_obs, period = "day" ) {
     .period = period,
     .f = ~ estimate_capm_alpha(., min_obs),
     .before = window - 1,
+    .after = - 10,
     .complete = FALSE
   )
 
@@ -97,9 +99,6 @@ roll_capm_estimation <- function(data, window, min_obs, period = "day" ) {
     alpha = alphas
   ))
 }
-
-
-
 
 winsorize <- function(x, cut) {
   x <- replace(
