@@ -14,6 +14,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(lubridate)
 library(readxl)
+library(lmtest)
 library(timetk)
 library(dplyr)
 library(zoo)
@@ -77,8 +78,9 @@ eu_5factors_monthly = read.csv("C:/Users/Marti/OneDrive - University of Copenhag
 Calendar-time portfolio approach 1 month sentiment data: 
 ################
 
+### Positive news
 ```{r}
-rolling_means = list(1,2,3,4,5)
+rolling_means = list(1)
 SDs = list(1,2,3)
 emptylist_pos_1 = list()
 emptylist_pos_2 = list()
@@ -136,8 +138,8 @@ long_term_data_positive = long_term_data_monthly %>% select(date,isin,ret,MKT_CA
 # x Month portfolio returns:
 
 list = list(1,4,8,12,18,24)
-alpha_positive <- data.frame(matrix(nrow=4, ncol=9)) 
-colnames(alpha_positive)<-c("Alpha","t","p" ,"return","index_return", "ave_N","holding_period","rolling_mean","SD_thres")
+alpha_positive <- data.frame(matrix(nrow=4, ncol=10)) 
+colnames(alpha_positive)<-c("Alpha","t","p","r","N","model")
 
 for (x in 1:length(list)) {
   
@@ -149,21 +151,17 @@ long_term_data_M_positive = long_term_data_positive %>%
   group_by(date) %>%
   summarise(ret = weighted.mean(ret,free_float_mkt_cap),
             n = n_distinct(isin)) %>%
-  left_join(eu_3factors_monthly, by = "date")
+  left_join(eu_5factors_monthly, by = "date")
 
 # Calculate alpha of portfolios:
   
 alpha_M_positive = long_term_data_M_positive %>% 
-  summarise(alpha = tidy(lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML, weights = n))$estimate[1],
-             t = tidy(lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML, weights = n))$statistic[1],
-             p = tidy(lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML, weights = n))$p.value[1],
-             return = 100*mean(12*(ret-RF)),
-             index_return = 100*mean(12*mkt_excess_ret),
-             ave_N = mean(n)) %>%
-   mutate(holding_period = paste0(i,"M"),
-          rolling_mean = y,
-          SD_thres = z
-          ) 
+  summarise(alpha = tidy(lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML + RMW + CMA, weights = n))$estimate[1],
+             t = tidy(lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML + RMW + CMA, weights = n))$statistic[1],
+             p = tidy(lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML + RMW + CMA, weights = n))$p.value[1],
+            r = glance(lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML + RMW + CMA, weights = n))$r.squared,
+             N = mean(n)) %>%
+   mutate(model = paste0(i,"M_",y,"_",z))
 
 alpha_positive[x,] = alpha_M_positive
 
@@ -189,14 +187,15 @@ emptylist_pos_2[[y]] = emptylist_pos_1
 #}
 
 print(xtable(as.data.frame(emptylist_pos_2[[1]][3]),type="latex",
-             digits=c(0,4,2,3,2,0,1,1,1,1),
+             digits=c(0,4,2,3,3,2,0,1,1,1,1),
              hline.after=c(-1,0),
              floating=FALSE,latex.environments=NULL),
       include.rownames=FALSE,
       include.colnames = TRUE) %>% 
-  write(file="alpha_positive_FF3_3.tex")
+  write(file="alpha_positive_FF5_3.tex")
 ```
 
+### Negative news
 ```{r}
 
 rolling_means = list(1)
@@ -258,8 +257,8 @@ long_term_data_negative = long_term_data_monthly %>% select(date,isin,ret,MKT_CA
 # x Month portfolio returns:
 
 list = list(1,3,6,12,18,24)
-alpha_negative <- data.frame(matrix(nrow=4, ncol=9)) 
-colnames(alpha_negative)<-c("Alpha","t","p" ,"return","index_return", "ave_N","holding_period","rolling_mean","SD_thres")
+alpha_negative <- data.frame(matrix(nrow=4, ncol=10)) 
+colnames(alpha_negative)<-c("Alpha","t","p", "r","return","index_return", "ave_N","holding_period","rolling_mean","SD_thres")
 
 for (x in 1:length(list)) {
   
@@ -279,6 +278,7 @@ alpha_M_negative = long_term_data_M_negative %>%
    summarise(alpha = tidy(lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML, weights = n))$estimate[1],
              t = tidy(lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML, weights = n))$statistic[1],
              p = tidy(lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML, weights = n))$p.value[1],
+              r = glance(lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML, weights = n))$r.squared,
              return = 100*mean(12*(ret-RF)),
              index_return = 100*mean(12*mkt_excess_ret),
              ave_N = mean(n)) %>%
@@ -417,19 +417,24 @@ short_term_data_daily = data_daily %>%
   mutate(date = as.Date(date)) %>% 
   right_join(sxxp_index_daily %>% select(date, mkt_excess), by = "date")
 
-# 
-#  plan(multisession, workers = availableCores())
-# 
-#  short_term_data_nested <- short_term_data_daily %>% ungroup() %>%
-#    select(date,isin,W_RETURN,mkt_excess) %>%
-#    nest(data = -c(isin)) %>%
-#    mutate(beta = future_map(
-#      data, ~ roll_capm_estimation(., window = 120, min_obs = 80, period = "day")
-#    )) %>%
-#    unnest(c(beta)) %>%
-#    na.omit(beta,alpha) %>% select(-data)
 
-
+ # plan(multisession, workers = availableCores())
+ # 
+ # short_term_data_nested <- short_term_data_daily %>% ungroup() %>%
+ #   select(date,isin,W_RETURN,mkt_excess) %>%
+ #   nest(data = -c(isin)) %>%
+ #   mutate(beta = future_map(
+ #     data, ~ roll_capm_estimation(., window = 120, min_obs = 80, period = "day")
+ #   )) %>%
+ #   unnest(c(beta)) %>%
+ #   na.omit(beta,alpha) %>% select(-data)
+ 
+ ##### BP-test of the individual stock data:
+ 
+data = short_term_data_daily %>% select(date,isin,W_RETURN,mkt_excess) %>% na.omit()
+   
+ test = data %>% nest(data = -isin) %>% mutate(tidied = map(data, ~ bptest(W_RETURN ~ mkt_excess, data = .)))
+                                              
   # # Write to CSV to keep in nice format:
   #      short_term_data_nested %>%
   #          write.csv(file = "C:/Users/Marti/OneDrive - University of Copenhagen/KU/Speciale/Data behandling/nested_daily_for_capm_sxxp.csv")
@@ -502,11 +507,11 @@ short_term_data_event = short_term_data %>%
 
 # Positive 
 positive_index = short_term_data_event %>% 
-  select(date,isin,"0",contains("-"),contains("+"),pos_event) %>% 
+  select(date,isin,MKT_CAP,"0",contains("-"),contains("+"),pos_event) %>% 
   select(-c(contains("pos_event_"),contains("neg_event_"))) %>%
   filter(pos_event == 1) %>%
   select(-pos_event) %>%
-  pivot_longer(!c(date,isin), names_to = "type", values_to = "value") %>%
+  pivot_longer(!c(date,isin,MKT_CAP), names_to = "type", values_to = "value") %>%
   na.omit(value) 
   
 
@@ -537,11 +542,11 @@ remove(positive_index_events_mean,positive_index_events)
 ### negative 
 
 negative_index = short_term_data_event %>% 
-  select(date,isin,"0",contains("-"),contains("+"),neg_event) %>% 
+  select(date,isin,MKT_CAP,"0",contains("-"),contains("+"),neg_event) %>% 
   select(-c(contains("pos_event_"),contains("neg_event_"))) %>%
   filter(neg_event == 1) %>%
   select(-neg_event) %>%
-  pivot_longer(!c(date,isin), names_to = "type", values_to = "value") %>%
+  pivot_longer(!c(date,isin,MKT_CAP), names_to = "type", values_to = "value") %>%
   na.omit(value) 
   
 
@@ -574,8 +579,8 @@ positive_index_10 = positive_index_all %>%
   group_by(type) %>%
   summarise(
     rel_events = mean(relative_events, na.rm = TRUE),
-    AAR = mean(value),
-    CAAR = mean(csum),
+    AAR = weighted.mean(value,MKT_CAP),
+    CAAR = weighted.mean(csum,MKT_CAP),
     SE_AAR = sd(value, na.rm = TRUE)/sqrt(n()),
     SE_CAAR = sd(csum, na.rm = TRUE)/sqrt(n())
     )
@@ -585,8 +590,8 @@ negative_index_10 = negative_index_all %>%
   group_by(type) %>%
   summarise(
     rel_events = mean(relative_events, na.rm = TRUE),
-    AAR = mean(value),
-    CAAR = mean(csum),
+    AAR = weighted.mean(value,MKT_CAP),
+    CAAR = weighted.mean(csum,MKT_CAP),
     SE_AAR = sd(value, na.rm = TRUE)/sqrt(n()),
     SE_CAAR = sd(csum, na.rm = TRUE)/sqrt(n())
     )
@@ -795,15 +800,15 @@ n_positive = short_term_return_sdg %>%
   arrange(isin,sdg,date,period) %>%
   group_by(isin,sdg,date) %>%
   mutate(CAAR = cumsum(abnormal_ret)) %>%
-  group_by(sdg) %>% filter(period == '10') %>%
+  group_by(sdg) %>% filter(period == '0') %>%
   summarise(n = n(),
-            sd = sd(CAAR),
+            sd = sd(abnormal_ret),
             se = sd/sqrt(n),
             t = 1.96,
             CI=t*se
             )
       
-positive_index_sdg %>% 
+positive_index_sdg %>% filter(period == '0') %>%
   group_by(sdg) %>% 
   summarise(
   sum = sum(AAR)) %>%
@@ -832,15 +837,15 @@ n_negative = short_term_return_sdg %>%
   arrange(isin,sdg,date,period) %>%
   group_by(isin,sdg,date) %>% 
   mutate(CAAR = cumsum(abnormal_ret)) %>%
-  group_by(sdg) %>% filter(period == '10') %>%
+  group_by(sdg) %>% filter(period == '0') %>%
   summarise(n = n(),
-            sd = sd(CAAR),
+            sd = sd(abnormal_ret),
             se = sd/sqrt(n),
             t = 1.96,
             CI=t*se
             )
       
-negative_index_sdg %>% 
+negative_index_sdg %>% filter(period == '0') %>%
   group_by(sdg) %>% 
   summarise(
   sum = sum(AAR)) %>% 
@@ -850,8 +855,7 @@ negative_index_sdg %>%
   geom_bar(stat="identity") +
   geom_errorbar( aes(x=sdg, ymin=sum-CI, ymax=sum+CI), colour = "orange", width=0.5, alpha=0.8, size=0.7) + 
   scale_y_continuous(name ="Abnormal return",
-                     labels = scales::percent,
-                     breaks = c(-0.08,-0.06,-0.04,-0.02,0,0.02,0.04)) +
+                     labels = scales::percent) +
   theme_bw() +
   theme(legend.title = element_blank(),
         legend.key.size = unit(0.5, 'cm'),

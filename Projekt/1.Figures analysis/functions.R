@@ -99,6 +99,8 @@ roll_capm_estimation <- function(data, window, min_obs, period = "day" ) {
 }
 
 
+
+
 winsorize <- function(x, cut) {
   x <- replace(
     x,
