@@ -1,0 +1,47 @@
+Sensitivity analysis:
+
+What do we want to test?
+
+Short term model:
+- the event specification; 
+        - new data: Bloomberg global
+        - requiring 2 SDs for the event rule
+
+Long term:
+- equal weighted portfolios
+- event collection length
+
+
+\subsection{Market model regression: event specification}
+
+\begin{figure} [H]
+    \centering
+    \caption{Negative news: $CAAR_{t=10}$}
+    \includegraphics[scale=0.6]{Projekt/1.Figures analysis/ST_negative_}
+     \caption*{\footnotesize The figure illustrates the average abnormal return (AAR) and cumulative AAR (CAAR) around the event date (t = 0) of negative news. The lines (left axis) represent the average and the ribbons represent the 95th confidence intervals. The bars (right axis) represent the amount of events on a given day relative to t = 0. }
+    \label{fig:ST_neg_news}
+\end{figure} 
+
+\begin{table}[ht]
+\centering
+\caption{AAR and CAAR (in \%) with new event rule (sd)} 
+\begin{tabular}{lcc}
+  \hline  \hline
+  & 2 sd & 3 sd  \\   
+ \hline
+$AAR_{t=0}$ & $\underset{(-3.40)}{-0.522^{***}}$ & $\underset{(0.)}{-0.617^{***}}$ \\ 
+$CAAR_{[-2;+2]}$  & $\underset{(-3.66)}{-0.714^{***}}$  & $\underset{(0.-1.686)}{-0.697^{**}}$ \\ 
+$CAAR_{[-5;+5]}$  & $\underset{(-3.56)}{-0.902^{***}}$  & $\underset{(0.-1.686)}{-0.697^{**}}$ \\ 
+$CAAR_{[-10;+10]}$  & $\underset{(-1.88)}{-0.652^{**}}$  & $\underset{(0.-1.686)}{-0.697^{**}}$ \\ 
+   \hline \hline
+   \multicolumn{3}{p{8cm}}{\footnotesize Cumulative and simple average abnormal stock returns associated with positive and negative news over an event window of 21 days.} \\
+   \hline
+\end{tabular}
+\label{tab:ST_sensitivity}
+\end{table}
+
+
+\subsection{Market model regression: source data}
+
+
+\subsection{Calendar Time Portfolio: }
