@@ -24,31 +24,45 @@ This paper will apply the event study methodology examine the behavior of stock 
 
 The inspection of short-term abnormal return behavior covers (2n+1) trading days surrounding a corporate event: n days before to catch possible insiders information, the day of the event, and n days after. The short term analysis will use N = 10, which leaves a total window of 21 days [-10,+10] to investigate effect from an event. The effect of an event is expressed in terms of the abnormal return, defined as the difference between the realized ex-post return and the expected return, with the latter characterized as the expected return conditional on the event not taking place \citep{Event_studies}. Several models have been applied in the literature to estimate the short-term abnormal returns in event studies, which includes the CAPM, the Market Model, and multi-factor models. According to \cite{holler2014event} the most widely used is the Market Model, which assumes a linear relationship between the individual stock return and the market return. 
 
-Tilføj noget om short term risk fra Kothari s. 22
+ \textcolor{red}{Tilføj noget om short term risk fra Kothari s. 22} 
 
 \subsubsection{The Market Model}
 
-The Market Model is a single factor statistical model, which relates the return of a given security to the return of the market portfolio. The linear specification follows from the assumed joint normality of asset returns. For any given stock the model is defined as:
+The Market Model is a single factor statistical model, which relates the return of a given security to the return of a market portfolio. The linear specification follows from the assumed joint normality of asset returns. The statistical assumption that asset returns are jointly multivariate normal and independently and identically distributed through time is imposed. \cite{Event_studies} states that these assumptions are sufficient for the market model to be correctly specified, which in practice is empirically reasonable as inferences using normal return models tend to be robust to deviations from the assumptions. For any given stock the model is defined as:
 
 \begin{equation} \label{market_model}
-    R_{i,t} = \alpha_i + \beta_i * R_{m,t} + \epsilon_{i,t},
+    R_{i,t} = \hat{\alpha_i} + \hat{\beta_i} * R_{m,t} + \hat{\epsilon}_{i,t},
 \end{equation}
  where $R_{i,t}$ is the return of the stock \textit{i} on day \textit{t}, $\alpha_i$ is the regression intercept\footnote{The excess return of a stock relative to the market, that is not explained by the $\beta$.} for stock \textit{i}, $R_{m,t}$ is the market return on day \textit{t}, and
  $\beta_i$ is the sensitivity of $R_{i,t}$ to the market return.  
 
- The regression coefficients $\alpha_i$ and $\beta_i$ are computed as the stock returns of a given frequency on the market returns. To analyze the market participants' short-term reaction before and after the event date, the event window is set to +-10 days around the event date, and the estimation window of the regression is set to 120 days prior to the event, as proposed by \cite{Event_studies}. The linear ordinary least squares (OLS) has been applied in the estimation. \cite{brown1985using} investigate the properties of applying daily stock returns in event studies with the market model, and find that the model is well-specified under a variety of conditions. 
+ The regression coefficients $\alpha_i$ and $\beta_i$ are computed as the stock returns of a given frequency on the market returns. To analyze the market participants' short-term reaction before and after the event date, the event window is set to +-10 days around the event date. The estimation window of the regression is set to 120 days prior to the event, as proposed by \cite{Event_studies} to mitigate for sampling error and serial correlation in abnormal returns. Under the null hypothesis that a given event has no impact on returns, the distributional properties of the abnormal returns can be used to draw inferences in the event period. 
+ The linear ordinary least squares (OLS) has been applied in the estimation. In addition to \cite{Event_studies},\cite{brown1985using} investigate the properties of applying daily stock returns in event studies with the market model, and find that the model is well-specified under a variety of conditions. 
 
- With the expected returns predicted from the Market Model, the abnormal returns are defined as the residual between the realized and the expected returns for each event:
+ With the expected returns predicted from the Market Model, the abnormal returns (AR) are defined as the residual between the realized and the expected returns for each event:
  \begin{equation}
-    \text{Abnormal returns} \: (AR_{i,t}) = R_{i,t} - (\alpha_i + \beta_i * R_{m,t})
+    AR_{i,t} = R_{i,t} - (\hat{\alpha_i} + \hat{\beta_i} * R_{m,t})
  \end{equation}
 
- where $AR_{i,t}$ measures the shareholder's reaction to the event addressing firm \textit{i} at time \textit{t}  with $\alpha_i$ and $\beta_i$ defined as the OLS-parameter estimates from the regression in equation \ref{market_model}. The abnormal return can be transformed into cumulative abnormal returns (for n = (1, ..., 10) by: 
+ where $AR_{i,t}$ measures the shareholder's reaction to the event addressing firm \textit{i} at time \textit{t}  with $\alpha_i$ and $\beta_i$ defined as the OLS-parameter estimates from the regression in equation \ref{market_model}.
+  
+ The individual stock abnormal returns can be aggregated for each event as the average abnormal return (AAR), by:  
  \begin{equation}
-     CAR_{i,t}[-n,+n] = \sum_{\tau = t-n} ^{t+n} AR_{i,t}
+ AAR_t = \frac{1}{N} \sum_{i=1} ^N AR_{i,t},
  \end{equation}
- To test the hypothesis we compute average abnormal returns ($AAR_t = \overline{AR}_{i,t})$ and cumulative average abnormal returns ($CAAR_{[-n,+n]} = \overline{CAR}_{[-n,+n]}$, and use statistical analysis to test the significance of the results. 
-
+ \begin{equation}
+ var(AAR_{t}) = \frac{1}{N^2} \sum_{i=1} ^N \sigma_{\epsilon_i} ^2.
+ \end{equation}
+ The AAR can then be aggregated from $t_1$ to $t_2$ to accommodate a multiple period event window as the cumulative AAR (CAAR), by:
+ \begin{equation}
+ CAAR_{[t_1,t_2]} = \sum_{t = t_1 } ^{t_2} AAR_{t},
+ \end{equation}
+ \begin{equation}
+ var(CAAR_{[t_1,t_2]}) = var(AAR_t).
+ \end{equation}
+ 
+Inferences about the CAAR can be drawn by using: $CAAR_{t_1,t_2} ~ N[0,var(CAAR_{[t_1,t_2]})]$ to test the null hypothesis that the abnormal returns are zero. I use the sample variance from the market model regression as a estimator of $\sigma^2_{\epsilon_i}$. The distribution is asymptotic with the the number of stocks N and the length of the estimation window \cite{Event_studies}.  
+ 
  
 
 \subsection{Long-term abnormal returns}
