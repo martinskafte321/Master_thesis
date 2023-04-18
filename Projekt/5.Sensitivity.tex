@@ -1,21 +1,20 @@
-Sensitivity analysis:
 
-What do we want to test?
+%What do we want to test?
 
-Short term model:
-- the event specification; 
-        - new data: Bloomberg global
-        - requiring 2 SDs for the event rule
-        - mkt cap vs. value weighted. 
+%Short term model:
+%- the event specification; 
+%        - new data: Bloomberg global
+%        - requiring 2/3 SDs for the event rule
+%        - mkt cap vs. value weighted. 
 
-Long term:
-- equal weighted portfolios
-- event collection length
+%Long term:
+%- mkt cap vs. value weighted. 
+%- event collection length
 
 
-In this section I will examine the robustness of the results by altering the model variables or event requirements and re-estimating the results. The practice can lead to validation or invalidation along with advancement of the model specification.  
+In this section I will examine the robustness of the results by altering the model variables or event requirements and re-estimate the results. The practice can lead to validation or invalidation along with advancement of the model specification.  
 
-\subsection{Market model regression: event specification}
+\subsection{Market model: event specification}
 The requirement rule for event identification is based on the magnitude of events in relation to the average event for the individual firm. Thus, it seems plausible that an increase in the tightness of the requirement rule will lead to higher abnormal returns in absolute values.  
 To address the issue I test whether the short term abnormal returns are sensitive to the methodology in specifying individual events. Specifically, I re-estimate the models with a requirement stating that the events should be more than, respectively, two and three standard deviations from the average event. A tighter event specification determine that fewer stocks will be included in the model as less events will be regarded as important. Consequently, the events included should be more negative or positive with a stricter rule. 
 
@@ -42,10 +41,10 @@ $CAAR_{[-10;+10]}$  & $\underset{(-0.168)}{-0.035}$  & $\underset{(-0.062)}{-0.0
 \label{tab:ST_sensitivity}
 \end{table}
 
-The two new models based on negative events are compared to the original results (1 sd) in figure \ref{fig:ST_neg_sensitivity}. The AAR is presented in dotted lines and the CAAR in solid lines along with estimation requirements of 1 sd (red), 2 sd (green), and 3 sd (blue). The similarities of the AAR and CAAR imply that the results are robust to changes in the event specification. While it is clear that enforcing a stronger sd requirement leads to lower AARs on the event date, no effect on the CAAR is present, visually, over the full event window. From table \ref{tab:ST_sensitivity}, the AAR on $t=0$ is, respectively, -0.52\% and -0.61\% for the 2 and 3 sd requirements compared to -0.37\% for the original 1 sd, meaning that the greatest instantaneous causal impact happens with a tight event rule. All are significant on the 1\% level. Intuitively, the investor reaction is more severe when events are identified as more important.  
+The two new models based on negative events are compared to the original results (1 sd) in figure \ref{fig:ST_neg_sensitivity}. The AAR is presented in dotted lines and the CAAR in solid lines along with estimation requirements of 1 sd (red), 2 sd (green), and 3 sd (blue). For simplicity, I have skipped the confidence intervals along with the bars, which represented the relative amount of events. The similarities of the AAR and CAAR imply that the results are robust to changes in the event specification. While it is clear that enforcing a stronger sd requirement leads to lower AARs on the event date, no effect on the CAAR is present, visually, over the full event window. From table \ref{tab:ST_sensitivity}, the AAR on $t=0$ is, respectively, -0.52\% and -0.61\% for the 2 and 3 sd requirements compared to -0.37\% for the original 1 sd, meaning that the greatest instantaneous causal impact happens with a tight event rule. All are significant on the 1\% level. Intuitively, the investor reaction is more severe when events are identified as more important.  
 
 
-\begin{figure} [H]
+\begin{figure} [h]
     \centering
     \caption{Negative news: $CAAR_{t=10}$}
     \includegraphics[scale=0.6]{Projekt/1.Figures analysis/ST_negative_sensitivity.png}
@@ -54,8 +53,15 @@ The two new models based on negative events are compared to the original results
 \end{figure} 
 
 
-\subsection{Market model regression: value vs. equal weights}
+\subsection{Market model: value vs. equal weights}
 
 
+\begin{figure} [H]
+    \centering
+    \caption{Negative news: $CAAR_{t=10}$}
+    \includegraphics[scale=0.6]{Projekt/1.Figures analysis/ST_negative_sensitivity_weight.png}
+     \caption*{\footnotesize The figure illustrates the average abnormal return (AAR) and cumulative AAR (CAAR) around the event date (t = 0) of negative news. The lines (left axis) represent the average and the ribbons represent the 95th confidence intervals. The bars (right axis) represent the amount of events on a given day relative to t = 0. }
+    \label{fig:ST_neg_sensitivity_weight}
+\end{figure} 
 
 \subsection{Calendar Time Portfolio: }
