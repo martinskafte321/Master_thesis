@@ -58,10 +58,10 @@ The Market Model is a single factor statistical model, which relates the return 
  CAAR_{[t_1,t_2]} = \sum_{t = t_1 } ^{t_2} AAR_{t},
  \end{equation}
  \begin{equation}
- var(CAAR_{[t_1,t_2]}) = var(AAR_t).
+ var(CAAR_{[t_1,t_2]}) = \sum ^{t_2}_{t=t_1} var(AAR_t).
  \end{equation}
  
-Inferences about the CAAR can be drawn by using: $CAAR_{t_1,t_2} ~ N[0,var(CAAR_{[t_1,t_2]})]$ to test the null hypothesis that the abnormal returns are zero. I use the sample variance from the market model regression as a estimator of $\sigma^2_{\epsilon_i}$. The distribution is asymptotic with the the number of stocks N and the length of the estimation window \cite{Event_studies}.  
+Inferences about the CAAR can be drawn by using: $CAAR_{[t_1,t_2]} \sim N[0,var(CAAR_{[t_1,t_2]})]$ to test the null hypothesis that the abnormal returns are zero. I use the sample variance from the market model regression as a estimator of $\sigma^2_{\epsilon_i}$. The distribution is asymptotic with the the number of stocks N and the length of the estimation window \cite{Event_studies}.  
  
  
 
@@ -91,7 +91,7 @@ To implement the method a portfolio is constructed each calendar month consistin
 
 \cite{fama1998_events} outlines the advantages of the CTP approach as emerging from the use of monthly returns and rebalancing. He argues that monthly returns are less skewed, which makes the model less sensitive to the bad model problem. Further, the time-series variation of the rebalanced portfolio captures the effect of the cross-correlation between event stocks returns. 
 
-Due to the changes in the composition of the portfolio, heteroskedasticity might be introduced in the error term. For example, \cite{ritter1995} argues that anomalies can be understated if events bunch in time due to e.g. timing of events. However, the issue of heteroskedasticity can be addressed by using the weighted least squares (WLS) technique with the monthly amount of firms as weights in the regression\cite{Ang_event_method}.
+Due to the changes in the composition of the portfolio, heteroskedasticity might be introduced in the error term. For example, \cite{ritter1995} argues that anomalies can be understated if events bunch in time due to e.g. timing of events. However, the issue of heteroskedasticity can be addressed by using the weighted least squares (WLS) technique with the monthly amount of firms as weights in the regression \citep{Ang_event_method}.
 
 The calculation of monthly portfolio returns can be based on value or equal weights. \cite{fama1998_events} suggests that apparent anomalies might shrink when event firms are value-weighted, which possibly yield the right perspective because it more accurately captures the wealth-effect experienced by an investor. Moreover, an equal-weighted portfolio will put more weight on small stocks, which might increase the the bad-model bias, as asset-pricing models have systemic issues explaining the average return of small stocks. However, as the amount of firms in the portfolio may be relatively small, the portfolio return may be dominated by the outcome of large firms. As this is unfavorably when trying to estimate a relationship between specific events and stock returns, the equal-weighted portfolio returns will be applied in the analysis. 
 

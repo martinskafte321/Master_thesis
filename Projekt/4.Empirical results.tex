@@ -43,25 +43,28 @@ Examining the average effect from, respectively, positive and negative events pr
 
 Splitting the events on SDGs generally illustrate that negative events in most groups are associated with negative abnormal returns. However, the statistical uncertainty in the measurements means that one cannot generate a lot of insights from the aggregated values. Only SDG 10, 15, and 16 provides abnormal returns significantly different from zero at a \% level. The statistical uncertainty originates from the relatively low amount of observations associated with the individual groups after dividing the events into SDGs. For example, SDG 4 and 9 has only, respectively, 16 and 83 observations, which results in excessively wide confidence interval, whereas SDG 12 and 16 has, respectively, 576 and 1364 observations resulting in higher statistical certainty.   
 
-The significance of the results in relation to negative and positive events are summarised with a z-test. The test statistic is computed and compared to its assumed distribution under the null hypothesis that the average abnormal return is zero. I use a z-test since the sample size per event day is larger than 30. The z-scores and significance complementary to the AAR on $t=0$, along with the CAAR on respectively, two, five, and 10 days around the event are presented in table \ref{tab: ST_significace}.   
+The significance of the results in relation to negative and positive events are summarised with a z-test. The test statistic is computed and compared to its assumed distribution under the null hypothesis that the average abnormal return is zero. I use a z-test since the sample size per event day is larger than 30. The z-scores and significance complementary to the AAR on $t=0$, along with the CAAR on respectively, two, five, and 10 days around the event are presented in table \ref{tab: ST_significance}.   
 
 The selection method for negative events was proposed to gather cases of severe negative abnormal returns. The CAAR of the full and subset windows from negative events are significantly different from zero at $p \; < 0.01$, which further validates the selection method, and that negative abnormal returns are attainable to negative events. However, the method may be late to pick up the signal of negative events or new information on the market.  
 
 \begin{table}[ht]
 \centering
 \caption{AAR and CAAR over event window (in percentage)} 
-\begin{tabular}{lccccc}
-   \hline  \hline
-  & $AAR_{t=0}$ & $CAAR_{[-2;+2]}$ & $CAAR_{[-5;+5]}$ & $CAAR_{[-10;+10]}$ & N \\
+\begin{tabular}{ccc}
+  \hline  \hline
+  & \multicolumn{1}{c}{Positive} &  \multicolumn{1}{c}{Negative}\\  
  \hline
-Positive news & $\underset{(2.123)}{0.082^{**}}$  & $\underset{(0.406)}{0.032}$    &  $\underset{(0.753)}{0.085}$ & $\underset{(0.460)}{0.070}$ & 3564 \\ 
-Negative news & $\underset{(-3.509)}{-0.378^{***}}$  & $\underset{(4.440)}{-0.715^{***}}$    & $\underset{(-4.255)}{-0.858^{***}}$ & $\underset{(-3.0)}{-0.822^{***}}$ & 1046\\ 
+$AAR_{t=0}$ &  $\underset{(2.123)}{0.082^{**}}$ & $\underset{(-3.509)}{-0.378^{***}}$ \\ 
+$CAAR_{[-2;+2]}$  & $\underset{(0.406)}{0.032}$ & $\underset{(4.440)}{-0.715^{***}}$ \\ 
+$CAAR_{[-5;+5]}$  & $\underset{(0.753)}{0.085}$ & $\underset{(-4.255)}{-0.858^{***}}$ \\ 
+$CAAR_{[-10;+10]}$    & $\underset{(0.460)}{0.070}$ & $\underset{(-3.0)}{-0.822^{***}}$ \\ 
+N & 3564 & 1046 \\
    \hline \hline
-   \multicolumn{5}{p{12cm}}{\footnotesize  $^* \; p\; <\; 0.1$, $ ^{**} \; p\; <\; 0.05$, $ ^{***} \; p\; <\; 0.01$  } \\ 
-   \multicolumn{5}{p{12cm}}{\footnotesize  The table shows xxxx  } \\
-\hline
+   \multicolumn{3}{p{10cm}}{ \footnotesize $^* \; p\; <\; 0.1$, $ ^{**} \; p\; <\; 0.05$, $ ^{***} \; p\; <\; 0.01$  } \\
+   \multicolumn{3}{p{10cm}}{\footnotesize The tables shows the CAAR associated with positive and negative news over an event window of 5, 10, and 21 days surrounding the event date along with the AAR on $t=0$. } \\
+   \hline
 \end{tabular}
-\label{tab: ST_significace}
+\label{tab: ST_significance}
 \end{table}
 
 \subsubsection{Positive news}
@@ -146,7 +149,7 @@ Such results are indicative of a pessimistic short-to-medium term investor react
 
 Applying holding periods longer than $T=1$ generates exclusively alphas close to zero, which resembles a well-diversified portfolio return close to the market portfolio, which is an expected result if positive news are recognized as irrelevant. 
 
-The 
+
 
 \setlength{\tabcolsep}{15pt}
 \begin{table}[]
