@@ -388,24 +388,26 @@ conf.level = 0.95
 
 positive_index_2 = positive_index %>% 
   mutate(type = as.numeric(as.character(type))) %>%
-  filter(type >= -2) %>%
-  filter(type <= 2)
+  filter(type >= -10) %>%
+  filter(type <= 10)
 
 
 negative_index_2 = negative_index %>% 
   mutate(type = as.numeric(as.character(type))) %>%
-  filter(type >= -2) %>%
-  filter(type <= 2) %>%
-  mutate(csum = cumsum(value)) 
+  filter(type >= -10) %>%
+  filter(type <= 10) 
+
+
 
 # Test of significance
 significance_pos_2 = positive_index_2 %>% 
   mutate(csum = 100*cumsum(value)) %>%
-  filter(type == 2)
+  filter(type == 10)
    
  se_pos_2 = significance_pos_2 %>%
   group_by(type) %>%
-  summarise(sd = sd(csum, na.rm = TRUE))
+  summarise(sd = sd(csum, na.rm = TRUE),
+            ret = weighted.mean(csum,MKT_CAP))
 
 
 z.test(significance_pos_2 %>% ungroup() %>% select(csum),y = NULL,
@@ -417,11 +419,12 @@ conf.level = 0.95
 
 significance_neg_2 = negative_index_2 %>% 
   mutate(csum = 100*cumsum(value)) %>%
-  filter(type == 2)
+  filter(type == 10)
    
  se_neg_2 = significance_neg_2 %>%
   group_by(type) %>%
-  summarise(sd = sd(csum, na.rm = TRUE))
+  summarise(sd = sd(csum, na.rm = TRUE),
+            ret = weighted.mean(csum,MKT_CAP))
 
 
 z.test(significance_neg_2 %>% ungroup() %>% select(csum),y = NULL,
@@ -441,11 +444,11 @@ positive_index_0 = positive_index %>%
   mutate(type = as.numeric(as.character(type))) %>%
   filter(type == 0) 
 
+ 
 
 negative_index_0 = negative_index %>% 
   mutate(type = as.numeric(as.character(type))) %>%
-  filter(type == 0) %>%
-  mutate(csum = cumsum(value)) 
+  filter(type == 0) 
 
 # Test of significance
 significance_pos_0 = positive_index_0 %>% 
@@ -463,6 +466,8 @@ sigma.x = se_pos_0[[2]],
 conf.level = 0.95
 )
 
+negative_index_10_sensi %>% 
+  filter(type == 0)
 
 significance_neg_0 = negative_index_0 %>% 
   mutate(csum = 100*cumsum(value)) %>%
@@ -478,4 +483,7 @@ mu = 0,
 sigma.x = se_neg_0[[2]],
 conf.level = 0.95
 )
+sqrt(648)
+
+(-0.663-0)/(2.70/32.34192)
 ```

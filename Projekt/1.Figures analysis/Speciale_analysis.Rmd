@@ -418,16 +418,16 @@ short_term_data_daily = data_daily %>%
   right_join(sxxp_index_daily %>% select(date, mkt_excess), by = "date")
 
 
- # plan(multisession, workers = availableCores())
- # 
- # short_term_data_nested <- short_term_data_daily %>% ungroup() %>%
- #   select(date,isin,W_RETURN,mkt_excess) %>%
- #   nest(data = -c(isin)) %>%
- #   mutate(beta = future_map(
- #     data, ~ roll_capm_estimation(., window = 120, min_obs = 80, period = "day")
- #   )) %>%
- #   unnest(c(beta)) %>%
- #   na.omit(beta,alpha) %>% select(-data)
+plan(multisession, workers = availableCores())
+
+short_term_data_nested <- short_term_data_daily %>% ungroup() %>%
+  select(date,isin,W_RETURN,mkt_excess) %>%
+  nest(data = -c(isin)) %>%
+  mutate(beta = future_map(
+    data, ~ roll_capm_estimation(., window = 120, min_obs = 80, period = "day")
+  )) %>%
+  unnest(c(beta)) %>%
+  na.omit(beta,alpha) %>% select(-data)
                              
   # # Write to CSV to keep in nice format:
   #      short_term_data_nested %>%
