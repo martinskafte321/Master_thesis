@@ -128,22 +128,17 @@ Table \ref{tab: FF5_neg_sensi_weights} reports the alphas, t-values and signific
 \label{tab: FF5_neg_sensi_weights}
 \end{table}
 
-The results are in accordance with the short term sensitivity analysis on portfolio weights, where the equal weighted Market Model portfolio generated lower abnormal returns as well. As before, a potential explanation for the severity of the alphas are due to smaller stocks receiving a higher relative weight in the equal weighted portfolio. In accordance, the regression summaries report that the portfolio with SD = 1 and T = 1 is highly sensitive towards the size factor with a beta-value of 0.97. However, the negative returns of the constructed portfolios are more severe than explainable by the SMB factor, which gives rise to the alpha generation. Look-back periods of T = 8 and 12 months generate significant alpha as well,  Smaller stocks seems to be punished harder for negative news than larger stocks. However, this is not the focus of the paper. The returns of the equal weighted portfolios confirm the negative association between negative events and abnormal returns and to some degree the magnitude of the value weighted portfolio returns.
+The results are in accordance with the short term sensitivity analysis on portfolio weights, where the equal weighted Market Model portfolio generated lower abnormal returns as well. As before, a potential explanation for the severity of the alphas are due to smaller stocks receiving a higher relative weight in the equal weighted portfolio. In accordance, the regression summaries report that the portfolio with SD = 1 and T = 1 is highly sensitive towards the size factor with a beta-value of 0.97. However, the negative returns of the constructed portfolios are more severe than explainable by the SMB factor, which gives rise to the alpha generation. A look-back periods of T = 8 and 12 months generate significant alpha as well,  Smaller stocks seems to be punished harder for negative news than larger stocks. However, this is not the focus of the paper. The returns of the equal weighted portfolios confirm the negative association between negative events and abnormal returns and to some degree the magnitude of the value weighted portfolio returns.
 
 
 \subsection{Calendar Time Portfolio: Excess return}
 
 An inherent assumption of the factor model is that investors can borrow and lend at the risk-free rate. This is not a practical assumption. Hence, the returns of the models can be sensitive to the assumption of the market return. 
-To review the impact of the risk-free rate on abnormal returns, I re-estimate the models with the assumption that the rate is zero. This step applies to both sides of the equation in \ref{eq: FF5}, where $R_{rf,t}$ is set to zero. Hence, the portfolio returns (response variable) and the market returns become higher, while the remaining explanatory variables are kept constant. 
+To review the impact of the risk-free rate on abnormal returns, I re-estimate the models with the assumption that the rate is zero. This step applies to both sides of the equation in \ref{eq: FF5}, where $R_{rf,t}$ is set to zero. 
 
 The alphas, t-values and significance levels for the portfolios with the risk-free rate assumed to be zero are reported in table \ref{tab: FF5_neg_sensi_rf}. Generally, the r-squared of the regressions are relatively high with values between 0.82 and 0.98. 
 
-The alpha estimated is, in most instances, more negative when the risk free is assumed zero. 
-
-
-
-
-
+The factor models are not very sensitive to changes in the market index and the risk-free rate, as the alphas are close to or slightly more negative than the original values.  With interest rates close to zero in this period, this result may not be overly surprising. Nonetheless, the adjustment does ensure that the portfolio alpha with SD = 3 and T = 1 becomes significant at the $10\%$ level. Setting the rate to zero essentially increases the portfolio returns (response variable) and the market returns (explanatory variable) as the rate was originally subtracted from these. Intuitively, a higher alpha would be expected as the excess returns increases.  However, the reduced alpha originates from a slightly increased sensitivity towards the size and value factors and less sensitivity to the market portfolio.      
 
 
 
@@ -156,14 +151,14 @@ The alpha estimated is, in most instances, more negative when the risk free is a
 \hline \hline \\ 
  &     &  &    1 SD  &  2 SD  &  3 SD  &  \\ \cline{4-6} 
 & & & \multicolumn{3}{c}{ T = 1} & \\ \cline{2-6}
-& Alpha (\%)  &  & $-0.85^{***}$  & $-0.50$  & $-0.80^{**}$ &  \\
+& Alpha (\%)  &  & $-0.85^{***}$  & $-0.50$  & $-0.80^{*}$ &  \\
 & t-value &  & -3.02 & -1.40  & -1.69 & \\
 & & & \multicolumn{3}{c}{ T = 4} & \\ \cline{2-6}
-& Alpha (\%)  &  & $-0.55^{***}$  & $-0.41^{***}$  &  $-0.08$ & \\
-& t-value & & -3.20 & -1.81 & -0.26 & \\
+& Alpha (\%)  &  & $-0.37^{**}$  & $-0.47^{**}$  &  $-0.28$ & \\
+& t-value & & -2.30 & -2.19 & -1.09 & \\
 & & & \multicolumn{3}{c}{ T = 8} & \\ \cline{2-6}
-& Alpha (\%)  &  & $-0.22^{*}$   & $-0.17$  & $-0.28$ &  \\
-& t-value &  & -1.67  & -1.04 & -1.26 & \\
+& Alpha (\%)  &  & $-0.16$   & $-0.15$  & $-0.12$ &  \\
+& t-value &  & -1.67  & -0.95 & -0.73 & \\
 &  & & \multicolumn{3}{c}{ T = 12} & \\ \cline{2-6}
 & Alpha (\%)  &  & $-0.09$  & $-0.17$  & $-0.17$ &  \\
 & t-value &  & -0.96  & -1.23 & -1.01 & \\
