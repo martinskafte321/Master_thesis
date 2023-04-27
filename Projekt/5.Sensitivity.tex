@@ -9,7 +9,7 @@
 
 %Long term:
 %- mkt cap vs. value weighted. 
-%- Developed market factors
+%- Risk free rate assumed to be zero
 
 
 In this section I will examine the robustness of the results by altering the model variables or event requirements and re-estimate the results, as it is important to cross-validate that a potential appearance of over-performance is not created artificially. Thus, the practice can lead to validation or invalidation along with advancement of model specifications. 
@@ -18,10 +18,7 @@ In this section I will examine the robustness of the results by altering the mod
 The requirement rule for event identification is based on the magnitude of events in relation to the average event for the individual firm. Thus, it seems plausible that an increase in the tightness of the requirement rule will lead to higher abnormal returns in absolute values.  
 To address the issue I test whether the short term abnormal returns are sensitive to the methodology in specifying individual events. Specifically, I re-estimate the models with a requirement stating that the events should be more than, respectively, two and three standard deviations from the average event. A tighter event specification determine that fewer stocks will be included in the model as less events will be regarded as important. Consequently, the events included should be more negative or positive with a stricter rule. 
 
-The results are reported in table \ref{tab: ST_significace}, which demonstrate that negative events continue to generate significant abnormal returns, while positive events does not. Due to insignificance and borderline randomness of the relation between positive events and returns I will only present the plots related to negative events. The graph of the positive events can be found in Appendix \ref{fig:ST_pos_sensi}. 
-
-
-\begin{table}[ht]
+\begin{table}[H]
 \centering
 \caption{AAR and CAAR (in \%) with new event rule (sd)} 
 \begin{tabular}{lccccc}
@@ -42,7 +39,8 @@ N & 1845 & 1078 & & 648 & 451  \\
 \label{tab:ST_sensitivity}
 \end{table}
 
-The two new models based on negative events are compared to the original results (1 sd) in figure \ref{fig:ST_neg_sensitivity}. The AAR is presented in dotted lines and the CAAR in solid lines along with estimation requirements of 1 sd (red), 2 sd (green), and 3 sd (blue). For simplicity, I have skipped the confidence intervals along with the barchart, which represented the relative amount of events. The similarities of the AAR and CAAR imply that the results are robust to changes in the event specification. While it is clear that enforcing a stronger sd requirement leads to lower AARs on the event date, no effect on the CAAR is present, visually, over the full event window. From table \ref{tab:ST_sensitivity}, the AAR on $t=0$ is, respectively, -0.52\% and -0.61\% for the 2 and 3 sd requirements compared to -0.37\% for the original 1 sd, meaning that the greatest instantaneous causal impact happens with a tight event rule. All are significant on the 1\% level. Intuitively, the investor reaction is more severe when events are identified as more important.  
+
+The results are reported in table \ref{tab: ST_significace}, which demonstrate that negative events continue to generate significant abnormal returns, while positive events does not. Due to insignificance and borderline randomness of the relation between positive events and returns I will only present the plots related to negative events. The graph of the positive events can be found in Appendix \ref{fig:ST_pos_sensi}. 
 
 
 \begin{figure} [h]
@@ -53,26 +51,26 @@ The two new models based on negative events are compared to the original results
     \label{fig:ST_neg_sensitivity}
 \end{figure} 
 
+The two new models based on negative events are compared to the original results (1 sd) in figure \ref{fig:ST_neg_sensitivity}. The AAR is presented in dotted lines and the CAAR in solid lines along with estimation requirements of 1 sd (red), 2 sd (green), and 3 sd (blue). For simplicity, I have skipped the confidence intervals along with the barchart, which represented the relative amount of events. The similarities of the AAR and CAAR imply that the results are robust to changes in the event specification. While it is clear that enforcing a stronger sd requirement leads to lower AARs on the event date, no effect on the CAAR is present, visually, over the full event window. From table \ref{tab:ST_sensitivity}, the AAR on $t=0$ is, respectively, -0.52\% and -0.61\% for the 2 and 3 sd requirements compared to -0.37\% for the original 1 sd, meaning that the greatest instantaneous causal impact happens with a tight event rule. All are significant on the 1\% level. Intuitively, the investor reaction is more severe when events are identified as more important.  
+
 
 
 \subsection{Market model: value vs. equal weights}
 
 A portfolio of stocks needs to be weighted in order to determine the relative impact the individual constituents have on the performance of the portfolio. Throughout the paper the portfolio weights have been based on the relative market capitalization of the firms - also known as value weights. Table \ref{tab:ST_sensitivity_weights} compares the performance of the value weighted portfolio against an equal weighted. The portfolios hold the same firms, however with different weights, and are based on the same identified events. Again, the results from using equal weights show that none of the portfolio returns, associated with positive events, are significant. 
 
-The equal weighted portfolio returns associated with negative events the empirical results from the former section is more or less valid. As expected, the returns are slightly different. However, they do appear significant on the same level and with the same direction of returns as the original results. While the portfolio AARs apparently follow each other to some extent, the development in CAAR is more adverse using equal weights relative to value weights. A potential explanation is that an equal weighted portfolio will award more weight to small stocks, thus they will contribute more to the portfolio returns relative to an value weighted portfolio. As small stocks tends to be more volatile than larger stocks \cite{Fama_french_3fac}, negative news could drive portfolio returns lower. 
-
-In the period following a given event, the average reaction from equal and value weighted portfolios are different. Although the AARs at this point are insignificant, the CAAR series indicate that the equal weighted portfolio, which favor small stocks, is pricing in events in the days following an actual event, whereas most of the negative price action is happening before the event has occurred for the value weighted portfolio. Possibly, news about small stocks will take time to reach a large amount of investors, which is why the price reaction is happening at a later point. 
-
-\begin{figure} [H]
+\begin{figure}[H]
     \centering
     \caption{Negative news: Value vs. Equal weights}
     \includegraphics[scale=0.6]{Projekt/1.Figures analysis/ST_negative_sensitivity_weight.png}
-     \caption*{\footnotesize The figure illustrates the average abnormal return (AAR) and cumulative AAR (CAAR) around the event date (t = 0) of negative news. The blue lines are returns calculated from an equally weighted portfolio, while the weights of the red lines are based on market capitalization.}
+     \caption*{\footnotesize The figure illustrates the average abnormal return (AAR) and cumulative AAR (CAAR) around the event date (t = 0) of negative news. The blue lines are returns calculated from an equally weighted portfolio, while the red lines are based on market capitalization weights.}
     \label{fig:ST_neg_sensitivity_weight}
 \end{figure} 
 
 
-\begin{table}[ht]
+The equal weighted portfolio returns associated with negative events the empirical results from the former section is more or less valid. As expected, the returns are slightly different. However, they do appear significant on the same level and with the same direction of returns as the original results. While the portfolio AARs apparently follow each other to some extent, the development in CAAR is more adverse using equal weights relative to value weights. A potential explanation is that an equal weighted portfolio will award more weight to small stocks, thus they will contribute more to the portfolio returns relative to an value weighted portfolio. As small stocks tends to be more volatile than larger stocks \cite{Fama_french_3fac}, negative news could drive portfolio returns lower. 
+
+\begin{table}[H]
 \centering
 \caption{AAR and CAAR (in \%) with equally weighted returns} 
 \begin{tabular}{lcccc}
@@ -92,12 +90,16 @@ $CAAR_{[-10;+10]}$    & $\underset{(-0.452)}{-0.128 }$ & $\underset{(-5.702)}{-1
 \end{table}
 
 
-
+In the period following a given event, the average reaction from equal and value weighted portfolios are different. Although the AARs at this point are insignificant, the CAAR series indicate that the equal weighted portfolio, which favor small stocks, is pricing in events in the days following an actual event, whereas most of the negative price action is happening before the event has occurred for the value weighted portfolio. Possibly, news about small stocks will take time to reach a large amount of investors, which is why the price reaction is happening at a later point. 
 
 
 
 
 \subsection{Calendar Time Portfolio: Portfolio weights}
+
+The sensitivity of returns in relation to the weights used in calculating portfolio returns will also be controlled in regards to the long term abnormal returns. Since the returns associated with positive events were insignificant in the initial analysis, this section will exclusively report on the results relating to negative events. 
+
+Table \ref{tab: FF5_neg_sensi_weights} reports the alphas, t-values and significance levels of equally weighted portfolios. Besides the weights, the portfolio construction is identical to that from the empirical results in section \ref{sec: long_term_portfolio}. The results clearly indicate a discrepancy between value and equal weights with the latter generating higher absolute alpha values. For example, the value weighted portfolio with SD = 2 and T = 1 generated an insignificant alpha of -0.47, while the equivalent equal weighted portfolio generated an alpha of -0.94 significant on the $1\%$ level.   
 
 \setlength{\tabcolsep}{15pt}
 \begin{table}[]
@@ -123,8 +125,23 @@ $CAAR_{[-10;+10]}$    & $\underset{(-0.452)}{-0.128 }$ & $\underset{(-5.702)}{-1
  \multicolumn{7}{l}{ \footnotesize $^* \; p\; <\; 0.1$, $ ^{**} \; p\; <\; 0.05$, $ ^{***} \; p\; <\; 0.01$  } \\
  \multicolumn{7}{p{11.5cm}}{ \footnotesize Alpha is the WLS-regression intercept (in \%) of the Fama-French 3-factor model, displayed along with the corresponding t-value. N is the average amount of firms included in the portfolio each month, and T is the portfolio holding period. The threshold for event firms to be included in the portfolio is either 1,2 or 3 "SD" (standard deviations) larger than the mean.}  \\ 
 \end{tabular}
-\label{tab: FF3-pos}
+\label{tab: FF5_neg_sensi_weights}
 \end{table}
+
+The results are in accordance with the short term sensitivity analysis on portfolio weights, where the equal weighted Market Model portfolio generated lower abnormal returns as well. As before, a potential explanation for the severity of the alphas are due to smaller stocks receiving a higher relative weight in the equal weighted portfolio. In accordance, the regression summaries report that the portfolio with SD = 1 and T = 1 is highly sensitive towards the size factor with a beta-value of 0.97. However, the negative returns of the constructed portfolios are more severe than explainable by the SMB factor, which gives rise to the alpha generation. Look-back periods of T = 8 and 12 months generate significant alpha as well,  Smaller stocks seems to be punished harder for negative news than larger stocks. However, this is not the focus of the paper. The returns of the equal weighted portfolios confirm the negative association between negative events and abnormal returns and to some degree the magnitude of the value weighted portfolio returns.
+
+
+\subsection{Calendar Time Portfolio: Excess return}
+
+An inherent assumption of the factor model is that investors can borrow and lend at the risk-free rate. This is not a practical assumption. Hence, the returns of the models can be sensitive to the assumption of the market return. 
+To review the impact of the risk-free rate on abnormal returns, I re-estimate the models with the assumption that the rate is zero. This step applies to both sides of the equation in \ref{eq: FF5}, where $R_{rf,t}$ is set to zero. Hence, the portfolio returns (response variable) and the market returns become higher, while the remaining explanatory variables are kept constant. 
+
+The alphas, t-values and significance levels for the portfolios with the risk-free rate assumed to be zero are reported in table \ref{tab: FF5_neg_sensi_rf}. Generally, the r-squared of the regressions are relatively high with values between 0.82 and 0.98. 
+
+The alpha estimated is, in most instances, more negative when the risk free is assumed zero. 
+
+
+
 
 
 
@@ -134,28 +151,34 @@ $CAAR_{[-10;+10]}$    & $\underset{(-0.452)}{-0.128 }$ & $\underset{(-5.702)}{-1
 \begin{table}[]
 \small
 \centering
-\caption{Fama-French five-factor model alpha from positive news with equal weights} 
+\caption{Fama-French five-factor model alpha from negative news with Risk free rate assumed to be 0} 
 \begin{tabular}{ccccccc}
 \hline \hline \\ 
  &     &  &    1 SD  &  2 SD  &  3 SD  &  \\ \cline{4-6} 
 & & & \multicolumn{3}{c}{ T = 1} & \\ \cline{2-6}
-& Alpha (\%)  &  & $ -0.004$  & $-0.000$  & $-0.006$ &  \\
-& t-value &  & -1.55 & -0.27  & -1.48 & \\
+& Alpha (\%)  &  & $-0.85^{***}$  & $-0.50$  & $-0.80^{**}$ &  \\
+& t-value &  & -3.02 & -1.40  & -1.69 & \\
 & & & \multicolumn{3}{c}{ T = 4} & \\ \cline{2-6}
-& Alpha (\%)  &  & $ -0.003^{*}$  & $-0.001^{***}$  &  $-005^{**}$ & \\
-& t-value & & -1.77  & -0.75 & -227 & \\
+& Alpha (\%)  &  & $-0.55^{***}$  & $-0.41^{***}$  &  $-0.08$ & \\
+& t-value & & -3.20 & -1.81 & -0.26 & \\
 & & & \multicolumn{3}{c}{ T = 8} & \\ \cline{2-6}
-& Alpha (\%)  &  & $ -0.003^{***}$   & $-0.003^{**}$  & $-0.005^{**}$ &  \\
-& t-value &  & -2.98  & -2.45 & 3.51 & \\
+& Alpha (\%)  &  & $-0.22^{*}$   & $-0.17$  & $-0.28$ &  \\
+& t-value &  & -1.67  & -1.04 & -1.26 & \\
 &  & & \multicolumn{3}{c}{ T = 12} & \\ \cline{2-6}
-& Alpha (\%)  &  & $ -0.004^{***}$  & $-0.003^{**}$  & $-0.003^{**}$ &  \\
-& t-value &  & -3.02  & -2.66 & -1.12 & \\
+& Alpha (\%)  &  & $-0.09$  & $-0.17$  & $-0.17$ &  \\
+& t-value &  & -0.96  & -1.23 & -1.01 & \\
 \hline \hline
  \multicolumn{7}{l}{ \footnotesize $^* \; p\; <\; 0.1$, $ ^{**} \; p\; <\; 0.05$, $ ^{***} \; p\; <\; 0.01$  } \\
  \multicolumn{7}{p{11.5cm}}{ \footnotesize Alpha is the WLS-regression intercept (in \%) of the Fama-French 3-factor model, displayed along with the corresponding t-value. N is the average amount of firms included in the portfolio each month, and T is the portfolio holding period. The threshold for event firms to be included in the portfolio is either 1,2 or 3 "SD" (standard deviations) larger than the mean.}  \\ 
 \end{tabular}
-\label{tab: FF3-pos}
+\label{tab: FF5_neg_sensi_rf}
 \end{table}
+
+
+
+
+
+
 
 
 
