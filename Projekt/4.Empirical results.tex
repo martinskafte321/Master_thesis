@@ -58,10 +58,9 @@ $AAR_{t=0}$ &  $\underset{(2.123)}{0.082^{**}}$ & $\underset{(-3.509)}{-0.378^{*
 $CAAR_{[-2;+2]}$  & $\underset{(0.406)}{0.032}$ & $\underset{(4.440)}{-0.715^{***}}$ \\ 
 $CAAR_{[-5;+5]}$  & $\underset{(0.753)}{0.085}$ & $\underset{(-4.255)}{-0.858^{***}}$ \\ 
 $CAAR_{[-10;+10]}$    & $\underset{(0.460)}{0.070}$ & $\underset{(-3.0)}{-0.822^{***}}$ \\ 
-N & 3564 & 1046 \\
    \hline \hline
    \multicolumn{3}{p{10cm}}{ \footnotesize $^* \; p\; <\; 0.1$, $ ^{**} \; p\; <\; 0.05$, $ ^{***} \; p\; <\; 0.01$  } \\
-   \multicolumn{3}{p{10cm}}{\footnotesize The tables shows the CAAR associated with positive and negative news over an event window of 5, 10, and 21 days surrounding the event date along with the AAR on $t=0$. } \\
+   \multicolumn{3}{p{10cm}}{\footnotesize The tables shows the CAAR and associated t-value related to positive and negative events over an event window of 5, 10, and 21 days surrounding the event date along with the AAR on $t=0$. Positive and negative events consists of, respectively, 3564 and 1046 observations. } \\
    \hline
 \end{tabular}
 \label{tab: ST_significance}
@@ -96,7 +95,7 @@ Generally, the short term empirical evidence demonstrate a non-verifiable relati
 
 \input{Projekt/1.Figures analysis/st_ab_returns}
 
-\subsection{Long term abnormal returns: The Calendar Time Portfolio}
+\subsection{Long term abnormal returns: The Calendar Time Portfolio} \label{sec: long_term_portfolio}
 
 In contrast to the short term models, where the returns are measured relative to an event date, the long term portfolios are rebalanced each month and includes all firms, that have experienced an event within the T = 1/4/8/12 preceding months. The strategy resembles that T becomes the holding period for event firms. The portfolio returns are estimated over the full sample period of five years, and are evaluated by a regression on the market excess return and the factors from the Fama-French \citeyear{Fama_french_3fac} three-factor model. Full regression statistics including coefficient estimates, r-squared, and standard errors are available in Appendix X. The factor models do generally have high power in explaining the excess return risk exposure, with a r-square coefficient between 73\% to 98\% throughout the various portfolios. The portfolios which hold the least amount of firms on average generally has the lowest r-squared, which generally is a result of increased variance with less observations.  
 
