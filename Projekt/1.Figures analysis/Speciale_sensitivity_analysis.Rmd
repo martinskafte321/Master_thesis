@@ -72,6 +72,18 @@ eu_5factors_monthly = read.csv("C:/Users/Marti/OneDrive - University of Copenhag
   mutate(date = as.Date(date)) %>%
   filter(date >= '2018-01-01')
 
+dev_5factors_monthly <- read.csv("C:/Users/Marti/OneDrive - University of Copenhagen/KU/Speciale/Data behandling/Developed_5_Factors.csv", sep = ",") %>% 
+   transmute(
+        date = as.Date(ym(date)),
+        date = ceiling_date(date, "month")-1,
+        mkt_excess = as.numeric(Mkt.RF)/100,
+        SMB = as.numeric(SMB)/100,
+        HML = as.numeric(HML)/100,
+        RMW = as.numeric(RMW)/100,
+        CMA = as.numeric(CMA)/100,
+        RF = as.numeric(RF)/100) %>%
+  filter(date >= '2018-01-01')
+
 ```
 
 ################ 
@@ -137,8 +149,8 @@ long_term_data_positive = long_term_data_monthly %>% select(date,isin,ret,MKT_CA
 
 # x Month portfolio returns:
 
-list = list(1,4,8,12,18,24)
-alpha_positive <- data.frame(matrix(nrow=4, ncol=10)) 
+list = list(1,4,8,12)
+alpha_positive <- data.frame(matrix(nrow=4, ncol=6)) 
 colnames(alpha_positive)<-c("Alpha","t","p","r","N","model")
 
 for (x in 1:length(list)) {
@@ -149,17 +161,18 @@ long_term_data_M_positive = long_term_data_positive %>%
   # Only include the last 1 months:
   filter(period >= -i) %>% 
   group_by(date) %>%
-  summarise(ret = weighted.mean(ret,free_float_mkt_cap),
-            n = n_distinct(isin)) %>%
+  summarise(#ret = weighted.mean(ret,free_float_mkt_cap),
+    ret = mean(ret),        
+    n = n_distinct(isin)) %>%
   left_join(eu_5factors_monthly, by = "date")
 
 # Calculate alpha of portfolios:
   
 alpha_M_positive = long_term_data_M_positive %>% 
-  summarise(alpha = tidy(lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML + RMW + CMA, weights = n))$estimate[1],
-             t = tidy(lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML + RMW + CMA, weights = n))$statistic[1],
-             p = tidy(lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML + RMW + CMA, weights = n))$p.value[1],
-            r = glance(lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML + RMW + CMA, weights = n))$r.squared,
+  summarise(alpha = tidy(lm(ret-RF~ 1 + mkt_excess_ret + SMB + HML + RMW + CMA, weights = n))$estimate[1],
+             t = tidy(lm(ret-RF~ 1 + mkt_excess_ret + SMB + HML + RMW + CMA, weights = n))$statistic[1],
+             p = tidy(lm(ret-RF~ 1 + mkt_excess_ret + SMB + HML + RMW + CMA, weights = n))$p.value[1],
+            r = glance(lm(ret-RF~ 1 + mkt_excess_ret + SMB + HML + RMW + CMA, weights = n))$r.squared,
              N = mean(n)) %>%
    mutate(model = paste0(i,"M_",y,"_",z))
 
@@ -171,35 +184,25 @@ emptylist_pos_1[[z]] = alpha_positive
 emptylist_pos_2[[y]] = emptylist_pos_1
 }
 
-  emptylist_pos_2[[2]][3]
 
-# Plot the returns:
-# long_term_data_M_positive %>%
-#   ggplot(aes(x = date, y = ret)) +
-#    geom_bar(stat = 'identity') +
-#    geom_smooth(method = "lm") +
-#     theme_bw() +
-#    labs(x = "", y = "Monthly Returns") +
-#     scale_y_continuous(breaks = pretty_breaks(),
-#                      labels = scales::percent) +
-#    scale_x_date(date_breaks = "1 years", date_labels = "%Y")
-#       ggsave(paste0("LT_positive_returns_", i,".png"))
-#}
 
-print(xtable(as.data.frame(emptylist_pos_2[[1]][3]),type="latex",
-             digits=c(0,4,2,3,3,2,0,1,1,1,1),
+print(xtable(as.data.frame(emptylist_pos_2[[1]][1]),type="latex",
+             digits=c(0,4,2,3,3,2,0),
              hline.after=c(-1,0),
              floating=FALSE,latex.environments=NULL),
       include.rownames=FALSE,
       include.colnames = TRUE) %>% 
-  write(file="alpha_positive_FF5_3.tex")
+  write(file="alpha_positive_FF5_RF1.tex")
+
+tidy(summary(lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML + RMW + CMA, weights = n, data = long_term_data_M_positive)))
+
 ```
 
 ### Negative news
 ```{r}
 
 rolling_means = list(1)
-SDs = list(1,2,3)
+SDs = list(1)
 emptylist_neg_1 = list()
 emptylist_neg_2 = list()
 
@@ -242,7 +245,7 @@ long_term_data_monthly <- data_monthly %>%
 ############################
 
 # Add lagged values of the events to sort whether an event has happened in the last X months. 
-  for (i in 1:24) {
+  for (i in 1:4) {
   long_term_data_monthly[paste0("-",i)] <- long_term_data_monthly %>% group_by(isin) %>% transmute(t = lag(neg_event,i)) %>% ungroup() %>% select(-isin)
   }
 
@@ -256,9 +259,9 @@ long_term_data_negative = long_term_data_monthly %>% select(date,isin,ret,MKT_CA
 
 # x Month portfolio returns:
 
-list = list(1,3,6,12,18,24)
-alpha_negative <- data.frame(matrix(nrow=4, ncol=10)) 
-colnames(alpha_negative)<-c("Alpha","t","p", "r","return","index_return", "ave_N","holding_period","rolling_mean","SD_thres")
+list = list(1,4,8,12)
+alpha_negative <- data.frame(matrix(nrow=4, ncol=6)) 
+colnames(alpha_negative)<-c("Alpha","t","p","r","N","model")
 
 for (x in 1:length(list)) {
   
@@ -268,24 +271,23 @@ long_term_data_M_negative = long_term_data_negative %>%
   # Only include the last 1 months:
   filter(period >= -i) %>% 
   group_by(date) %>%
-  summarise(ret = weighted.mean(ret,free_float_mkt_cap),
-            n = n_distinct(isin)) %>%
-  left_join(eu_3factors_monthly, by = "date")
+  summarise(
+    ret = weighted.mean(ret,free_float_mkt_cap),
+    #ret = mean(ret),
+    n = n_distinct(isin)) %>%
+  left_join(eu_5factors_monthly , by = "date") %>%
+  mutate(
+    mkt_excess_ret = mkt_excess_ret + RF)
 
 # Calculate alpha of portfolios:
   
 alpha_M_negative = long_term_data_M_negative %>% 
-   summarise(alpha = tidy(lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML, weights = n))$estimate[1],
-             t = tidy(lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML, weights = n))$statistic[1],
-             p = tidy(lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML, weights = n))$p.value[1],
-              r = glance(lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML, weights = n))$r.squared,
-             return = 100*mean(12*(ret-RF)),
-             index_return = 100*mean(12*mkt_excess_ret),
-             ave_N = mean(n)) %>%
-   mutate(holding_period = paste0(i,"M"),
-          rolling_mean = y,
-          SD_thres = z
-          ) 
+  summarise(alpha = tidy(lm(ret ~ 1 + mkt_excess_ret + SMB + HML + RMW + CMA, weights = n))$estimate[1],
+             t = tidy(lm(ret ~ 1 + mkt_excess_ret + SMB + HML + RMW + CMA, weights = n))$statistic[1],
+             p = tidy(lm(ret ~ 1 + mkt_excess_ret + SMB + HML + RMW + CMA, weights = n))$p.value[1],
+            r = glance(lm(ret ~ 1 + mkt_excess_ret + SMB + HML + RMW + CMA, weights = n))$r.squared,
+             N = mean(n)) %>%
+   mutate(model = paste0(i,"M_",y,"_",z)) 
 
 alpha_negative[x,] = alpha_M_negative
 
@@ -295,113 +297,17 @@ emptylist_neg_1[[z]] = alpha_negative
 emptylist_neg_2[[y]] = emptylist_neg_1
 }
 
-# 
-# # Plot the returns:
-# long_term_data_M_negative %>%
-#   ggplot(aes(x = date, y = ret)) + 
-#    geom_bar(stat = 'identity') + 
-#    geom_smooth(method = "lm") +
-#     theme_bw() +
-#    labs(x = "", y = "Monthly Returns") +
-#     scale_y_continuous(breaks = pretty_breaks(),
-#                      labels = scales::percent) +
-#    scale_x_date(date_breaks = "1 years", date_labels = "%Y" )
-#       ggsave(paste0("LT_negative_returns_", i,".png"))
-#}
+test = emptylist_neg_2
 
-
-print(xtable(as.data.frame(emptylist_neg_2[[5]][3]),type="latex",
-             digits=c(0,4,2,3,2,0,1,1,1,1),
+print(xtable(as.data.frame(emptylist_neg_2[[1]][3]),type="latex",
+             digits=c(0,4,2,3,3,2),
              hline.after=c(-1,0),
              floating=FALSE,latex.environments=NULL),
       include.rownames=FALSE,
       include.colnames = TRUE) %>% 
-  write(file="alpha_negative_FF5_15.tex")
+  write(file="alpha_negative_FF5_RF3.tex")
 
-
-```
-
-################ 
-Parametric portfolio approach 1 week sentiment data: 
-################
-
-```{r}
-
-pp_data = long_term_data_weekly %>% select(date, isin, ret, MKT_CAP, pos_event,neg_event) %>%
-  group_by(isin) %>%
-  mutate(
-    month = date,
-    ret_excess = ret,
-    permno = isin,
-    MKT_CAP = MKT_CAP/1000000000,
-    mktcap_lag = lag(MKT_CAP)) %>%
-  na.omit()
-  
-pp_monthly_lags = pp_data %>% 
-  group_by(isin) %>%
-  transmute(isin,
-            date_5 = lead(date,5),
-            MKT_CAP) 
-
-pp_data = pp_data %>% 
-  inner_join(pp_monthly_lags,
-             by = c("isin","date" = "date_5"),
-             suffix = c("", "_5"))
-  
-data_portfolios = pp_data %>%
-  mutate(
-    momentum_lag = mktcap_lag / MKT_CAP_5,
-    size_lag = log(mktcap_lag),
-    event = neg_event
-    ) %>%
-  drop_na(contains("lag"))
-
-
-data_portfolios = data_portfolios %>%
-  group_by(date) %>%
-  mutate(
-    n = n(),
-    relative_mktcap = mktcap_lag / sum(mktcap_lag),
-    across(contains("lag"), ~ (. - mean(.)) / sd(.)),
-    ) %>%
-  ungroup() %>%
-  select(-mktcap_lag)
-
-n_parameters <- sum(str_detect(colnames(data_portfolios), "lag"))
-
-theta <- rep(1.5, n_parameters)
-
-names(theta) <- colnames(data_portfolios)[str_detect(
-  colnames(data_portfolios), "lag")]
-
-
-weights <- compute_portfolio_weights(
-  optimal_theta,
-  data_portfolios,
-  value_weighting = TRUE,
-  allow_short_selling = FALSE
-)
-
-power_utility <- function(r, gamma = 5) {
-  (1 + r)^(1 - gamma) / (1 - gamma)
-}
-
-evaluate_portfolio(weights) |>
-  print(n = Inf)
-
-
-
-
-optimal_theta <- optim(
-  par = theta,
-  compute_objective_function,
-  objective_measure = "Expected utility",
-  data = data_portfolios,
-  value_weighting = TRUE,
-  allow_short_selling = FALSE
-)
-
-optimal_theta = optimal_theta$par
+tidy(summary(lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML + RMW + CMA, weights = n, data = long_term_data_M_negative)))
 ```
 
 
