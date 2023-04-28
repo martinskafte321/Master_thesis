@@ -20,28 +20,18 @@ More interestingly, the impact on returns is significantly negative before the i
 The effect is approximately zero on average until $t = -5$ upon which the AAR decreases steadily in the days leading up to the event date. After $t=0$ the AAR surges towards neutrality at 0\% and becomes stable for the rest of the window, indicating that no short term effect is present after the event has taken place. The CAAR line shows that the market gradually learns about the prospective negative event. 
 The CAAR stays negative during the full event window and bottoms on $t=2$ after a large decline of approximately $1.2\%$ from $t=-5$. 
 
-However, the only significant negative AARs are found between $t=-2$ and $t=0$ at $95\%$. The same goes for the CAAR after $t=-2$ and through the remaining window. Generally, negative news seems to be priced in leading up to and including the identified event day, after which they have limited impact. \\ 
-The bars offers insights into the extent of public attention leading up to an event. The bars begin to increase at $t=-5$ at which the AAR begins to decline, which imply a relation between attention towards negative news and pessimistic investor behavior even before the event date. Furthermore, this is an indication that the specified event time may be lagging the incident of the *true* event, which is a disadvantage of this model setup.  
-
 \begin{figure} [H]
     \centering
-    \caption{Negative news: $CAAR_{t=10}$}
+    \caption{Negative news: AAR and CAAR}
     \includegraphics[scale=0.6]{Projekt/1.Figures analysis/ST_negative_all_CI.png}
      \caption*{\footnotesize The figure illustrates the average abnormal return (AAR) and cumulative AAR (CAAR) around the event date (t = 0) of negative news. The lines (left axis) represent the average and the ribbons represent the 95th confidence intervals. The bars (right axis) represent the amount of events on a given day relative to t = 0. }
     \label{fig:ST_neg_news}
 \end{figure} 
 
-Examining the average effect from, respectively, positive and negative events provides insights into the overall relational tendency between shareholder sentiment and corporate sustainability. By investigating the abnormal returns resulting from events specific to the individual SDGs one can gain a deeper understanding of which themes within corporate sustainability that investors place most emphasis with. Figure \ref{fig:ST_neg_bar} illustrates the AAR on $t=0$ from events related to specific SDGs along with corresponding confidence intervals. 
+However, the only significant negative AARs are found between $t=-2$ and $t=0$ at $95\%$. The same goes for the CAAR after $t=-2$ and through the remaining window. Generally, negative news seems to be priced in leading up to and including the identified event day, after which they have limited impact. \\ 
+The bars offers insights into the extent of public attention leading up to an event. The bars begin to increase at $t=-5$ at which the AAR begins to decline, which imply a relation between attention towards negative news and pessimistic investor behavior even before the event date. Furthermore, this is an indication that the specified event time may be lagging the incident of the *true* event, which is a disadvantage of this model setup.  
 
-\begin{figure} [H]
-    \centering
-    \caption{AAR per SDG: negative news}
-    \includegraphics[scale=0.6]{Projekt/1.Figures analysis/ST_negative_sdg_bar.png}
-    \caption*{\footnotesize The figure illustrates the AAR on $t = 0$ from negative news. The error bars represent the 95\% confidence intervals of the AAR.}
-    \label{fig:ST_neg_bar}
-\end{figure}
 
-Splitting the events on SDGs generally illustrate that negative events in most groups are associated with negative abnormal returns. However, the statistical uncertainty in the measurements means that one cannot generate a lot of insights from the aggregated values. Only SDG 10, 15, and 16 provides abnormal returns significantly different from zero at a \% level. The statistical uncertainty originates from the relatively low amount of observations associated with the individual groups after dividing the events into SDGs. For example, SDG 4 and 9 has only, respectively, 16 and 83 observations, which results in excessively wide confidence interval, whereas SDG 12 and 16 has, respectively, 576 and 1364 observations resulting in higher statistical certainty.   
 
 The significance of the results in relation to negative and positive events are summarised with a z-test. The test statistic is computed and compared to its assumed distribution under the null hypothesis that the average abnormal return is zero. I use a z-test since the sample size per event day is larger than 30. The z-scores and significance complementary to the AAR on $t=0$, along with the CAAR on respectively, two, five, and 10 days around the event are presented in table \ref{tab: ST_significance}.   
 
@@ -66,6 +56,38 @@ $CAAR_{[-10;+10]}$    & $\underset{(0.460)}{0.070}$ & $\underset{(-3.0)}{-0.822^
 \label{tab: ST_significance}
 \end{table}
 
+
+\noindent \textbf{Split news on relation to SDGs.} Examining the average effect from, respectively, positive and negative events provides insights into the overall relational tendency between shareholder sentiment and corporate sustainability. By investigating the abnormal returns resulting from events specific to the individual SDGs one can gain a deeper understanding of which themes within corporate sustainability that investors place most emphasis with. Figure \ref{fig:ST_neg_bar} illustrates the AAR on $t=0$ from events related to specific SDGs along with corresponding confidence intervals. 
+
+\begin{figure} [H]
+    \centering
+    \caption{Negative news: AAR split on relation to SDGs}
+    \includegraphics[scale=0.6]{Projekt/1.Figures analysis/ST_negative_sdg_bar.png}
+    \caption*{\footnotesize The figure illustrates the AAR on $t = 0$ from negative news. The error bars represent the 95\% confidence intervals of the AAR.}
+    \label{fig:ST_neg_bar}
+\end{figure}
+
+Splitting the events on SDGs generally illustrate that negative events in most groups are associated with negative abnormal returns. However, the statistical uncertainty in the measurements means that one cannot generate a lot of insights from the aggregated values. Only SDG 10, 16, and 17 provides abnormal returns significantly different from zero at a \% level. The statistical uncertainty originates from the relatively low amount of observations associated with the individual groups after dividing the events into SDGs. For example, SDG 4 and 9 has only, respectively, 16 and 83 observations, which results in excessively wide confidence interval, whereas SDG 12 and 16 has, respectively, 576 and 1364 observations resulting in higher statistical certainty.   
+
+\noindent \textbf{Split firms on ESG rating.} 
+
+The investigation of negative news and stock returns verify a significant relation between the two in the short horizon. It is of similar interest to determine whether the sustainability profile of a firm influences how investors react to news related to the social development goals. 
+
+Figure \ref{fig:ST_neg_ESG} employs the same setup as figure \ref{fig:ST_neg_news} and includes the CAAR of an nearly identical sample\footnote{The sample is not identical as 39 firms } of firms and events only with a separation on the firms' ESG risk profiles. "Low" means that a firm has a low risk profile in relation to ESG. The  Firms with a  which have experienced a negative event throughout the sample period. 
+
+
+
+
+\begin{figure} [H]
+    \centering
+    \caption{Negative news: CAAR split on ESG rating}
+    \includegraphics[scale=0.6]{Projekt/1.Figures analysis/ST_negative_ESG.png}
+     \caption*{\footnotesize The figure illustrates the CAAR around the event date of negative news. The lines represent low, medium and high ESG risk of the firms in the sample. The ribbons represent the 95th confidence intervals. The categories low, medium, and high have, respectively, 289, 559, and 159 observed events in the sample. }
+    \label{fig:ST_neg_ESG}
+\end{figure} 
+
+
+
 \subsubsection{Positive news}
 
 Focusing initially on the event date, the sample average abnormal return for positive news with the market model is 0.08\%. With a standard error of 0.038\% the z value of the test is 2.12 and the null hypothesis that the event has no impact is rejected at a 5\% level. However, according to figure \ref{fig:ST_pos_news} the remaining days of the event window are not associated with significant reaction  from the shareholders. Following, the statistical uncertainty of the CAAR becomes more widespread through the event window, as indicated by the widening red ribbon. The positive tendency of the CAAR is insignificant since the measure is based on insignificant AARs, meaning that one cannot for certain state that the cumulative return is different from zero. Nonetheless, a positive reaction is inferred at $t=0$ indicating that investor do react instantly to positive news on average, however the gains seems to be depleted in the following weeks.  
@@ -78,7 +100,10 @@ Focusing initially on the event date, the sample average abnormal return for pos
     \label{fig:ST_pos_news}
 \end{figure}
 
+The insignificance of the abnormal returns associated with positive events are manifested in table \ref{tab: ST_significace}. The the CAARs on, respectively, two, five and 10 days around the event are all insignificantly different from zero. However, the AAR does exhibit positive performance at $t = 0$ at 5\% significance.
 
+
+\textbf{Split news on SDGs.}
 The tendency of insignificance related to positive events is further reinforced by the results from the individual SDGs, as most returns are statistically indistinguishable from zero. In contrast to the case of negative events, where the main issue was the amount of observations, the underlying issue with uncertainty comes with the seemingly random shareholder reaction to positive events, as indicated by the aggregate overview in figure \ref{fig:ST_pos_news}. Only positive news associated with SDG 7, that deals with clean energy, displays a significant, positive abnormal return. 
  
 \begin{figure} [H]
@@ -89,7 +114,18 @@ The tendency of insignificance related to positive events is further reinforced 
     \label{fig:ST_pos_bar}
 \end{figure}
 
-The insignificance of the abnormal returns associated with positive events are manifested in table \ref{tab: ST_significace}. The the CAARs on, respectively, two, five and 10 days around the event are all insignificantly different from zero. However, the AAR does exhibit positive performance at $t = 0$ at 5\% significance.  
+\textbf{Split on ESG rating.}
+
+\noindent \textbf{Split firms on ESG rating.} 
+
+\begin{figure} [H]
+    \centering
+    \caption{Positive news: CAAR split on ESG rating}
+    \includegraphics[scale=0.6]{Projekt/1.Figures analysis/ST_positive_ESG.png}
+     \caption*{\footnotesize The figure illustrates the CAAR around the event date of positive news. The lines represent low, medium and high ESG risk of the firms in the sample. The ribbons represent the 95th confidence intervals. The categories low, medium, and high have, respectively, 1149, 1982, and 336 observed events in the sample.  }
+    \label{fig:ST_neg_ESG}
+\end{figure} 
+
 
 Generally, the short term empirical evidence demonstrate a non-verifiable relation between positive events, related to both broad and specific SDGs, and abnormal returns. Positive news is however associated with an instant reaction from investors on the event date. The evidence point towards an overall negative relationship, but this is not statistically valid.  
 
