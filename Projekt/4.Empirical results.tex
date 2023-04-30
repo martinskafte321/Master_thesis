@@ -180,6 +180,40 @@ Overall, the relation between negative news and returns are most severe within 1
 ??. 
 
 
+
+\textbf{Split on ESG risk profiles}
+
+
+\setlength{\tabcolsep}{15pt}
+\begin{table}[h]
+\small
+\centering
+\caption{Fama-French five-factor model alpha from negative news split on ESG risk} 
+\begin{tabular}{llllllc}
+\hline \hline \\ 
+ &     &  &    Low  &  Medium  &  High &  \\    \cline{4-6} 
+& & & \multicolumn{3}{c}{ T = 1} & \\ \cline{2-6}
+& Alpha (\%)  &  & -0.64^{**}  & -0.61  & -0.7 &  \\ 
+& t-value &  & -2.01 & -1.35  & -1.63 &  \\
+&  N       &  &  8   & 9  & 5  & \\
+& & & \multicolumn{3}{c}{ T = 4} & \\ \cline{2-6}
+& Alpha (\%)  &  & -0.23  & -0.33  &  -0.27 & \\
+& t-value &  & -1.06 & -1.28  & -1.04 & \\
+&  N       &  & 28     & 28  & 18  & \\
+& & & \multicolumn{3}{c}{ T = 8} & \\ \cline{2-6}
+& Alpha (\%)   &  & -0.01   & -0.28  & -0.12 &  \\
+& t-value &  & -0.08  & -1.35 & -0.68 &  \\
+& N       &  & 47 & 46  & 34 & \\
+& & & \multicolumn{3}{c}{ T = 12} & \\ \cline{2-6}
+& Alpha (\%)   &  & -0.09  & -0.19  & -0.17 &  \\
+& t-value &  & -0.62  & -1.23 & -0.97 & \\
+& N       &  & 62   & 60  & 48 \\ \hline \hline
+ \multicolumn{7}{l}{ \footnotesize $^* \; p\; <\; 0.1$, $ ^{**} \; p\; <\; 0.05$, $ ^{***} \; p\; <\; 0.01$  } \\
+ \multicolumn{7}{p{11.5cm}}{ \footnotesize Alpha is the WLS-regression intercept (in \%) of the Fama-French 3-factor model, displayed along with the corresponding t-value. N is the average amount of firms included in the portfolio each month, and T is the portfolio holding period. The threshold for event firms to be included in the portfolio is either 1,2 or 3 "SD" (standard deviations) larger than the mean.} \\ 
+ \hline
+\end{tabular}
+\label{tab: FF3-neg}
+\end{table}
 \subsubsection{Positive news}
 
 The impact from positive news on financial performance in the long run is illustrated in table \ref{tab: FF3-pos}. The table applies the same format as table \ref{tab: FF3-neg}. Positive events have no significant impact on returns over any of the portfolio and event constructions. Nevertheless, the long run effect is predominantly negative, which appears in contrast to the short term effect, that indicate a positive relation, however insignificant. The performance is most negative when applying a brief holding period of $T=1$ and a strict event rule of $SD = 3$, which generates alpha of -0.42\%. With $T=1$ and $SD=1$ the portfolio achieves an alpha of -0.3\%.  
@@ -218,4 +252,3 @@ Applying holding periods longer than $T=1$ generates exclusively alphas close to
 \end{tabular}
 \label{tab: FF3-pos}
 \end{table}
-
