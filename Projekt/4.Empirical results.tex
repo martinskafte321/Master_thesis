@@ -73,20 +73,18 @@ Splitting the events on SDGs generally illustrate that negative events in most g
 
 The investigation of negative news and stock returns verify a significant relation between the two in the short horizon. It is of similar interest to determine whether the sustainability profile of a firm influences how investors react to news related to the social development goals. 
 
-Figure \ref{fig:ST_neg_ESG} employs the same setup as figure \ref{fig:ST_neg_news} and includes the CAAR of an nearly identical sample\footnote{The sample is not identical as 39 firms } of firms and events only with a separation on the firms' ESG risk profiles. "Low" means that a firm has a low risk profile in relation to ESG. The  Firms with a  which have experienced a negative event throughout the sample period. 
-
-
-
+Figure \ref{fig:ST_neg_ESG} employs the same setup as figure \ref{fig:ST_neg_news} and includes the CAAR of an nearly identical sample\footnote{The sample is not identical as four firms were missing an ESG risk rating.} of firms and events only with a separation on the firms' ESG risk profiles. "Low" means that a firm has a low risk of encountering complications in relation to ESG affairs. Intuitively, firms with low ESG risks are expected to experience less disputes related to sustainability. Hence, if they do appear in such disputes, a logical reaction from investors would be of more severe magnitude. 
 
 \begin{figure} [H]
     \centering
     \caption{Negative news: CAAR split on ESG rating}
     \includegraphics[scale=0.6]{Projekt/1.Figures analysis/ST_negative_ESG.png}
-     \caption*{\footnotesize The figure illustrates the CAAR around the event date of negative news. The lines represent low, medium and high ESG risk of the firms in the sample. The ribbons represent the 95th confidence intervals. The categories low, medium, and high have, respectively, 289, 559, and 159 observed events in the sample. }
+     \caption*{\footnotesize The figure illustrates the CAAR around the event date of negative news. The lines represent low, medium and high ESG risk of the firms in the sample. The ribbons represent the 95th confidence intervals. The categories low, medium, and high have, respectively, 315, 559, and 170 observed events in the sample. }
     \label{fig:ST_neg_ESG}
 \end{figure} 
 
 
+The CAAR of the three groups of risk profiles do behave in a similar way, indicating that the general pattern of a negative relation from figure \ref{fig:ST_neg_news} applies to all risk types. Nonetheless, a relation as described above do seem to occur, as firms with a low ESG risk profile are experiencing larger return declines after negative events than firms with medium or high risk. The returns of firms with a medium or high ESG risk profile appear to behave similar to each other, and neither of the CAARs are significant after the full period. Still, the CAAR of the medium risk group is significantly negative at $t=0$. As the group of high risk companies consists of only 170 observations, the confidence intervals become wide and no significant relation can be determined. Only the CAAR of the high risk group is significantly different from zero over the full event window.  
 
 \subsubsection{Positive news}
 
@@ -114,17 +112,22 @@ The tendency of insignificance related to positive events is further reinforced 
     \label{fig:ST_pos_bar}
 \end{figure}
 
-\textbf{Split on ESG rating.}
 
-\noindent \textbf{Split firms on ESG rating.} 
+\noindent \textbf{Split firms on ESG rating.}
+Splitting the sample firms by ESG risk ratings allows to investigate whether the investor reaction from positive news related to SDGs varies with the sustainability profile of the company. In the initial results from figure \ref{fig:ST_pos_news}, the CAAR were close to zero and estimated with large uncertainty. 
+
+However, an average result like such doesn't report the full narrative as an evident difference between firms with a low and medium ESG risk profile is illustrated in figure  \ref{fig:ST_pos_ESG}. Allegedly, investors are pessimistic when low ESG risk-firms are involved in positive interactions with SDGs. The CAAR is significantly negative at $-0.5\%$ over the full window. Similarly, the high ESG risk-firms experience an average negative return, although the results are highly insignificant. The insignificance may be a feature of the low amount of observations relative to the other groups. In contrary, firms with a medium risk rating enjoy a significant, positive CAAR at $0.5\%$ over the full window. A clear distinction between the CAAR of low and medium risk profiles are already visible from around $t = -8$, where the two averages evolve conversely. 
+
 
 \begin{figure} [H]
     \centering
     \caption{Positive news: CAAR split on ESG rating}
     \includegraphics[scale=0.6]{Projekt/1.Figures analysis/ST_positive_ESG.png}
-     \caption*{\footnotesize The figure illustrates the CAAR around the event date of positive news. The lines represent low, medium and high ESG risk of the firms in the sample. The ribbons represent the 95th confidence intervals. The categories low, medium, and high have, respectively, 1149, 1982, and 336 observed events in the sample.  }
-    \label{fig:ST_neg_ESG}
+     \caption*{\footnotesize The figure illustrates the CAAR around the event date of positive news. The lines represent low, medium and high ESG risk of the firms in the sample. The ribbons represent the 95th confidence intervals. The categories low, medium, and high have, respectively, 1193, 1982, and 350 observed events in the sample.  }
+    \label{fig:ST_pos_ESG}
 \end{figure} 
+
+
 
 
 Generally, the short term empirical evidence demonstrate a non-verifiable relation between positive events, related to both broad and specific SDGs, and abnormal returns. Positive news is however associated with an instant reaction from investors on the event date. The evidence point towards an overall negative relationship, but this is not statistically valid.  
@@ -195,21 +198,21 @@ Applying holding periods longer than $T=1$ generates exclusively alphas close to
 \hline \hline \\ 
  &     &  &    1 SD  &  2 SD  &  3 SD  &  \\ \cline{4-6} 
 & & & \multicolumn{3}{c}{ T = 1} & \\ \cline{2-6}
-& Alpha (\%)  &  & -0.30  & -0.05  & -0.42 &  \\
-& t-value &  & -1.19 & -0.14  & -0.89 & \\
+& Alpha (\%)  &  & -0.26  & 0.04  & -0.37 &  \\
+& t-value &  & -1.03 & 0.11  & -0.74 & \\
 &  N       &  &  34    & 15 & 7 &\\
 & & & \multicolumn{3}{c}{ T = 4} & \\ \cline{2-6}
-& Alpha (\%)  &  & -0.07  & -0.02  &  -0.09 & \\
-& t-value &  & -0.49 & -0.08  & -0.32 & \\
+& Alpha (\%)  &  & -0.04  & 0.03  &  -0.07 & \\
+& t-value &  & -0.26 & 0.13  & -0.23 & \\
 & N       &  & 105     & 52  & 25 & \\
 & & & \multicolumn{3}{c}{ T = 8} & \\ \cline{2-6}
-& Alpha (\%)  &  & -0.04   & -0.01  & -0.06 &  \\
-& t-value &  & -0.41  & -0.57 & -0.29 & \\
+& Alpha (\%)  &  & 0.01   & -0.01  & 0.04 &  \\
+& t-value &  & 0.05  & -0.15 & 0.18 & \\
 & N       &  & 164 & 63   & 47 & \\
 &  & & \multicolumn{3}{c}{ T = 12} & \\ \cline{2-6}
-& Alpha (\%)  &  & -0.01  & 0.04  & 0.08 &  \\
-& t-value &  & -1.03  & 0.33 & 0.47 & \\
-& N       &  & 240    & 122  & 67 & \\ \hline \hline
+& Alpha (\%)  &  & 0.05  & 0.13  & 0.23 &  \\
+& t-value &  & 0.76  & 1.09 & 1.35 & \\
+& N       &  & 202   & 122  & 67 & \\ \hline \hline
  \multicolumn{7}{l}{ \footnotesize $^* \; p\; <\; 0.1$, $ ^{**} \; p\; <\; 0.05$, $ ^{***} \; p\; <\; 0.01$  } \\
  \multicolumn{7}{p{11.5cm}}{ \footnotesize Alpha is the WLS-regression intercept (in \%) of the Fama-French 3-factor model, displayed along with the corresponding t-value. N is the average amount of firms included in the portfolio each month, and T is the portfolio holding period. The threshold for event firms to be included in the portfolio is either 1,2 or 3 "SD" (standard deviations) larger than the mean.}  \\ 
 \end{tabular}
