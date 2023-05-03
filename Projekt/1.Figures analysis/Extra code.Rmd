@@ -209,14 +209,14 @@ all = short_term_return_sdg_5 %>%
 
 
 
-all = short_term_return_sdg_5 %>%
+t = short_term_return_sdg_5 %>%
   filter(group == 'negative') %>%
   mutate_at("sdg", str_replace, "_negative_count", "") %>%
   mutate_at("sdg", str_replace, "_", " ") %>%
   mutate(sdg = factor(sdg, levels = c("sdg 1", "sdg 2","sdg 3","sdg 4","sdg 5","sdg 6","sdg 7","sdg 8","sdg 9","sdg 10","sdg 11", 
                                         "sdg 12", "sdg 13","sdg 14","sdg 15","sdg 16","sdg 17"))) %>%
   select(-c(event,group)) %>%
-  pivot_longer(!c(date,isin,sdg,MKT_CAP), names_to = "period", values_to = "abnormal_ret") %>% na.omit(abnormal_ret) %>%
+  pivot_longer(!c(date,isin,sdg), names_to = "period", values_to = "abnormal_ret") %>% na.omit(abnormal_ret) %>%
    mutate(sdg = as.character(sdg)) %>%
    mutate(sdg = case_when(
     sdg == "sdg 1" | sdg == "sdg 2" | sdg == "sdg 3" | sdg == "sdg 4" | sdg == "sdg 5"  ~ "People",
@@ -224,29 +224,44 @@ all = short_term_return_sdg_5 %>%
     sdg == "sdg 6" | sdg == "sdg 12" | sdg == "sdg 13" | sdg == "sdg 14" | sdg == "sdg 15"  ~ "Planet",
     sdg == "sdg 16"  ~ "Peace",
     sdg == "sdg 17" ~ "Partnership")
-         ) %>%
+         ) 
+  
+  all = t %>%
+    mutate(period = as.numeric(period)) %>%
+  filter(period >= -5) %>%
+  filter(period <= 5) %>%
   mutate(period = as.factor(period),
            sdg = as.factor(sdg)) %>%
-  mutate(period = factor(period, levels = c("-5","-4","-3","-2","-1","0", "1", "2","3","4","5")))
+  mutate(period = factor(period, levels = c("-10","-9","-8","-7","-6","-5","-4","-3","-2","-1","0", "1", "2","3","4","5","6","7","9","10"))) %>% na.omit() %>%
+  arrange(isin,sdg,date,period) %>%
+  group_by(isin,sdg,date) %>% 
+  mutate(csum = cumsum(abnormal_ret))
+    
 
 
 bands = all %>%
-  group_by(sdg) %>% 
+  group_by(sdg,period) %>% 
   summarise(n = n(),
-            sd = sd(abnormal_ret),
+            sd = sd(csum),
             se = sd/sqrt(n),
             t = 1.96,
             CI=t*se
             )
 
 all %>%
-  group_by(sdg) %>%
-  summarise(AAR = weighted.mean(abnormal_ret,MKT_CAP)) %>%
-  left_join(bands, by = "sdg") %>%
+  group_by(sdg,period) %>%
+  summarise(CAAR = mean(csum),
+            AAR = mean(abnormal_ret)) %>% ungroup() %>%
+  left_join(bands, by = c("sdg","period")) %>% 
+  mutate(period = as.character(period)) %>%
+  filter(period == '5') %>%
   ggplot(
-    aes(x = sdg, y = AAR, color= sdg,group = sdg, fill = sdg)) + 
+    aes(x = sdg, y = CAAR, color= sdg,group = sdg, fill = sdg)) + 
   geom_bar(stat="identity") +
-  geom_errorbar( aes(x=sdg, ymin=AAR-CI, ymax=AAR+CI), colour = "orange", width=0.5, alpha=0.8, size=0.7) + 
+  geom_errorbar( aes(x=sdg, ymin=CAAR-CI, ymax=CAAR+CI), colour = "orange", width=0.5, alpha=0.8, size=0.7)
+
+
++ 
   scale_y_continuous(name ="Abnormal return",
                      labels = scales::percent) +
   labs(x = "SDG group") +
