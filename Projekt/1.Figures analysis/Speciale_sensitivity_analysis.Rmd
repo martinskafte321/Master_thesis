@@ -135,7 +135,7 @@ long_term_data_monthly <- data_monthly %>%
 ############################
 
 # Add lagged values of the events to sort whether an event has happened in the last X months. 
-  for (i in 1:24) {
+  for (i in 1:12) {
   long_term_data_monthly[paste0("-",i)] <- long_term_data_monthly %>% group_by(isin) %>% transmute(t = lag(neg_event,i)) %>% ungroup() %>% select(-isin)
   }
 
@@ -161,8 +161,9 @@ long_term_data_M_positive = long_term_data_positive %>%
   # Only include the last 1 months:
   filter(period >= -i) %>% 
   group_by(date) %>%
-  summarise(#ret = weighted.mean(ret,free_float_mkt_cap),
-    ret = mean(ret),        
+  summarise(
+    ret = weighted.mean(ret,free_float_mkt_cap),
+    #ret = mean(ret),        
     n = n_distinct(isin)) %>%
   left_join(eu_5factors_monthly, by = "date")
 

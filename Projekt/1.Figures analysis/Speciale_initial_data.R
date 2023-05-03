@@ -10,6 +10,19 @@ library(zoo)
 setwd("C:/Users/Marti/OneDrive - University of Copenhagen/KU/Speciale/Data behandling")
 
 
+###############################################################
+############## ESG Risk Ratings ###############################
+###############################################################
+
+ESG_RR <- read_excel("ESG_RR.xlsx", sheet = "Results") %>% 
+  select(entity_name, region, country, ISIN, ESG_risk_score, ESG_risk_category)
+
+
+ESG <- ISIN %>% select(ISIN = id_isin) %>% left_join(ESG_RR, by = "ISIN") 
+
+# Write to CSV to keep in nice format:
+ESG %>%
+  write.csv(file = "ESG_ratings.csv")
 
 ###############################################################
 ############# Get stock market data monthly ###################
@@ -207,10 +220,9 @@ all_data_monthly %>%
        
        
        
-       
-       
+       ######################
 # TEst
-
+#######################
       stocks = stocks_daily %>% group_by(isin) %>%
          mutate(date = date(date),
                 Day = weekdays(date),
