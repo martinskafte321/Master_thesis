@@ -1,6 +1,61 @@
-\subsection{Negative news}
 
-\subsection{Positive news}
+\subsection{Short term investor reaction} 
+To answer hypothesis \#1, \#2, and \#3 along with sub hypothesis, I assess the statistical significance of the cumulative average abnormal returns over a window of 21 days around all identified event dates of negative or positive news from section \ref{ST_results}. The hypothesis for short term performance addressed the immediate investor reaction to events by using the Market Model to estimate abnormal returns. 
+
+\subsubsection{Negative news}
+
+
+The null hypothesis assumes that the market does not react to negative news. \\ 
+$H_1:$ \textit{Negative news related to the SDGs does not have a short term impact on firm' market value} \\
+Rejecting the null would necessarily imply that we accept the alternative hypothesis, $H_{1,A}$ that the short term abnormal return is different from zero, meaning that investor react immediately to negative news. 
+
+Rejection of the null would require the Market Model to generate abnormal returns statistically different from zero. Abnormal returns were measured as the cumulative average abnormal returns over the event window covering 10 days before and 10 days after an event has occurred. 
+
+The development in CAAR and AAR was illustrated in section \ref{sec: st_negative}. We saw a downtrend in the CAAR after $t = -5$. The full sample CAAR ends at $-0.82\%$, which is significantly lower than zero at the 1\% level. Thus, I can reject the $H_1$ of no abnormal returns coinciding with a negative event, and accept the alternative hypothesis. 
+
+In general the combination of the Market Model and the event study methodology seems to resemble a good measure of abnormal returns in relation to negative news events. As mentioned, the average abnormal returns are hovering around the level of 0\% implying that the model correctly estimates the realized returns. This phenomena occurs in the the first five days of the window and the full period after an event has occurred, meaning that the realized returns are approximately as expected from the Market Model on average. 
+
+Likewise, the event study methodology works adequately at identifying negative events from news, as an evident investor reaction is recognized through the abnormal returns. However, the reaction materializes ahead of the identification of events, which is an unfavorable feature of the model selection procedure. This occurs since the underlying data-set captures the amount of times a given firm has been mentioned in news articles globally, upon which the identification procedure is based on detecting the biggest events exclusively. Hence, the procedure will not be able to catch the "breaking news". 
+
+
+\textbf{How well does the Market model capture the returns? Quite well, as the AR drifts around zero from -10 to -5 and from 5 and onwards. }
+
+\textbf{How well does the event model capture the events? Not tradable, since the return effect comes before the event is captured. However, it clearly captures some events, as per the significant reactions. }
+\textbf{The equal weighted portfolio favors small stocks and consequently also generates higher returns. }
+
+
+\begin{table}[H]
+\centering
+\caption{Negative news: AAR and CAAR on overall and ESG risk level} 
+\begin{tabular}{ccccc}
+  \hline  \hline
+  & \multicolumn{1}{c}{Overall} &  \multicolumn{1}{c}{Low} & \multicolumn{1}{c}{Medium} & \multicolumn{1}{c}{High}\\  
+ \hline
+$AAR_{t=0}$ &   $\underset{(-3.509)}{-0.378^{***}}$ &   $\underset{(-2.057)}{-0.298^{***}}$ &   $\underset{(-2.592)}{-0.297^{***}}$ &   $\underset{(-1.712)}{-0.275^{*}}$ \\
+
+$CAAR_{[-2;+2]}$  &  $\underset{(4.440)}{-0.715^{***}}$ &   $\underset{(-3.260)}{-0.820^{***}}$ &   $\underset{(-3.155)}{-0.600^{***}}$ &   $\underset{(0.125)}{ 0.045}$ \\ 
+
+$CAAR_{[-5;+5]}$  &  $\underset{(-4.255)}{-0.858^{***}}$ &   $\underset{(-3.157)}{-1.054^{***}}$ &   $\underset{(-2.498)}{-0.688^{**}}$ &   $\underset{(-1.312)}{-0.677}$ \\ 
+
+$CAAR_{[-10;+10]}$    & $\underset{(-3.0)}{-0.822^{***}}$ &   $\underset{(-2.602)}{-1.234^{***}}$ &   $\underset{(-1.525)}{-0.565}$ &   $\underset{(-0.570)}{-0.450}$ \\ 
+   \hline \hline
+   \multicolumn{5}{p{10cm}}{ \footnotesize $^* \; p\; <\; 0.1$, $ ^{**} \; p\; <\; 0.05$, $ ^{***} \; p\; <\; 0.01$  } \\
+   \multicolumn{5}{p{10cm}}{\footnotesize The tables shows the CAAR and associated t-value related to positive and negative events over an event window of 5, 10, and 21 days surrounding the event date along with the AAR on $t=0$. Positive and negative events consists of, respectively, 3564 and 1046 observations. } \\
+   \hline
+\end{tabular}
+\label{tab: ST_neg_significance}
+\end{table}
+
+
+\subsubsection{Positive news}
+
+
+\textbf{Which risk factors are driving long term portfolio returns?}
+\textbf{Does the amount of firms in the portfolio have an impact on the results?}
+\textbf{How well does the Market model capture the returns? Quite well, as the AR drifts around zero from -10 to -5 and from 5 and onwards. }
+\textbf{How well does the event model capture the events? Not tradable, since the return effect comes before the event is captured. However, it clearly captures some events, as per the significant reactions. }
+\textbf{The equal weighted portfolio favors small stocks and consequently also generates higher returns. }
+
 
 
   However, the amount of firms in the portfolios does also have implication for the validity of the alpha, as the results indicate that the numerical value of the alpha is not a sole determinant of whether abnormal performance has been detected. A reason could be that a low amount of average firms , e.g. 5 ($T = 1$ and 3 sd), 
@@ -14,20 +69,27 @@ A strict event criteria of 3 SDs presents relatively large negative alphas
 
 
 
-\begin{figure} [H]
-    \centering
-    \caption{SDG 5 pillars: negative news}
-    \includegraphics[scale=0.6]{Projekt/1.Figures analysis/ST_negative_sdg_bar_groups_0.png}
-    \caption*{\footnotesize The figure illustrates the CAAR on $t = 10$ (the full period) from negative news. The error bars represent the 95\% confidence intervals of the CAAR.}
-    \label{fig:ST_neg_bar}
-\end{figure}
 
 
 
-\begin{figure} [H]
-    \centering
-    \caption{SDG 5 pillars: positive news}
-    \includegraphics[scale=0.6]{Projekt/1.Figures analysis/ST_positive_sdg_bar_groups_0.png}
-    \caption*{\footnotesize The figure illustrates the CAAR on $t = 10$ (full period) from positive news. The error bars represent the 95\% confidence intervals of the CAAR.}
-    \label{fig:ST_pos_bar}
-\end{figure}
+
+
+
+Hypothesis 1: \textit{Negative news related to the SDGs does not have a short term impact on firm' market value.
+}
+Hypothesis 1a: \textit{A potential impact is independent on which SDG the news are related to.}  
+Hypothesis 1b: \textit{The potential impact is independent on the firm's level of ESG risk.}
+
+Hypothesis 2: \textit{Positive news related to the SDGs does not have a short term impact on firm' market value.}
+Hypothesis 2a: \textit{A potential impact is independent on which SDG the news are related to.}  
+Hypothesis 2b: \textit{The potential impact is independent on the firm's level of ESG risk.}
+
+Hypothesis 3: \textit{The short term impact of news related to SDGs on firms' market value is equivalent for negative news and positive news.}
+
+
+\subsection{Long term}
+
+\textbf{Which risk factors are driving long term portfolio returns?}
+
+
+\textbf{Does the amount of firms in the portfolio have an impact on the results?}
