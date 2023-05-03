@@ -20,7 +20,8 @@ This paper will apply the event study methodology examine the behavior of stock 
 - Something with Fama
 
 
-\subsection{Short-term abnormal returns}
+
+\subsection{Short-term}
 
 The inspection of short-term abnormal return behavior covers (2n+1) trading days surrounding a corporate event: n days before to catch possible insiders information, the day of the event, and n days after. The short term analysis will use N = 10, which leaves a total window of 21 days [-10,+10] to investigate effect from an event. The effect of an event is expressed in terms of the abnormal return, defined as the difference between the realized ex-post return and the expected return, with the latter characterized as the expected return conditional on the event not taking place \citep{Event_studies}. Several models have been applied in the literature to estimate the short-term abnormal returns in event studies, which includes the CAPM, the Market Model, and multi-factor models. According to \cite{holler2014event} the most widely used is the Market Model, which assumes a linear relationship between the individual stock return and the market return. 
 
@@ -80,8 +81,6 @@ In their evaluation of the methodology behind long-horizon event studies, \cite{
 The buy-and-hold approach is sensitive to biases connected with cross-correlation, insufficient matching, new equity issues, periodic rebalancing and skewed distribution of long-term returns, while the CTP approach might encounter issues with the choice of asset pricing model and heteroskedasticity in portfolio returns \citep{Ang_event_method}.  
 
 
-\textcolor{red}{ This paper will apply CTP approach. Moreover, we will apply the Parametric Portfolio Policy by xxx as a new way of measuring the abnormal returns.} 
-
 \subsubsection{Calendar Time Portfolio}
 
 The calendar-time portfolio Approach (or the Jensen-alpha approach) is used to calculate calendar-time portfolio returns for firms experiencing an event, and test whether they are abnormal in a factor regression model. The estimated intercept (alpha) from the regression is the post-event risk-adjusted abnormal return from the sample event firms. \\
@@ -112,8 +111,3 @@ The representation of the Fama-French three-factor model is:
 \end{equation}
 
 with $R_{rf,t}$ being the risk-free rate\footnote{US treasuries / EUR treasuries} at time \textit{t} and the $\beta$'s representing the sensitivity of the portfolio return towards the market risk premium, and the return of, respectively, small-minus-big (SMB) and high-minus-low (HML) portfolios for developed markets in Europe.   
-
-\subsubsection{Parametric Portfolio Policy}
-
-Notes:
-\textcolor{red}{The PPP could incorporate all firms in the sample - I think this is necessary. We should add a column with a characteristic of whether a firm has experienced an event in the foregoing month.}
