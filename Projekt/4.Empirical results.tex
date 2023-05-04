@@ -16,10 +16,11 @@ To test hypothesis #1 and #2 of whether negative and positive SDG-related events
 The average abnormal returns and development in cumulative average abnormal returns, inferred from the Market Model, are illustrated in figure \ref{fig:ST_neg_news}. To support the analysis, the AAR and CAAR are portrayed along with their respective 95\% confidence intervals and the amount of events on a given day relative to the event day $(t = 0)$ (right axis) illustrated by the barplot in the background. 
 
 The left y-axis depicts the abnormal return and the x-axis is the number of days before and after an event has occurred. The average effect on returns from negative events is represented by the blue line in the graph. 
-Focusing on the event date $(t=0)$ the sample average return for negative news is -0.36\%. Given the standard error of the day zero negative news AAR is  0.10\%, the z statistic is -3.45 and the null hypothesis that events has no impact is strongly rejected at a 1\% level. Hence, there is clear evidence of the news impact on day zero. The AAR on $t=1$ is equivalently negative with a value of -0.04\%, however not a significant result. The source of the day one effects is likely to be that some news are released after market closure on day zero, meaning that the effects will be captured along with the returns the day after. Moreover, the effect could be investors reacting rather slowly to news. 
-More interestingly, the impact on returns is significantly negative before the identified event has taking place. 
-The effect is approximately zero on average until $t = -5$ upon which the AAR decreases steadily in the days leading up to the event date. After $t=0$ the AAR surges towards neutrality at 0\% and becomes stable for the rest of the window, indicating that no short term effect is present after the event has taken place. The CAAR line shows that the market gradually learns about the prospective negative event. 
-The CAAR stays negative during the full event window and bottoms on $t=2$ after a large decline of approximately $1.2\%$ from $t=-5$. 
+
+Focusing on negative news, the sample average abnormal returns of the event date at $(t=0)$ is significantly negative at -0.36\% at a 1\% level. Investors are reacting to spikes in bad news of firms by selling their shares. The days following an event demonstrates no abnormal performance. The effect of the news appear to be priced in earlier than the spike in news occurs. 
+
+The effect is approximately zero on average until $t = -5$ upon which the AAR decreases in the days leading up to the event date. The decline of the CAAR line indicates that the market gradually learns about and prices the prospective negative event.   
+The CAAR stays negative during the full event window and bottoms on $t=2$ after a large decline of approximately $1.3\%$ from $t=-5$. 
 
 \begin{figure} [H]
     \centering
@@ -29,19 +30,14 @@ The CAAR stays negative during the full event window and bottoms on $t=2$ after 
     \label{fig:ST_neg_news}
 \end{figure} 
 
-However, the only significant negative AARs are found between $t=-2$ and $t=0$ at $95\%$. The same goes for the CAAR after $t=-2$ and through the remaining window. Generally, negative news seems to be priced in leading up to and including the identified event day, after which they have limited impact. \\ 
-The bars offers insights into the extent of public attention leading up to an event. The bars begin to increase at $t=-5$ at which the AAR begins to decline, which imply a relation between attention towards negative news and pessimistic investor behavior even before the event date. Furthermore, this is an indication that the specified event time may be lagging the incident of the *true* event, which is a disadvantage of this model setup.  
+The only significant negative AARs are found between at $t=-5$ and between $t=-2$ to $t=0$ at a $5\%$ level. Nonetheless, the CAAR is significantly negative at $t=-5$ and through the remaining window. Generally, negative news seems to be priced in leading up to and including the identified event day, after which they have limited impact. \\ 
+
+The bars offers insights into the extent of public attention leading up to an event. The bars begin to increase at $t=-5$ at which point the AAR begins to decline, which imply a relation between attention towards negative news and pessimistic investor behavior even before the event date. Furthermore, this is an indication that the specified event time may be lagging the incident of the *true* event, which is a disadvantage of this model setup.  
+
+The selection method for negative events was proposed to gather cases of severe negative abnormal returns. These results are an initial indication of the relation between negative news and investor reactions. However, the method may be late to pick up the signal of negative events or new information on the market.  
 
 
-
-The significance of the results in relation to negative and positive events are summarised with a z-test. The test statistic is computed and compared to its assumed distribution under the null hypothesis that the average abnormal return is zero. I use a z-test since the sample size per event day is larger than 30. The z-scores and significance complementary to the AAR on $t=0$, along with the CAAR on respectively, two, five, and 10 days around the event are presented in table \ref{tab: ST_neg_significance}.   
-
-The selection method for negative events was proposed to gather cases of severe negative abnormal returns. The CAAR of the full and subset windows from negative events are significantly different from zero at $p \; < 0.01$, which further validates the selection method, and that negative abnormal returns are attainable to negative events. However, the method may be late to pick up the signal of negative events or new information on the market.  
-
-
-
-\noindent \textbf{Split news on relation to SDGs.} Examining the average effect from, respectively, positive and negative events provides insights into the overall relational tendency between shareholder sentiment and corporate sustainability. By investigating the abnormal returns resulting from events specific to the individual SDGs one can gain a deeper understanding of which themes within corporate sustainability that investors place most emphasis with. Figure \ref{fig:ST_neg_bar} illustrates the AAR on $t=0$ from events related to specific SDGs along with corresponding confidence intervals. 
-
+\noindent \textbf{Split news on relation to SDGs.} Investigating the abnormal returns associated with news specific to the individual SDGs can potentially deepen the understanding of which themes within corporate sustainability that investors place most emphasis with. However, splitting the data into 17 groups impose a natural restriction on the amount of observations of each group, which generate statistical uncertainty. For example, SDG 4 and 9 only has, respectively, 16 and 83 observations. The results are illustrated in the appendix \ref{fig:ST_neg_bar_all}. With a low amount of observations the CAAR at $t = 10$ associated with each SDG becomes highly insignificant, as indicated by the confidence intervals. To counter the issue I combine the SDGs into five groups known officially as the Five Pillars of SDG. They consist of People, Prosperity, Planet, Peace, and Partnership. The analysis changes focus from the individual SDGs to broader themes within sustainability, which, regardless, allows to adequately test the hypothesis.
 
 \begin{figure} [H]
     \centering
@@ -52,15 +48,13 @@ The selection method for negative events was proposed to gather cases of severe 
 \end{figure}
 
 
-
-
-Splitting the events on SDGs generally illustrate that negative events in most groups are associated with negative abnormal returns. However, the statistical uncertainty in the measurements means that one cannot generate a lot of insights from the aggregated values. Only SDG 10, 16, and 17 provides abnormal returns significantly different from zero at a \% level. The statistical uncertainty originates from the relatively low amount of observations associated with the individual groups after dividing the events into SDGs. For example, SDG 4 and 9 has only, respectively, 16 and 83 observations, which results in excessively wide confidence interval, whereas SDG 12 and 16 has, respectively, 576 and 1364 observations resulting in higher statistical certainty.   
+Figure \ref{fig:ST_neg_bar} illustrate CAAR over the full event window from negative news related to the Five Pillars of SDGs, and indicates that all groups but People are associated with negative abnormal returns. Moreover Prosperity, Peace, and Partnership are associated with significantly negative CAAR.      
 
 \noindent \textbf{Split firms on ESG rating.} 
 
-The investigation of negative news and stock returns verify a significant relation between the two in the short horizon. It is of similar interest to determine whether the sustainability profile of a firm influences how investors react to news related to the social development goals. 
+It is of similar interest to determine whether the sustainability profile of a firm influences how investors react to news related to the social development goals. 
 
-Figure \ref{fig:ST_neg_ESG} employs the same setup as figure \ref{fig:ST_neg_news} and displays the CAAR of a nearly identical sample\footnote{The sample is not identical as four firms are missing an ESG risk rating.} of firms with a split on ESG risk profiles. "Low" means that a firm has a low risk of encountering complications in relation to ESG affairs. Intuitively, firms with low ESG risks are expected to experience less disputes related to sustainability. Hence, if they do appear in such disputes, a logical reaction from investors would be of more severe magnitude. 
+Figure \ref{fig:ST_neg_ESG} employs the same setup as figure \ref{fig:ST_neg_news} and displays the CAAR of event firms with a partition on ESG risk profiles. "Low" means that a firm has a low risk of encountering complications in relation to ESG affairs. Intuitively, firms with low ESG risks are expected to experience less disputes related to sustainability. Hence, if they do appear in such disputes, a logical reaction from investors would be of more severe magnitude. 
 
 \begin{figure} [H]
     \centering
@@ -159,36 +153,7 @@ The abnormal returns from the individual portfolios are reflected through the re
 
 In the matter of negative events the alphas are negative for all portfolio specifications, which indicates that the event selection methodology works as intended. However, the alphas are only significant in three instances. With a 1 SD requirement the alpha is significant for holding periods of $T = 1$ and $T = 4$ months at, respectively, -0.84\% at a $1\%$ level and -0.36\% at $5\%$. The portfolio with a 2 SD requirement and a $T=4$ holding period has significant alpha of -0.45\% at $5\%$. The alphas for holding periods larger than $T = 4$ are closer to zero and insignificant, which is in support of market efficiency over the long term. An implication of the strategy is that portfolios with longer holding periods will accordingly include more firms in each rebalancing, which ultimately will drive the portfolio return closer to the market return. For example with 1 SD, we see the inverse relation between the increases in the average N and the correspondingly decreases in alpha. In contrast, a higher SD requirement is equivalent to a more strict selection procedure designating that fewer firms will enter the portfolio. A consequence of the strict requirements is the size of the portfolios. A portfolio consisting of 5 or 10 firms will inevitably be exposed to idiosyncratic risks from the individual companies, which means that the portfolio outcome may be driven by specific risks rather than the effect from negative news. This effect is clear from the portfolio with $SD = 3$ and $T=1$, which generates an alpha of -0.78. As the alpha is relatively negative, one would expect that it would be significant as well, but the low amount of firms clearly brings too much variance into the model for the regression to be able to explain it. A large portfolio consisting of, e.g., 60 firms will not encounter the same risks due to diversification benefits. Diversification of random firms with monthly rebalancing is exactly the purpose of an exercise like this, since it allows to approximately isolate the effect of negative news from stock returns. 
 
-\setlength{\tabcolsep}{15pt}
-\begin{table}[h]
-\small
-\centering
-\caption{Fama-French five-factor model alpha from negative news } 
-\begin{tabular}{llllllc}
-\hline \hline \\ 
- &     &  &    1 SD  &  2 SD  &  3 SD  &  \\    \cline{4-6} 
-& & & \multicolumn{3}{c}{ T = 1} & \\ \cline{2-6}
-& Alpha (\%)  &  & -0.84^{***}  & -0.47  & -0.78 &  \\ 
-& t-value &  & -2.97 & -1.33  & -1.63 &  \\
-&  N       &  &  19    & 10  & 5  & \\
-& & & \multicolumn{3}{c}{ T = 4} & \\ \cline{2-6}
-& Alpha (\%)  &  & -0.36^{**}  & -0.45^{**}  &  -0.27 & \\
-& t-value &  & -2.23 & -2.12  & -1.04 & \\
-&  N       &  & 60      & 35  & 18  & \\
-& & & \multicolumn{3}{c}{ T = 8} & \\ \cline{2-6}
-& Alpha (\%)   &  & -0.15   & -0.14  & -0.12 &  \\
-& t-value &  & -1.21  & -0.89 & -0.68 &  \\
-& N       &  & 100 & 63   & 34 & \\
-& & & \multicolumn{3}{c}{ T = 12} & \\ \cline{2-6}
-& Alpha (\%)   &  & -0.08  & -0.16  & -0.17 &  \\
-& t-value &  & -0.86  & -1.16 & -0.97 & \\
-& N       &  & 130    & 86  & 48 \\ \hline \hline
- \multicolumn{7}{l}{ \footnotesize $^* \; p\; <\; 0.1$, $ ^{**} \; p\; <\; 0.05$, $ ^{***} \; p\; <\; 0.01$  } \\
- \multicolumn{7}{p{11.5cm}}{ \footnotesize Alpha is the WLS-regression intercept (in \%) of the Fama-French 3-factor model, displayed along with the corresponding t-value. N is the average amount of firms included in the portfolio each month, and T is the portfolio holding period. The threshold for event firms to be included in the portfolio is either 1,2 or 3 "SD" (standard deviations) larger than the mean.} \\ 
- \hline
-\end{tabular}
-\label{tab: FF3-neg}
-\end{table}
+
 
 Overall, the relation between negative news and returns are most severe within 1-4 months after an event has occurred and with a "loose" selection criteria of 1 SD for event firms to be included in the portfolio. Although most of the alphas are insignificant it is important to note that all are negative, which support the relation between negative news and pessimistic investor behavior.  
 ??. 
@@ -209,22 +174,22 @@ In general, all ESG types are capable of generating negative alphas. However, on
 \caption{Fama-French five-factor model alpha from negative news split on ESG risk} 
 \begin{tabular}{llllllc}
 \hline \hline \\ 
- &     &  &    Low  &  Medium  &  High &  \\    \cline{4-6} 
-& & & \multicolumn{3}{c}{ T = 1} & \\ \cline{2-6}
-& Alpha (\%)  &  & -0.64^{**}  & -0.61  & -2.3 &  \\ 
-& t-value &  & -2.01 & -1.35  & -1.57 &  \\
-& & & \multicolumn{3}{c}{ T = 4} & \\ \cline{2-6}
-& Alpha (\%)  &  & -0.23  & -0.33  &  -0.93 & \\
-& t-value &  & -1.06 & -1.28  & -1.36 & \\
-& & & \multicolumn{3}{c}{ T = 8} & \\ \cline{2-6}
-& Alpha (\%)   &  & -0.01   & -0.28  & -0.34 &  \\
-& t-value &  & -0.08  & -1.35 & -0.64 &  \\
-& & & \multicolumn{3}{c}{ T = 12} & \\ \cline{2-6}
-& Alpha (\%)   &  & -0.09  & -0.19  & 0.21 &  \\
-& t-value &  & -0.62  & -1.23 & 0.40 &  \\
+ &     & Overall &    Low  &  Medium  &  High &  \\    \cline{3-6} 
+& &  \multicolumn{3}{c}{ T = 1} & \\ \cline{2-6}
+& Alpha (\%)    & -0.84^{***} & -0.64^{**}  & -0.61  & -2.3 &  \\ 
+& t-value   & -2.97 & -2.01 & -1.35  & -1.57 &  \\
+& &  \multicolumn{3}{c}{ T = 4} & \\ \cline{2-6}
+& Alpha (\%)   & -0.36^{**} & -0.23  & -0.33  &  -0.93 & \\
+& t-value &   -2.23 & -1.06 & -1.28  & -1.36 & \\
+& &  \multicolumn{3}{c}{ T = 8} & \\ \cline{2-6}
+& Alpha (\%)    & -0.15 & -0.01   & -0.28  & -0.34 &  \\
+& t-value &   -1.21 & -0.08  & -1.35 & -0.64 &  \\
+& &  \multicolumn{3}{c}{ T = 12} & \\ \cline{2-6}
+& Alpha (\%)    & -0.08 & -0.09  & -0.19  & 0.21 &  \\
+& t-value &    -0.86 & -0.62  & -1.23 & 0.40 &  \\
 \hline \hline
  \multicolumn{7}{l}{ \footnotesize $^* \; p\; <\; 0.1$, $ ^{**} \; p\; <\; 0.05$, $ ^{***} \; p\; <\; 0.01$  } \\
- \multicolumn{7}{p{11.5cm}}{ \footnotesize Alpha is the WLS-regression intercept (in \%) of the Fama-French 3-factor model, displayed along with the corresponding t-value. N is the average amount of firms included in the portfolio each month, and T is the portfolio holding period. The threshold for event firms to be included in the portfolio is either 1,2 or 3 "SD" (standard deviations) larger than the mean.} \\ 
+ \multicolumn{7}{p{12cm}}{ \footnotesize Alpha is the WLS-regression intercept (in \%) of the Fama-French 3-factor model, displayed along with the corresponding t-value. N is the average amount of firms included in the portfolio each month, and T is the portfolio holding period. The threshold for event firms to be included in the portfolio is either 1,2 or 3 "SD" (standard deviations) larger than the mean.} \\ 
  \hline
 \end{tabular}
 \label{tab: FF5_neg_ESG}
@@ -241,32 +206,7 @@ Such results are indicative of a pessimistic short-to-medium term investor react
 Applying holding periods longer than $T=1$ generates exclusively alphas close to zero, which resembles a well-diversified portfolio return close to the market portfolio, which is an expected result if positive news are recognized as irrelevant. Enforcing stricter event requirements by altering the amount of standard deviations doesn't change the results. Even the most positive news related to SDGs doesn't generate a positive abnormal return. 
 
 
-\setlength{\tabcolsep}{15pt}
-\begin{table}[H]
-\small
-\centering
-\caption{FF-5 model alpha from positive news } 
-\begin{tabular}{ccccccc}
-\hline \hline \\ 
- &     &  &    1 SD  &  2 SD  &  3 SD  &  \\ \cline{4-6} 
-& & & \multicolumn{3}{c}{ T = 1} & \\ \cline{2-6}
-& Alpha (\%)  &  & -0.26  & 0.04  & -0.37 &  \\
-& t-value &  & -1.03 & 0.11  & -0.74 & \\
-& & & \multicolumn{3}{c}{ T = 4} & \\ \cline{2-6}
-& Alpha (\%)  &  & -0.04  & 0.03  &  -0.07 & \\
-& t-value &  & -0.26 & 0.13  & -0.23 & \\
-& & & \multicolumn{3}{c}{ T = 8} & \\ \cline{2-6}
-& Alpha (\%)  &  & 0.01   & -0.01  & 0.04 &  \\
-& t-value &  & 0.05  & -0.15 & 0.18 & \\
-&  & & \multicolumn{3}{c}{ T = 12} & \\ \cline{2-6}
-& Alpha (\%)  &  & 0.05  & 0.13  & 0.23 &  \\
-& t-value &  & 0.76  & 1.09 & 1.35 & \\
- \hline \hline
- \multicolumn{7}{l}{ \footnotesize $^* \; p\; <\; 0.1$, $ ^{**} \; p\; <\; 0.05$, $ ^{***} \; p\; <\; 0.01$  } \\
- \multicolumn{7}{p{11.5cm}}{ \footnotesize Alpha is the WLS-regression intercept (in \%) of the Fama-French 5-factor model, displayed along with the corresponding t-value. N is the average amount of firms included in the portfolio each month, and T is the portfolio holding period. The threshold for event firms to be included in the portfolio is either 1,2 or 3 standard deviations (SD) larger than the mean.}  \\ 
-\end{tabular}
-\label{tab: FF5_pos}
-\end{table}
+
 
 \textbf{Split on ESG risk rating.}
 Dividing the event firms into categories of low, medium or high ESG risk changes the narrative slightly. Table \ref{tab: FF5_pos_ESG} illustrates the alpha generated from the firms in such groups after experiencing a 1-standard deviation positive event. Firms with low and medium ESG risk experience a slight change in alpha, with none of the new estimates being significant. As before, most alphas are close to zero. On the contrary, firms with high ESG risk are enjoying a highly positive alpha when the look-back period is four months or higher. The alpha resulting from T = 12 is significantly positive, while the alpha of T = 4 and T = 8 are high but insignificant, although accompanied by quite high t-statistics. With T = 1 the abnormal returns are negative - on par with the short term results. 
@@ -280,22 +220,22 @@ The average monthly amount of firms in the portfolios does contribute to the dis
 \caption{FF-5 model alpha from positive news split on ESG risk} 
 \begin{tabular}{ccccccc}
 \hline \hline \\  
- &     &  &    Low  &  Medium  &  High  &  \\ \cline{4-6} 
-& & & \multicolumn{3}{c}{ T = 1} & \\ \cline{2-6}
-& Alpha (\%)  &  & -0.04  & -0.41  & -0.59 &  \\
-& t-value &  & -0.12 & -1.47  & -0.47 & \\
-& & & \multicolumn{3}{c}{ T = 4} & \\ \cline{2-6}
-& Alpha (\%)  &  & -0.22  & -0.18  &  0.90 & \\
-& t-value &  & -1.15 & -0.91  & 1.15 & \\
-& & & \multicolumn{3}{c}{ T = 8} & \\ \cline{2-6}
-& Alpha (\%)  &  & -0.23   & 0.03  & 1.06 &  \\
-& t-value &  & 1.64  & 0.26 & 1.65 & \\
-&  & & \multicolumn{3}{c}{ T = 12} & \\ \cline{2-6}
-& Alpha (\%)  &  & -0.14  & 0.02  & $0.97^{*}$ &  \\
-& t-value &  & -1.11  & 0.19 & 1.72 & \\
+ &     & Overall  &    Low  &  Medium  &  High  &  \\ \cline{3-6} 
+& & \multicolumn{4}{c}{ T = 1} & \\ \cline{2-6}
+& Alpha (\%)  & -0.26 & -0.04  & -0.41  & -0.59 &  \\
+& t-value & -1.03 & -0.12 & -1.47  & -0.47 & \\
+& &  \multicolumn{4}{c}{ T = 4} & \\ \cline{2-6}
+& Alpha (\%)  & -0.04 & -0.22  & -0.18  &  0.90 & \\
+& t-value & -0.26 & -1.15 & -0.91  & 1.15 & \\
+& &  \multicolumn{4}{c}{ T = 8} & \\ \cline{2-6}
+& Alpha (\%)  & 0.01 & -0.23   & 0.03  & 1.06 &  \\
+& t-value & 0.05 & 1.64  & 0.26 & 1.65 & \\
+&  &  \multicolumn{4}{c}{ T = 12} & \\ \cline{2-6}
+& Alpha (\%)  & 0.05 & -0.14  & 0.02  & $0.97^{*}$ &  \\
+& t-value & 0.76 & -1.11  & 0.19 & 1.72 & \\
 \hline \hline
  \multicolumn{7}{l}{ \footnotesize $^* \; p\; <\; 0.1$, $ ^{**} \; p\; <\; 0.05$, $ ^{***} \; p\; <\; 0.01$  } \\
- \multicolumn{7}{p{11.5cm}}{ \footnotesize Alpha is the WLS-regression intercept (in \%) of the Fama-French 5-factor model, displayed along with the corresponding t-value. T is the portfolio holding period. The threshold for event firms to be included in the portfolio is 1 standard deviation from the mean.}  \\ 
+ \multicolumn{7}{p{12cm}}{ \footnotesize Alpha is the WLS-regression intercept (in \%) of the Fama-French 5-factor model, displayed along with the corresponding t-value. T is the portfolio holding period. The threshold for event firms to be included in the portfolio is 1 standard deviation from the mean.}  \\ 
 \end{tabular}
 \label{tab: FF5_pos_ESG}
 \end{table}
