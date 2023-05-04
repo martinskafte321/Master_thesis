@@ -15,7 +15,7 @@ The development in CAAR and AAR was illustrated in section \ref{sec: st_negative
 
 In general the combination of the Market Model and the event study methodology seems to resemble a good measure of abnormal returns in relation to negative news events. As mentioned, the average abnormal returns are hovering around the level of 0\% implying that the model correctly estimates the realized returns. This phenomena occurs in the the first five days of the window and the full period after an event has occurred, meaning that the realized returns are approximately as expected from the Market Model on average. 
 
-Likewise, the event study methodology works adequately at identifying negative events from news, as an evident investor reaction is recognized through the abnormal returns. However, the reaction materializes ahead of the identification of events, which is an unfavorable feature of the model selection procedure. This occurs since the underlying data-set captures the amount of times a given firm has been mentioned in news articles globally, upon which the identification procedure is based on detecting the biggest events exclusively. Hence, the procedure will not be able to catch the "breaking news". 
+Likewise, the event study methodology works adequately at identifying negative events from news, as an evident investor reaction is recognized through the abnormal returns. However, the reaction materializes ahead of the identification of events, which is an unfavorable feature of the model selection procedure. This occurs since the underlying data-set captures the amount of times a given firm has been mentioned in news articles globally, upon which the identification procedure is based on detecting the biggest events exclusively. Hence, the procedure will not be able to catch the "breaking news" where, intuitively, some of the early investor reactions will be present.  
 
 
 \textbf{How well does the Market model capture the returns? Quite well, as the AR drifts around zero from -10 to -5 and from 5 and onwards. }
@@ -31,16 +31,14 @@ Likewise, the event study methodology works adequately at identifying negative e
   \hline  \hline
   & \multicolumn{1}{c}{Overall} &  \multicolumn{1}{c}{Low} & \multicolumn{1}{c}{Medium} & \multicolumn{1}{c}{High}\\  
  \hline
-$AAR_{t=0}$ &   $\underset{(-3.509)}{-0.378^{***}}$ &   $\underset{(-2.057)}{-0.298^{***}}$ &   $\underset{(-2.592)}{-0.297^{***}}$ &   $\underset{(-1.712)}{-0.275^{*}}$ \\
+$AAR_{t=0}$ &   $\underset{(-3.509)}{-0.378^{***}}$ &   $\underset{(-4.480)}{-0.650^{***}}$ &   $\underset{(-3.411)}{-0.390^{***}}$ &   $\underset{(-0.291)}{-0.138 }$ \\
 
-$CAAR_{[-2;+2]}$  &  $\underset{(4.440)}{-0.715^{***}}$ &   $\underset{(-3.260)}{-0.820^{***}}$ &   $\underset{(-3.155)}{-0.600^{***}}$ &   $\underset{(0.125)}{ 0.045}$ \\ 
+$CAAR_{[-5;+5]}$  &  $\underset{(-4.255)}{-0.858^{***}}$ &   $\underset{(-6.720)}{-2.251^{***}}$ &   $\underset{(-3.704)}{-1.019^{***}}$ &   $\underset{(0.060)}{0.035}$ \\ 
 
-$CAAR_{[-5;+5]}$  &  $\underset{(-4.255)}{-0.858^{***}}$ &   $\underset{(-3.157)}{-1.054^{***}}$ &   $\underset{(-2.498)}{-0.688^{**}}$ &   $\underset{(-1.312)}{-0.677}$ \\ 
-
-$CAAR_{[-10;+10]}$    & $\underset{(-3.0)}{-0.822^{***}}$ &   $\underset{(-2.602)}{-1.234^{***}}$ &   $\underset{(-1.525)}{-0.565}$ &   $\underset{(-0.570)}{-0.450}$ \\ 
+$CAAR_{[-10;+10]}$    & $\underset{(-3.012)}{-0.822^{***}}$ &   $\underset{(-8.460)}{-4.014^{***}}$ &   $\underset{(-3.138)}{-1.160^{***}}$ &   $\underset{(0.455)}{0.348}$ \\ 
    \hline \hline
-   \multicolumn{5}{p{10cm}}{ \footnotesize $^* \; p\; <\; 0.1$, $ ^{**} \; p\; <\; 0.05$, $ ^{***} \; p\; <\; 0.01$  } \\
-   \multicolumn{5}{p{10cm}}{\footnotesize The tables shows the CAAR and associated t-value related to positive and negative events over an event window of 5, 10, and 21 days surrounding the event date along with the AAR on $t=0$. Positive and negative events consists of, respectively, 3564 and 1046 observations. } \\
+   \multicolumn{5}{p{12cm}}{ \footnotesize $^* \; p\; <\; 0.1$, $ ^{**} \; p\; <\; 0.05$, $ ^{***} \; p\; <\; 0.01$  } \\
+   \multicolumn{5}{p{13cm}}{\footnotesize The tables shows the CAAR and associated t-value related to positive and negative events over an event window of 10, and 21 days surrounding the event date along with the AAR on $t=0$. Negative events consists of 1046 observations. } \\
    \hline
 \end{tabular}
 \label{tab: ST_neg_significance}
