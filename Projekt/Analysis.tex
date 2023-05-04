@@ -2,8 +2,10 @@
 \subsection{Short term investor reaction} 
 To answer hypothesis \#1, \#2, and \#3 along with sub hypothesis, I assess the statistical significance of the cumulative average abnormal returns over a window of 21 days around all identified event dates of negative or positive news from section \ref{ST_results}. The hypothesis for short term performance addressed the immediate investor reaction to events by using the Market Model to estimate abnormal returns. 
 
-\subsubsection{Negative news}
+\subsubsection{Negative news }
 
+
+The significance of the results in relation to negative and positive events are summarised with a z-test. The test statistic is computed and compared to its assumed distribution under the null hypothesis that the average abnormal return is zero. I use a z-test since the sample size per event day is larger than 30. The z-scores and significance complementary to the AAR on $t=0$, along with the CAAR on respectively, two, five, and 10 days around the event are presented in table \ref{tab: ST_neg_significance}.   
 
 The null hypothesis assumes that the market does not react to negative news. \\ 
 $H_1:$ \textit{Negative news related to the SDGs does not have a short term impact on firm' market value} \\
@@ -11,17 +13,25 @@ Rejecting the null would necessarily imply that we accept the alternative hypoth
 
 Rejection of the null would require the Market Model to generate abnormal returns statistically different from zero. Abnormal returns were measured as the cumulative average abnormal returns over the event window covering 10 days before and 10 days after an event has occurred. 
 
-The development in CAAR and AAR was illustrated in section \ref{sec: st_negative}. We saw a downtrend in the CAAR after $t = -5$. The full sample CAAR ends at $-0.82\%$, which is significantly lower than zero at the 1\% level. Thus, I can reject the $H_1$ of no abnormal returns coinciding with a negative event, and accept the alternative hypothesis. 
+The development in CAAR and AAR was illustrated in section \ref{sec: st_negative}. We saw a downtrend in the CAAR after $t = -5$. The full sample CAAR ends at $-1.5\%$, which is significantly lower than zero at the 1\% level. Thus, I can reject the $H_1$ of no abnormal returns coinciding with a negative event, and accept the alternative hypothesis. 
 
-In general the combination of the Market Model and the event study methodology seems to resemble a good measure of abnormal returns in relation to negative news events. As mentioned, the average abnormal returns are hovering around the level of 0\% implying that the model correctly estimates the realized returns. This phenomena occurs in the the first five days of the window and the full period after an event has occurred, meaning that the realized returns are approximately as expected from the Market Model on average. 
+In general the combination of the Market Model and the event study methodology seems to resemble a good measure of abnormal returns in relation to negative news events. As mentioned, the average abnormal returns are hovering around the level of 0\% in the first five days of the window and again after the event has occurred at $t = 0$, implying that the realized returns are approximately as the expected returns from the Market Model on average. 
 
-Likewise, the event study methodology works adequately at identifying negative events from news, as an evident investor reaction is recognized through the abnormal returns. However, the reaction materializes ahead of the identification of events, which is an unfavorable feature of the model selection procedure. This occurs since the underlying data-set captures the amount of times a given firm has been mentioned in news articles globally, upon which the identification procedure is based on detecting the biggest events exclusively. Hence, the procedure will not be able to catch the "breaking news" where, intuitively, some of the early investor reactions will be present.  
+Likewise, the event study methodology works adequately at identifying negative events from news, as an evident investor reaction is recognized through the abnormal returns. However, the reaction materializes ahead of the identification of events, which is an unfavorable feature of the model selection procedure. This occurs since the underlying data-set captures the amount of times a given firm has been mentioned in news articles globally, upon which the identification procedure is based on detecting the biggest events exclusively. Hence, the procedure will not be able to catch the "breaking news" where, intuitively, some of the early investor reactions will be present. Such early reactions are apparent in the results as the largest drawdowns happens between $t = -5$ and $t = 0$, which implicate that the short term model setup is not capable of generating abnormal profits.  \\
+The results from the sensitivity analysis implies that applying more weight to smaller firms decrease the abnormal returns. The discrepancy originates from larger firms receiving more media attention in general. The identification is based on news spikes of firms relative to their mean so in theory all events should be equally valid, however being mentioned 500 times in the news on a given day reaches a lot more investor reaction than being mentioned 30 times even though the firm's mean value is 10. The investor reaction is earlier for the value-weighted portfolio as a possible result from news about large firms reaching investors faster than for small firms. 
+
+Moreover, the tightening of the identification rule for events decreases the abnormal returns. This is an unintuitive results as one would expect the abnormal returns to increase when the magnitude of the negative events increases. Tightening the threshold for events to be valid works as a proxy for increasing the amount of small firms, measured by a decrease in average market capitalization. Large firms have a general high level of media exposure, indicating that a 2- or 3-standard deviation move will happen very rarely, as expected. Firms with less media exposure have a low mean value, implying that a 2-standard deviation move will be easier to obtain, given the assumption that these firms only obtain media attention when the news are highly negative. 
+
+\subsubsection{Re}
+
+
+
 
 
 \textbf{How well does the Market model capture the returns? Quite well, as the AR drifts around zero from -10 to -5 and from 5 and onwards. }
 
 \textbf{How well does the event model capture the events? Not tradable, since the return effect comes before the event is captured. However, it clearly captures some events, as per the significant reactions. }
-\textbf{The equal weighted portfolio favors small stocks and consequently also generates higher returns. }
+\textbf{The equal weighted portfolio favors small stocks and consequently also generates higher returns. No! }
 
 
 \begin{table}[H]
@@ -31,11 +41,11 @@ Likewise, the event study methodology works adequately at identifying negative e
   \hline  \hline
   & \multicolumn{1}{c}{Overall} &  \multicolumn{1}{c}{Low} & \multicolumn{1}{c}{Medium} & \multicolumn{1}{c}{High}\\  
  \hline
-$AAR_{t=0}$ &   $\underset{(-3.509)}{-0.378^{***}}$ &   $\underset{(-4.480)}{-0.650^{***}}$ &   $\underset{(-3.411)}{-0.390^{***}}$ &   $\underset{(-0.291)}{-0.138 }$ \\
+$AAR_{t=0}$ &   $\underset{(-3.509)}{-0.400^{***}}$ &   $\underset{(-4.480)}{-0.650^{***}}$ &   $\underset{(-3.411)}{-0.390^{***}}$ &   $\underset{(-0.291)}{-0.138 }$ \\
 
-$CAAR_{[-5;+5]}$  &  $\underset{(-4.255)}{-0.858^{***}}$ &   $\underset{(-6.720)}{-2.251^{***}}$ &   $\underset{(-3.704)}{-1.019^{***}}$ &   $\underset{(0.060)}{0.035}$ \\ 
+$CAAR_{[-5;+5]}$  &  $\underset{(-5.457)}{-1.100^{***}}$ &   $\underset{(-6.720)}{-2.251^{***}}$ &   $\underset{(-3.704)}{-1.019^{***}}$ &   $\underset{(0.060)}{0.035}$ \\ 
 
-$CAAR_{[-10;+10]}$    & $\underset{(-3.012)}{-0.822^{***}}$ &   $\underset{(-8.460)}{-4.014^{***}}$ &   $\underset{(-3.138)}{-1.160^{***}}$ &   $\underset{(0.455)}{0.348}$ \\ 
+$CAAR_{[-10;+10]}$    & $\underset{(-5.702)}{-1.558^{***}}$ &   $\underset{(-8.460)}{-4.014^{***}}$ &   $\underset{(-3.138)}{-1.160^{***}}$ &   $\underset{(0.455)}{0.348}$ \\ 
    \hline \hline
    \multicolumn{5}{p{12cm}}{ \footnotesize $^* \; p\; <\; 0.1$, $ ^{**} \; p\; <\; 0.05$, $ ^{***} \; p\; <\; 0.01$  } \\
    \multicolumn{5}{p{13cm}}{\footnotesize The tables shows the CAAR and associated t-value related to positive and negative events over an event window of 10, and 21 days surrounding the event date along with the AAR on $t=0$. Negative events consists of 1046 observations. } \\

@@ -52,28 +52,28 @@ The sensitivity of returns in relation to the weights used in calculating portfo
 Table \ref{tab: FF5_neg_sensi_weights} reports the alphas, t-values and significance levels of equally weighted portfolios. Besides the weights, the portfolio construction is identical to that from the empirical results in section \ref{sec: long_term_portfolio}. The results clearly indicate a discrepancy between value and equal weights with the latter generating higher absolute alpha values. For example, the value weighted portfolio with SD = 2 and T = 1 generated an insignificant alpha of -0.47, while the equivalent equal weighted portfolio generated an alpha of -0.94 significant on the $1\%$ level.   
 
 \setlength{\tabcolsep}{15pt}
-\begin{table}[]
+\begin{table}[H]
 \small
 \centering
 \caption{Fama-French five-factor model alpha from negative news with equal weights} 
-\begin{tabular}{ccccccc}
+\begin{tabular}{cccc}
 \hline \hline \\ 
- &     &  &    1 SD  &  2 SD  &  3 SD  &  \\ \cline{4-6} 
-& & & \multicolumn{3}{c}{ T = 1} & \\ \cline{2-6}
-& Alpha (\%)  &  & $-0.96^{***}$  & $-0.94^{***}$  & $-0.90^{**}$ &  \\
-& t-value &  & -3.94 & -2.87  & -1.92 & \\
-& & & \multicolumn{3}{c}{ T = 4} & \\ \cline{2-6}
-& Alpha (\%)  &  & $-0.70^{***}$  & $-0.84^{***}$  &  $-0.81^{***}$ & \\
-& t-value & & -3.95 & -4.28 & -2.99 & \\
-& & & \multicolumn{3}{c}{ T = 8} & \\ \cline{2-6}
-& Alpha (\%)  &  & $-0.64^{***}$   & $-0.67^{***}$  & $-0.73^{***}$ &  \\
-& t-value &  & -4.20  & -4.27 & 3.51 & \\
-&  & & \multicolumn{3}{c}{ T = 12} & \\ \cline{2-6}
-& Alpha (\%)  &  & $-0.49^{***}$  & $-0.62^{***}$  & $-0.61^{***}$ &  \\
-& t-value &  & -3.71  & -4.53 & -3.92 & \\
+ &  &  Equal weight   &  \\ \cline{3-3}
+& & T = 1 & \\ \cline{2-3}
+& Alpha (\%) & $-0.96^{***}$  &  \\ 
+& t-value & -3.94  & \\
+& & T = 4 & \\  \cline{2-3}
+& Alpha (\%)  & $-0.70^{***}$  & \\
+& t-value  & -3.95  & \\
+& & T = 8 & \\ \cline{2-3}
+& Alpha (\%)   & $-0.64^{***}$  &  \\
+& t-value &   -4.20  & \\
+&  & T = 12 & \\ \cline{2-3}
+& Alpha (\%)  & $-0.49^{***}$ &  \\
+& t-value   & -3.71  & \\
 \hline \hline
- \multicolumn{7}{l}{ \footnotesize $^* \; p\; <\; 0.1$, $ ^{**} \; p\; <\; 0.05$, $ ^{***} \; p\; <\; 0.01$  } \\
- \multicolumn{7}{p{11.5cm}}{ \footnotesize Alpha is the WLS-regression intercept (in \%) of the Fama-French 3-factor model, displayed along with the corresponding t-value. N is the average amount of firms included in the portfolio each month, and T is the portfolio holding period. The threshold for event firms to be included in the portfolio is either 1,2 or 3 "SD" (standard deviations) larger than the mean.}  \\ 
+ \multicolumn{4}{l}{ \footnotesize $^* \; p\; <\; 0.1$, $ ^{**} \; p\; <\; 0.05$, $ ^{***} \; p\; <\; 0.01$  } \\
+ \multicolumn{4}{p{7cm}}{ \footnotesize Alpha is the WLS-regression intercept (in \%) of the Fama-French 3-factor model, displayed along with the corresponding t-value. N is the average amount of firms included in the portfolio each month, and T is the portfolio holding period. The threshold for event firms to be included in the portfolio is either 1,2 or 3 "SD" (standard deviations) larger than the mean.}  \\ 
 \end{tabular}
 \label{tab: FF5_neg_sensi_weights}
 \end{table}
@@ -88,38 +88,35 @@ To review the impact of the risk-free rate on abnormal returns, I re-estimate th
 
 The alphas, t-values and significance levels for the portfolios with the risk-free rate assumed to be zero are reported in table \ref{tab: FF5_neg_sensi_rf}. Generally, the r-squared of the regressions are relatively high with values between 0.82 and 0.98. 
 
-The factor models are not very sensitive to changes in the market index and the risk-free rate, as the alphas are close to or slightly more negative than the original values.  With interest rates close to zero in this period, this result may not be overly surprising. Nonetheless, the adjustment does ensure that the portfolio alpha with SD = 3 and T = 1 becomes significant at the $10\%$ level. Setting the rate to zero essentially increases the portfolio returns (response variable) and the market returns (explanatory variable) as the rate was originally subtracted from these. Intuitively, a higher alpha would be expected as the excess returns increases.  However, the reduced alpha originates from a slightly increased sensitivity towards the size and value factors and less sensitivity to the market portfolio.      
-
+The factor models are not very sensitive to changes in the market index and the risk-free rate, as the alphas are close to or slightly more negative than the original values.  With interest rates close to zero in this period, this result may not be overly surprising. Nonetheless, the adjustment does ensure that the portfolio alpha with SD = 3 and T = 1 becomes significant at the $10\%$ level. Setting the rate to zero essentially increases the portfolio returns (response variable) and the market returns (explanatory variable) as the rate was originally subtracted from these. Intuitively, a higher alpha would be expected as the excess returns increases. However, the reduced alpha originates from a slightly increased sensitivity towards the size and value factors and less sensitivity to the market portfolio.       
 
 
 \setlength{\tabcolsep}{15pt}
-\begin{table}[]
+\begin{table}[h]
 \small
 \centering
-\caption{Fama-French five-factor model alpha from negative news with Risk free rate assumed to be 0} 
-\begin{tabular}{ccccccc}
+\caption{Fama-French five-factor model alpha from negative news } 
+\begin{tabular}{cccccc}
 \hline \hline \\ 
- &     &  &    1 SD  &  2 SD  &  3 SD  &  \\ \cline{4-6} 
-& & & \multicolumn{3}{c}{ T = 1} & \\ \cline{2-6}
-& Alpha (\%)  &  & $-0.85^{***}$  & $-0.50$  & $-0.80^{*}$ &  \\
-& t-value &  & -3.02 & -1.40  & -1.69 & \\
-& & & \multicolumn{3}{c}{ T = 4} & \\ \cline{2-6}
-& Alpha (\%)  &  & $-0.37^{**}$  & $-0.47^{**}$  &  $-0.28$ & \\
-& t-value & & -2.30 & -2.19 & -1.09 & \\
-& & & \multicolumn{3}{c}{ T = 8} & \\ \cline{2-6}
-& Alpha (\%)  &  & $-0.16$   & $-0.15$  & $-0.12$ &  \\
-& t-value &  & -1.67  & -0.95 & -0.73 & \\
-&  & & \multicolumn{3}{c}{ T = 12} & \\ \cline{2-6}
-& Alpha (\%)  &  & $-0.09$  & $-0.17$  & $-0.17$ &  \\
-& t-value &  & -0.96  & -1.23 & -1.01 & \\
-\hline \hline
- \multicolumn{7}{l}{ \footnotesize $^* \; p\; <\; 0.1$, $ ^{**} \; p\; <\; 0.05$, $ ^{***} \; p\; <\; 0.01$  } \\
- \multicolumn{7}{p{11.5cm}}{ \footnotesize Alpha is the WLS-regression intercept (in \%) of the Fama-French 3-factor model, displayed along with the corresponding t-value. N is the average amount of firms included in the portfolio each month, and T is the portfolio holding period. The threshold for event firms to be included in the portfolio is either 1,2 or 3 "SD" (standard deviations) larger than the mean.}  \\ 
+  & & 2 SD  &  & 3 SD  & \\  \cline{3-3} \cline{5-5}
+ & &  & T = 1  & & \\ \cline{2-5}
+ & Alpha (\%) &   -0.47 &  & -0.78  &  \\ 
+ & t-value   & -1.33  & & -1.63 & \\
+ & &  & T = 4  & & \\ \cline{2-5}
+ & Alpha (\%)  & -0.45^{**} & &  -0.27 & \\
+ & t-value & -2.12  & & -1.04  & \\
+ & &  & T = 8  & & \\ \cline{2-5}
+ & Alpha (\%) & -0.14 & & -0.12 &  \\
+ & t-value   & -0.89 & & -0.68 & \\
+& &  & T = 12  & & \\ \cline{2-5}
+ & Alpha (\%) & -0.16 & & -0.17 &  \\
+ & t-value  & -1.16 &  & -0.97  & \\ \hline \hline
+ \multicolumn{5}{l}{ \footnotesize $^* \; p\; <\; 0.1$, $ ^{**} \; p\; <\; 0.05$, $ ^{***} \; p\; <\; 0.01$  } \\
+ \multicolumn{6}{p{11cm}}{ \footnotesize Alpha is the WLS-regression intercept (in \%) of the Fama-French 3-factor model, displayed along with the corresponding t-value. N is the average amount of firms included in the portfolio each month, and T is the portfolio holding period. The threshold for event firms to be included in the portfolio is either 1,2 or 3 "SD" (standard deviations) larger than the mean.} \\ 
+ \hline
 \end{tabular}
-\label{tab: FF5_neg_sensi_rf}
+\label{tab: FF3-neg}
 \end{table}
-
-
 
 
 

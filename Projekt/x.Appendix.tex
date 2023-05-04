@@ -6,7 +6,7 @@
     \caption{Negative news: AAR split on relation to SDGs}
     \includegraphics[scale=0.6]{Projekt/1.Figures analysis/ST_negative_sdg_bar.png}
     \caption*{\footnotesize The figure illustrates the AAR on $t = 0$ from negative news. The error bars represent the 95\% confidence intervals of the AAR.}
-    \label{fig:ST_neg_bar}
+    \label{fig:ST_neg_bar_all}
 \end{figure}
 
 \begin{figure} [H]
@@ -14,13 +14,14 @@
     \caption{AAR per SDG: positive news}
     \includegraphics[scale=0.6]{Projekt/1.Figures analysis/ST_positive_sdg_bar.png}
     \caption*{\footnotesize The figure illustrates the AAR on $t = 0$ from positive news. The error bars represent the 95\% confidence intervals of the AAR.}
-    \label{fig:ST_pos_bar}
+    \label{fig:ST_pos_bar_all}
 \end{figure}
 
 
 
 
 \subsection{Sensitivity analysis figures:}
+
 \subsubsection{Short term}
 
 
@@ -53,10 +54,9 @@ N & 1845 & 1078 & & 648 & 451  \\
   \hline  \hline
   & \multicolumn{1}{c}{Positive} &  \multicolumn{1}{c}{Negative}\\  
  \hline
-$AAR_{t=0}$ &  $\underset{(0.634)}{0.045}$ & $\underset{(-3.509)}{-0.400^{***}}$ \\ 
-$CAAR_{[-2;+2]}$  & $\underset{(0.367)}{0.053}$ & $\underset{(-4.120)}{-0.662^{***}}$ \\ 
-$CAAR_{[-5;+5]}$  & $\underset{(-1.233)}{-0.258}$ & $\underset{(-5.457)}{-1.100^{***}}$ \\ 
-$CAAR_{[-10;+10]}$    & $\underset{(-0.452)}{-0.128 }$ & $\underset{(-5.702)}{-1.558^{***}}$ \\ 
+$AAR_{t=0}$ &  $\underset{(0.634)}{0.045}$ & $\underset{(-3.509)}{-0.378^{***}}$ \\  
+$CAAR_{[-5;+5]}$  & $\underset{(-1.233)}{-0.258}$ & $\underset{(-4.4255)}{-0.858^{***}}$ \\ 
+$CAAR_{[-10;+10]}$    & $\underset{(-0.452)}{-0.128 }$ & $\underset{(-3.012)}{-0.822^{***}}$ \\ 
    \hline \hline
    \multicolumn{3}{p{10cm}}{ \footnotesize $^* \; p\; <\; 0.1$, $ ^{**} \; p\; <\; 0.05$, $ ^{***} \; p\; <\; 0.01$  } \\
    \multicolumn{3}{p{10cm}}{\footnotesize The tables shows the CAAR associated with positive and negative news over an event window of 5, 10, and 21 days surrounding the event date along with the AAR on $t=0$. The models are split on the requirement rule for included events (2 or 3 sd).} \\
@@ -114,29 +114,28 @@ $CAAR_{[-10;+10]}$    & $\underset{(-0.452)}{-0.128 }$ & $\underset{(-5.702)}{-1
 
 
 \setlength{\tabcolsep}{15pt}
-\begin{table}[]
+\begin{table}[H]
 \small
 \centering
-\caption{Fama-French five-factor model alpha from positive news with RF = 0} 
-\begin{tabular}{ccccccc}
+\caption{FF-5 model alpha from positive news with altered event identification rule } 
+\begin{tabular}{ccc}
 \hline \hline \\ 
- &     &  &    1 SD  &  2 SD  &  3 SD  &  \\ \cline{4-6} 
-& & & \multicolumn{3}{c}{ T = 1} & \\ \cline{2-6}
-& Alpha (\%)  &  & $-0.28$  & $0.02$  & $-0.38$ &  \\
-& t-value &  & -1.08 & -0.06  & -0.78 & \\
-& & & \multicolumn{3}{c}{ T = 4} & \\ \cline{2-6}
-& Alpha (\%)  &  & $ -0.004$  & $-0.02$  &  $-0.08$ & \\
-& t-value & & -0.28  & 0.11 & --0.26 & \\
-& & & \multicolumn{3}{c}{ T = 8} & \\ \cline{2-6}
-& Alpha (\%)  &  & $ -0.00$   & $-0.003^{**}$  & $0.03$ &  \\
-& t-value &  & 0.05  & -0.17 & 0.16 & \\
-&  & & \multicolumn{3}{c}{ T = 12} & \\ \cline{2-6}
-& Alpha (\%)  &  & $ -0.05$  & $0.13$  & $0.23$ &  \\
-& t-value &  & 0.77  & 1.06 & 1.32 & \\
-\hline \hline
- \multicolumn{7}{l}{ \footnotesize $^* \; p\; <\; 0.1$, $ ^{**} \; p\; <\; 0.05$, $ ^{***} \; p\; <\; 0.01$  } \\
- \multicolumn{7}{p{11.5cm}}{ \footnotesize Alpha is the WLS-regression intercept (in \%) of the Fama-French 3-factor model, displayed along with the corresponding t-value. N is the average amount of firms included in the portfolio each month, and T is the portfolio holding period. The threshold for event firms to be included in the portfolio is either 1,2 or 3 "SD" (standard deviations) larger than the mean.}  \\ 
+&  2 SD  &  3 SD   \\ \cline{2-3} 
+ \multicolumn{2}{c}{ T = 1}  \\ \hline
+ Alpha (\%) & 0.04  & -0.37   \\
+ t-value & 0.11  & -0.74  \\
+ \multicolumn{2}{c}{ T = 4}  \\ \hline
+ Alpha (\%)  & 0.03  &  -0.07  \\
+ t-value  & 0.13  & -0.23  \\
+ \multicolumn{2}{c}{ T = 8}  \\ \hline
+ Alpha (\%) & -0.01  & 0.04   \\
+ t-value & -0.15 & 0.18  \\
+ \multicolumn{2}{c}{ T = 12}  \\ \hline
+ Alpha (\%) & 0.13  & 0.23   \\
+ t-value & 1.09 & 1.35  \\
+ \hline \hline
+ \multicolumn{3}{l}{ \footnotesize $^* \; p\; <\; 0.1$, $ ^{**} \; p\; <\; 0.05$, $ ^{***} \; p\; <\; 0.01$  } \\
+ \multicolumn{3}{p{5cm}}{ \footnotesize Alpha is the WLS-regression intercept (in \%) of the Fama-French 5-factor model, displayed along with the corresponding t-value. N is the average amount of firms included in the portfolio each month, and T is the portfolio holding period. The threshold for event firms to be included in the portfolio is either 1,2 or 3 standard deviations (SD) larger than the mean.}  \\ 
 \end{tabular}
-\label{tab: FF5_RF}
+\label{tab: FF5_pos}
 \end{table}
-
