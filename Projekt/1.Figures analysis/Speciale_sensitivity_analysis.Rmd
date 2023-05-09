@@ -383,8 +383,8 @@ short_term_data_event = short_term_data %>%
   mutate(
     norm_positive_sum = na_if(norm_positive_sum, 0),
     norm_negative_sum = na_if(norm_negative_sum, 0),
-    positive_threshold = mean(norm_positive_sum,na.rm = TRUE) + 3*sd(norm_positive_sum,na.rm = TRUE),
-    negative_threshold = mean(norm_negative_sum,na.rm = TRUE) + 3*sd(norm_negative_sum,na.rm = TRUE)
+    positive_threshold = mean(norm_positive_sum,na.rm = TRUE) + 1*sd(norm_positive_sum,na.rm = TRUE),
+    negative_threshold = mean(norm_negative_sum,na.rm = TRUE) + 1*sd(norm_negative_sum,na.rm = TRUE)
     ) %>%
   rename("0" = abnormal_ret) %>%
   
@@ -450,28 +450,13 @@ negative_index = short_term_data_event %>%
   pivot_longer(!c(date,isin,MKT_CAP), names_to = "type", values_to = "value") %>%
   na.omit(value) 
   
-
-negative_index_events_mean = short_term_data_event %>% select(date,isin,neg_event,norm_negative_sum, contains("neg_event")) %>%
-  filter(neg_event == 1) %>% 
-  rename('0' = norm_negative_sum) %>%
-  select(-neg_event) %>%
-  pivot_longer(!c(date,isin), names_to = "type", values_to = "amount") %>%
-   mutate_at("type", str_replace, "neg_event_", "") %>%
-  group_by(isin, date)
-
-negative_index_events = negative_index_events_mean %>%
-  left_join(negative_index_events_mean %>% filter(type == '0') %>% select(isin,date,"mean" = amount), by = c("isin","date")) %>%
-  mutate(amount = ifelse(is.na(amount), 0, amount)) %>%
-  mutate(relative_events = amount/mean) 
-
 negative_index_all = negative_index %>%
-  left_join(negative_index_events %>% select(isin,date,type,relative_events), by = c("isin","date","type")) %>%
   mutate(type = factor(type, levels = c("-10", "-9","-8","-7","-6","-5","-4","-3","-2","-1",
                                         "0", "+1", "+2","+3","+4","+5","+6","+7","+8","+9","+10"))) %>%
   arrange(isin,date,type) %>%
   group_by(isin,date)
 
-remove(negative_index_events_mean,negative_index_events)
+
 
 ### 10 days around the event: 
 
@@ -487,23 +472,19 @@ positive_index_10_sensi = positive_index_all %>%
     SE_CAAR = sd(csum, na.rm = TRUE)/sqrt(n())
     )
 
-negative_index_10_sensi = negative_index_all %>% 
+negative_index_10_e = negative_index_all %>% 
   mutate(csum = cumsum(value)) %>%
   group_by(type) %>%
   summarise(
-    rel_events = mean(relative_events, na.rm = TRUE),
-    AAR = weighted.mean(value,MKT_CAP),
-    CAAR = weighted.mean(csum, MKT_CAP),
-    sd = sd(csum, na.rm = TRUE),
-    n = n(),
-    SE_AAR = sd(value, na.rm = TRUE)/sqrt(n()),
-    SE_CAAR = sd(csum, na.rm = TRUE)/sqrt(n())
+    AAR = mean(value),
+    CAAR = mean(csum),
+    mkt = mean(MKT_CAP)
     )
 
 
 
 positive_index_10_sensi %>% select(type, "AAR_sens" = AAR, "CAAR_sens" = CAAR) %>%
-  left_join(positive_index_10 %>% select(type,AAR,CAAR), by ="type") %>%
+  left_join(negative_index_10_2sd %>% select(type,AAR,CAAR), by ="type") %>%
   pivot_longer(!type, names_to = "metric", values_to = "ret") %>%
   mutate(
     weight = 
@@ -529,20 +510,20 @@ ggsave("ST_positive_sensitivity_weight.png")
 
 
 
-negative_index_10_sensi %>% select(type, "AAR_sens" = AAR, "CAAR_sens" = CAAR) %>%
-  left_join(negative_index_10 %>% select(type,AAR,CAAR), by ="type") %>%
+negative_index_10_v %>% select(type, "AAR_v" = AAR, "CAAR_v" = CAAR) %>%
+  left_join(negative_index_10_e %>% select(type,AAR,CAAR), by ="type") %>%
   pivot_longer(!type, names_to = "metric", values_to = "ret") %>%
   mutate(
     weight = 
            case_when(
-             grepl("sens", metric) ~ "Equal",
-             TRUE ~ "Value"),
+             grepl("v", metric) ~ "Value",
+             TRUE ~ "Equal"),
   Metric = 
            case_when(
              grepl("C", metric) ~ "CAAR",
   TRUE ~ "AAR")) %>%
   group_by(metric) %>%
-  ggplot(aes(x = type, y = ret, colour = weight,linetype = Metric,group = metric)) + 
+  ggplot(aes(x = type, y = ret, colour = weight,linetype = Metric, group = metric)) + 
   geom_line(size=1) +
     theme_bw() +
    theme(legend.title = element_blank(),
@@ -554,8 +535,35 @@ negative_index_10_sensi %>% select(type, "AAR_sens" = AAR, "CAAR_sens" = CAAR) %
   scale_x_discrete(name = "Relative time",breaks=c("-10","-5","0","+5","+10"))
 ggsave("ST_negative_sensitivity_weight.png")
 
-dat = negative_index_10_sensi %>% select(type, "AAR_sens" = AAR, "CAAR_sens" = CAAR) %>%
-  left_join(negative_index_10 %>% select(type,AAR,CAAR), by ="type") %>% ungroup()
+
+
+negative_index_10_1sd %>% select(type,"AAR1sd" = AAR, "CAAR1sd" = CAAR) %>%
+  left_join(negative_index_10_2sd %>% select(type,"CAAR2sd" = CAAR, "AAR2sd" = AAR), by ="type") %>%
+   left_join(negative_index_10_3sd %>% select(type,"CAAR3sd" = CAAR, "AAR3sd" = AAR), by ="type") %>%
+  pivot_longer(!type, names_to = "metric", values_to = "ret") %>%
+  mutate(
+    group = 
+           case_when(
+             grepl("1", metric) ~ "1 sd",
+             grepl("2", metric) ~ "2 sd",
+             grepl("3", metric) ~ "3 sd",
+             TRUE ~ "Value"),
+  Metric = 
+           case_when(
+             grepl("C", metric) ~ "CAAR",
+  TRUE ~ "AAR")) %>%
+  group_by(metric) %>%
+  ggplot(aes(x = type, y = ret, colour = group,linetype = Metric,group = metric)) + 
+  geom_line(size=1) +
+    theme_bw() +
+   theme(legend.title = element_blank(),
+          legend.position="top",
+          legend.direction = "horizontal") +
+  scale_y_continuous(name ="Abnormal return",
+                     breaks = pretty_breaks(),
+                     labels = scales::percent) +
+  scale_x_discrete(name = "Relative time",breaks=c("-10","-5","0","+5","+10"))
+ggsave("ST_negative_sensitivity.png")
 
  
 

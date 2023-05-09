@@ -27,8 +27,8 @@ short_term_data_sdg <- betas %>%
 
 
 short_term_data_event_sdg = short_term_data_sdg %>% 
-  select(isin,date,abnormal_ret, contains("sdg")) %>% 
-  select(isin,date,abnormal_ret, contains("tive"),-c(sdg_broad_negative_count,sdg_broad_neutral_count,sdg_broad_positive_count))
+  select(isin,date,abnormal_ret,MKT_CAP, contains("sdg")) %>% 
+  select(isin,date,abnormal_ret,MKT_CAP, contains("tive"),-c(sdg_broad_negative_count,sdg_broad_neutral_count,sdg_broad_positive_count))
 
 remove(short_term_data_nested,short_term_data_sdg,sentiment_daily,data_daily)
 # Create columns that represent the lagged and leading values in relation to the event date:
@@ -123,7 +123,7 @@ se_neg_bar = short_term_return_sdg_5 %>%
   mutate(sdg = factor(sdg, levels = c("sdg 1", "sdg 2","sdg 3","sdg 4","sdg 5","sdg 6","sdg 7","sdg 8","sdg 9","sdg 10","sdg 11", 
                                         "sdg 12", "sdg 13","sdg 14","sdg 15","sdg 16","sdg 17","sdg broad"))) %>%
   select(-c(event,group)) %>%
-  pivot_longer(!c(date,isin,sdg), names_to = "period", values_to = "abnormal_ret") %>% na.omit(abnormal_ret) %>%
+  pivot_longer(!c(date,isin,sdg,MKT_CAP), names_to = "period", values_to = "abnormal_ret") %>% na.omit(abnormal_ret) %>%
   mutate(period = factor(period, levels = c("-10", "-9","-8","-7","-6","-5","-4","-3","-2","-1","0", "1", "2","3","4","5","6","7","8","9","10"))) %>%
   arrange(isin,sdg,date,period) %>%
   group_by(isin,sdg,date) %>% 
@@ -210,13 +210,13 @@ all = short_term_return_sdg_5 %>%
 
 
 t = short_term_return_sdg_5 %>%
-  filter(group == 'negative') %>%
-  mutate_at("sdg", str_replace, "_negative_count", "") %>%
+  filter(group == 'positive') %>%
+  mutate_at("sdg", str_replace, "_positive_count", "") %>%
   mutate_at("sdg", str_replace, "_", " ") %>%
   mutate(sdg = factor(sdg, levels = c("sdg 1", "sdg 2","sdg 3","sdg 4","sdg 5","sdg 6","sdg 7","sdg 8","sdg 9","sdg 10","sdg 11", 
                                         "sdg 12", "sdg 13","sdg 14","sdg 15","sdg 16","sdg 17"))) %>%
   select(-c(event,group)) %>%
-  pivot_longer(!c(date,isin,sdg), names_to = "period", values_to = "abnormal_ret") %>% na.omit(abnormal_ret) %>%
+  pivot_longer(!c(date,isin,sdg,MKT_CAP), names_to = "period", values_to = "abnormal_ret") %>% na.omit(abnormal_ret) %>%
    mutate(sdg = as.character(sdg)) %>%
    mutate(sdg = case_when(
     sdg == "sdg 1" | sdg == "sdg 2" | sdg == "sdg 3" | sdg == "sdg 4" | sdg == "sdg 5"  ~ "People",
@@ -229,7 +229,7 @@ t = short_term_return_sdg_5 %>%
   all = t %>%
     mutate(period = as.numeric(period)) %>%
   filter(period >= -5) %>%
-  filter(period <= 5) %>%
+  filter(period <= 0) %>%
   mutate(period = as.factor(period),
            sdg = as.factor(sdg)) %>%
   mutate(period = factor(period, levels = c("-10","-9","-8","-7","-6","-5","-4","-3","-2","-1","0", "1", "2","3","4","5","6","7","9","10"))) %>% na.omit() %>%
@@ -250,21 +250,19 @@ bands = all %>%
 
 all %>%
   group_by(sdg,period) %>%
-  summarise(CAAR = mean(csum),
-            AAR = mean(abnormal_ret)) %>% ungroup() %>%
+  summarise(CAAR = weighted.mean(csum,MKT_CAP),
+            AAR = weighted.mean(abnormal_ret,MKT_CAP)) %>% ungroup() %>%
   left_join(bands, by = c("sdg","period")) %>% 
   mutate(period = as.character(period)) %>%
-  filter(period == '5') %>%
+  filter(period == '0') %>%
+  mutate(sdg = factor(sdg, levels = c("People","Planet","Prosperity","Peace","Partnership"))) %>%
   ggplot(
     aes(x = sdg, y = CAAR, color= sdg,group = sdg, fill = sdg)) + 
   geom_bar(stat="identity") +
-  geom_errorbar( aes(x=sdg, ymin=CAAR-CI, ymax=CAAR+CI), colour = "orange", width=0.5, alpha=0.8, size=0.7)
-
-
-+ 
+  geom_errorbar( aes(x=sdg, ymin=CAAR-CI, ymax=CAAR+CI), colour = "orange", width=0.5, alpha=0.8, size=0.7) + 
   scale_y_continuous(name ="Abnormal return",
                      labels = scales::percent) +
-  labs(x = "SDG group") +
+  labs(x = "Five Pillars of SDGs") +
   theme(legend.title = element_blank(),
         legend.key.size = unit(0.5, 'cm'),
         axis.text.x = element_text(angle=45))+
@@ -495,5 +493,25 @@ sigma.x = se_neg_0[[2]],
 conf.level = 0.95
 )
 
+
+
+
+negative_index %>% 
+  mutate(type = as.numeric(as.character(type))) %>%
+  #filter(type >= -5) %>%
+  filter(type == 0) %>%
+  arrange(date,isin,type) %>%
+  mutate(csum = 100*cumsum(value)) %>%
+  filter(type == '0') %>% 
+  ungroup() %>%
+  summarise(sd = sd(csum, na.rm = TRUE),
+            mean = weighted.mean(csum,MKT_CAP))
+   
+ 
+  
+
+sqrt(170)
+
+(-0.1383149		 -0)/(6.197935			/13.038)
 
 ```
