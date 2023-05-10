@@ -686,7 +686,7 @@ positive = positive_index_10 %>%
 
 
 
-negative_index_10 = negative_index_all %>%
+negative_index_10 = negative_index_all %>% 
   left_join(ESG_RR, by = "isin") %>%
   mutate(csum = cumsum(value)) %>%
   group_by(type,ESG_risk_category) %>% na.omit() %>%
@@ -712,7 +712,7 @@ negative = negative_index_10 %>%
      high = ret + 1.96*SE
    )
 
-negative %>% filter(metric == 'CAAR') %>% mutate(ESG_risk_category = factor(ESG_risk_category, levels = c("Low", "Medium","High"))) %>%
+negative %>% filter(metric == 'CAAR') %>% mutate(ESG_risk_category = factor(ESG_risk_category, levels = c("Low", "Medium","High"))) %>% 
     group_by(ESG_risk_category) %>%
     ggplot(aes(x = type, y = ret,colour = ESG_risk_category, group = ESG_risk_category)) +
     geom_ribbon(aes(ymin = low, ymax = high, fill = ESG_risk_category),
