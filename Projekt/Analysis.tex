@@ -1,38 +1,18 @@
 
 \subsection{Short term investor reaction} 
-To answer hypothesis \#1, \#2, and \#3 along with sub hypothesis, I assess the statistical significance of the cumulative average abnormal returns over a window of 21 days around all identified event dates of negative or positive news from section \ref{ST_results}. The hypothesis for short term performance addressed the immediate investor reaction to events by using the Market Model to estimate abnormal returns. 
+To answer the hypothesis 1, that focus on the short term, and to provide intuition from the sub-questions, I assess the statistical significance of the cumulative average abnormal returns over a window of 21 days around all identified events of negative or positive news in section \ref{ST_results}. The hypothesis for short term performance addressed the immediate investor reaction to events by using the Market Model to estimate abnormal returns. \\
 
-\subsubsection{Negative news }
+The significance of the results from the Market Model in relation to negative and positive events are summarised with a z-test. The test statistic is computed and compared to its assumed distribution under the null hypothesis that the abnormal return is zero. I use a z-test since the sample size per event day is larger than 30. The z-scores and significance complementary to the AAR on $t=0$ and the CAAR on 5 and 10 days around the event are presented in table \ref{tab: ST_neg_significance} for negative news and table \ref{tab: ST_pos_significance} for positive news.  
 
+\subsubsection{The impact of SDG news on stock prices }
 
-The significance of the results in relation to negative and positive events are summarised with a z-test. The test statistic is computed and compared to its assumed distribution under the null hypothesis that the average abnormal return is zero. I use a z-test since the sample size per event day is larger than 30. The z-scores and significance complementary to the AAR on $t=0$, along with the CAAR on respectively, two, five, and 10 days around the event are presented in table \ref{tab: ST_neg_significance}.   
+The null hypothesis assumes that the market does not react to news related to SDGs on the short horizon. Any significant deviation from the expected returns indicates that SDG news has an observable effect on firm's stock prices.  Rejecting the null means accepting the alternative hypothesis that the short term abnormal return is different from zero, meaning that investors react immediately to news. \\
+ 
+Table \ref{tab: ST_neg_significance} shows that negative SDG disclosures impact firm's market value adversely both on the event date, and with a 10 and a 21 day event window. In support of hypothesis 1.a the cumulative abnormal return is $-1.56\%$ throughout the 21-day event window. The magnitude of the impact is high and significantly lower than zero at the 1\% level. Hence, I reject the hypothesis stating that negative events have no impact on abnormal returns, and accept the alternative that negative events are concurrent with negative abnormal returns on average. 
 
-The null hypothesis assumes that the market does not react to negative news. \\ 
-$H_1:$ \textit{Negative news related to the SDGs does not have a short term impact on firm' market value} \\
-Rejecting the null would necessarily imply that we accept the alternative hypothesis, $H_{1,A}$ that the short term abnormal return is different from zero, meaning that investor react immediately to negative news. 
+For positive news the cumulative abnormal average change in firm's market value around a 10 and 21-day event window is positive, however highly insignificant. With a CAAR of 0.07\% throughout the full event window, I cannot reject the null hypothesis, which indicates that positive news related to the SDGs does not have a short term impact on firm's market values. However, the AAR on the event date is 0.08\% which is significant on the 5\% level. Thus, positive news are rewarded on the event date, but there is no general pattern in the days around an event.  
 
-Rejection of the null would require the Market Model to generate abnormal returns statistically different from zero. Abnormal returns were measured as the cumulative average abnormal returns over the event window covering 10 days before and 10 days after an event has occurred. 
-
-The development in CAAR and AAR was illustrated in section \ref{sec: st_negative}. We saw a downtrend in the CAAR after $t = -5$. The full sample CAAR ends at $-1.5\%$, which is significantly lower than zero at the 1\% level. Thus, I can reject the $H_1$ of no abnormal returns coinciding with a negative event, and accept the alternative hypothesis. 
-
-In general the combination of the Market Model and the event study methodology seems to resemble a good measure of abnormal returns in relation to negative news events. As mentioned, the average abnormal returns are hovering around the level of 0\% in the first five days of the window and again after the event has occurred at $t = 0$, implying that the realized returns are approximately as the expected returns from the Market Model on average. 
-
-Likewise, the event study methodology works adequately at identifying negative events from news, as an evident investor reaction is recognized through the abnormal returns. However, the reaction materializes ahead of the identification of events, which is an unfavorable feature of the model selection procedure. This occurs since the underlying data-set captures the amount of times a given firm has been mentioned in news articles globally, upon which the identification procedure is based on detecting the biggest events exclusively. Hence, the procedure will not be able to catch the "breaking news" where, intuitively, some of the early investor reactions will be present. Such early reactions are apparent in the results as the largest drawdowns happens between $t = -5$ and $t = 0$, which implicate that the short term model setup is not capable of generating abnormal profits.  \\
-The results from the sensitivity analysis implies that applying more weight to smaller firms decrease the abnormal returns. The discrepancy originates from larger firms receiving more media attention in general. The identification is based on news spikes of firms relative to their mean so in theory all events should be equally valid, however being mentioned 500 times in the news on a given day reaches a lot more investor reaction than being mentioned 30 times even though the firm's mean value is 10. The investor reaction is earlier for the value-weighted portfolio as a possible result from news about large firms reaching investors faster than for small firms. 
-
-Moreover, the tightening of the identification rule for events decreases the abnormal returns. This is an unintuitive results as one would expect the abnormal returns to increase when the magnitude of the negative events increases. Tightening the threshold for events to be valid works as a proxy for increasing the amount of small firms, measured by a decrease in average market capitalization. Large firms have a general high level of media exposure, indicating that a 2- or 3-standard deviation move will happen very rarely, as expected. Firms with less media exposure have a low mean value, implying that a 2-standard deviation move will be easier to obtain, given the assumption that these firms only obtain media attention when the news are highly negative. 
-
-\subsubsection{Re}
-
-
-
-
-
-\textbf{How well does the Market model capture the returns? Quite well, as the AR drifts around zero from -10 to -5 and from 5 and onwards. }
-
-\textbf{How well does the event model capture the events? Not tradable, since the return effect comes before the event is captured. However, it clearly captures some events, as per the significant reactions. }
-\textbf{The equal weighted portfolio favors small stocks and consequently also generates higher returns. No! }
-
+Accordingly, shareholders seem to penalize negative corporate responsibility in relation to SDGs, while they do not really reward positive behaviors. 
 
 \begin{table}[H]
 \centering
@@ -41,11 +21,11 @@ Moreover, the tightening of the identification rule for events decreases the abn
   \hline  \hline
   & \multicolumn{1}{c}{Overall} &  \multicolumn{1}{c}{Low} & \multicolumn{1}{c}{Medium} & \multicolumn{1}{c}{High}\\  
  \hline
-$AAR_{t=0}$ &   $\underset{(-3.509)}{-0.400^{***}}$ &   $\underset{(-4.480)}{-0.650^{***}}$ &   $\underset{(-3.411)}{-0.390^{***}}$ &   $\underset{(-0.291)}{-0.138 }$ \\
+$AAR_{t=0}$ &   $\underset{(-3.51)}{-0.40^{***}}$ &   $\underset{(-4.48)}{-0.65^{***}}$ &   $\underset{(-3.41)}{-0.39^{***}}$ &   $\underset{(-0.29)}{-0.14 }$ \\
 
-$CAAR_{[-5;+5]}$  &  $\underset{(-5.457)}{-1.100^{***}}$ &   $\underset{(-6.720)}{-2.251^{***}}$ &   $\underset{(-3.704)}{-1.019^{***}}$ &   $\underset{(0.060)}{0.035}$ \\ 
+$CAAR_{[-5;+5]}$  &  $\underset{(-5.46)}{-1.10^{***}}$ &   $\underset{(-6.72)}{-2.25^{***}}$ &   $\underset{(-3.70)}{-1.02^{***}}$ &   $\underset{(0.06)}{0.04}$ \\ 
 
-$CAAR_{[-10;+10]}$    & $\underset{(-5.702)}{-1.558^{***}}$ &   $\underset{(-8.460)}{-4.014^{***}}$ &   $\underset{(-3.138)}{-1.160^{***}}$ &   $\underset{(0.455)}{0.348}$ \\ 
+$CAAR_{[-10;+10]}$    & $\underset{(-5.70)}{-1.56^{***}}$ &   $\underset{(-8.46)}{-4.01^{***}}$ &   $\underset{(-3.14)}{-1.16^{***}}$ &   $\underset{(0.46)}{0.35}$ \\ 
    \hline \hline
    \multicolumn{5}{p{12cm}}{ \footnotesize $^* \; p\; <\; 0.1$, $ ^{**} \; p\; <\; 0.05$, $ ^{***} \; p\; <\; 0.01$  } \\
    \multicolumn{5}{p{13cm}}{\footnotesize The tables shows the CAAR and associated t-value related to positive and negative events over an event window of 10, and 21 days surrounding the event date along with the AAR on $t=0$. Negative events consists of 1046 observations. } \\
@@ -54,17 +34,89 @@ $CAAR_{[-10;+10]}$    & $\underset{(-5.702)}{-1.558^{***}}$ &   $\underset{(-8.4
 \label{tab: ST_neg_significance}
 \end{table}
 
+The findings are in line with most of the previous literature. \cite{Blancard_ESG_sentiment} and \citep{kruger2015corporate} finds similar evidence of a short term pessimistic market reaction from negative news. \citeauthor{Blancard_ESG_sentiment} finds a slightly positive abnormal return for positive events as well, whereas \citeauthor{kruger2015corporate} finds an ambivalent association that depends on the quality of the relation between the firms and their stakeholders. \cite{fisher2011voluntary} even find that companies which make ESG-positive announcement are penalized by shareholders since such actions are in conflict with firm value maximization. The distinction between the results may stem from the event methodology, as I gather all types of news related to SDGs, which may in fact be value maximizing. 
 
-\subsubsection{Positive news}
+In general the combination of the Market Model and the event study methodology resemble a good measure of abnormal returns in relation to negative news. The AAR is hovering around the level of 0\% in the first five days of the window and again after the event has occurred at $t = 0$, implying that the realized returns are approximately as the expected returns from the Market Model on average.   
+
+\begin{table}[H]
+\centering
+\caption{Positive news: AAR and CAAR (in \%) on overall and ESG risk level} 
+\begin{tabular}{ccccc}
+  \hline  \hline
+  & \multicolumn{1}{c}{Overall} &  \multicolumn{1}{c}{Low} & \multicolumn{1}{c}{Medium} & \multicolumn{1}{c}{High}\\  
+ \hline
+$AAR_{t=0}$ &  $\underset{(2.12)}{0.08^{**}}$ & $\underset{(0.16)}{0.00}$ & $\underset{(2.77)}{0.15^{***}}$ &  $\underset{(-0.36)}{-0.05}$ \\ 
+$CAAR_{[-5;+5]}$  & $\underset{(0.75)}{0.09}$ &  $\underset{(-1.66)}{-0.26^{*}}$ &  $\underset{(2.28)}{0.39^{**}}$ &  $\underset{(-1.25)}{-0.44}$ \\ 
+$CAAR_{[-10;+10]}$    & $\underset{(0.46)}{0.07}$ &  $\underset{(-2.29)}{-0.48}$ &  $\underset{(2.90)}{0.47^{***}}$ &  $\underset{(-0.80)}{-0.34}$ \\ 
+    \hline \hline
+   \multicolumn{5}{p{10cm}}{ \footnotesize $^* \; p\; <\; 0.1$, $ ^{**} \; p\; <\; 0.05$, $ ^{***} \; p\; <\; 0.01$  } \\
+   \multicolumn{5}{p{10cm}}{\footnotesize The tables shows the CAAR and associated t-value related to positive and negative events over an event window of 5, 10, and 21 days surrounding the event date along with the AAR on $t=0$. Positive and negative events consists of, respectively, 3564 and 1046 observations. } \\
+   \hline
+\end{tabular}
+\label{tab: ST_pos_significance}
+\end{table}
+
+Likewise, the event study methodology works adequately at identifying negative events from spikes in news, as an evident investor reaction is recognized through the abnormal returns. However, the reaction materializes ahead of the identification of events, which is an unfavorable feature of the model selection procedure. This occurs since the underlying data-set captures the amount of times a given firm has been mentioned in news articles globally - not the actual time of an specific event - upon which the identification procedure is based on detecting the biggest events based on volume. As a results, the methodology may not capture the initial market response to "breaking" news, which is typically reflected in early investors reactions. Such early reactions are apparent in the graphs, demonstrated by the large drawdowns between $t = -5$ and $t = 0$. The incremental increases in the bars from $t=-6$ preceding an event indicates that the initial "breaking" news may be published around five or six business days before the spike in news actually happens, which is harmonious with the observed investor reaction.  \\
 
 
-\textbf{Which risk factors are driving long term portfolio returns?}
-\textbf{Does the amount of firms in the portfolio have an impact on the results?}
-\textbf{How well does the Market model capture the returns? Quite well, as the AR drifts around zero from -10 to -5 and from 5 and onwards. }
-\textbf{How well does the event model capture the events? Not tradable, since the return effect comes before the event is captured. However, it clearly captures some events, as per the significant reactions. }
-\textbf{The equal weighted portfolio favors small stocks and consequently also generates higher returns. }
+The benefits from the sensitivity analysis are two-fold. First and foremost, the results validate the robustness of the initial results. Second, they can broaden our understanding of the relation between news and returns. \\
+Section \ref{sec: sens_st_weights} demonstrates that applying more weight to smaller firms, through an equal-weighted portfolio, decrease the abnormal returns. The discrepancy may originate from larger firms receiving more media attention with in-depth news on corporate behavior. With greater news coverage the stock price effect may be more severe due to 1; reaching a larger potential investor base and 2; investors receiving comprehensive and more detailed information. Such results are in contrast to \cite{tetlock_sentiment}, who finds a larger price impact on small stocks from negative sentiment due to the behavior of individual investors. 
+
+Moreover section \ref{sec: sens_st_sd} established how restraining the identification rule - from one to two and three standard deviations - for events decreased the abnormal returns. Intuitively, we would expect the abnormal returns to increase to the downside when the magnitude of the negative events increases. However, the day-zero abnormal return is larger from more severe events. \\
+
+There is no theoretical underpinnings of the result and it appears to be mostly an empirical issue. However, tightening the threshold does work as a proxy for increasing the amount of small firms,  as measured by a decrease in the average market capitalization of the portfolio. As stipulated, large firm are assumed to have a general higher level of media exposure, indicating that a 2- or 3-standard deviation event will only happen when extreme events are taking place. Firms with less media exposure on a daily basis have a low mean value, implying that a 2-standard deviation move will be easier to obtain.  
 
 
+\subsubsection{News related to specific SDGs}
+
+The question in focus is whether specific dimensions of social responsibility are more important than others to shareholders in the short horizon. As figure \ref{fig:ST_neg_bar} and \ref{fig:ST_pos_bar} illustrates, negative news related to Prosperity, Peace, and Partnership are associated with significantly, pessimistic market reactions, while no single Pillar for positive news is associated with significant abnormal returns. With such results and that the focus of most other research has been with negative events, I will place more emphasis to negative events. \\
+
+For negative news People is the only Pillar with a positive CAAR (3.4\%).  Social corporate behavior might be difficult to quantify as the theme is related to SDG 1 (No Poverty), 4 (Quality Education) and 5 (Gender Equality) among others. Hence, immoral acts in this relation may be more visible through consumer actions rather than short term investor reactions. The positive investor reaction from negative news is contradictory compared to other studies. For example \cite{chen2001layoffs} find an abnormal return of -1.2\% from social interactions. The reaction from positive news is close to non-existing. 
+
+The short term reaction from negative news on "Planet" is less severe than one may expect, given it incorporates themes such as clean water and climate action, which has received much public attention in the 21st century. \cite{karpoff2005reputational} finds that the average legal penalty for environmental violations is 2.26\% with the market penalty being approximately of the same magnitude. With a CAAR from negative news of less than 0.2\% a clear distinction is present. 
+
+Negative news related to Prosperity generates a significant, negative CAAR of 0.6\%, whereas for positive news it is insignificant with an value of around 0.1\%. The Prosperity Pillar is mostly driven by SDG 7 (Affordable and Clean Energy) and 8 (Decent work and Economic Growth) which account for 70\% of the volume in events. The data does not provide information on the contents of the news, however events within these themes may focus on sustainable development and whether firms keep up with the Paris Agreement. The necessary global transition to sustainable energy sources is accompanied with increased investor attention on climate risk as a systematic risk. Companies that doesn't live up to climate goals are not necessarily penalized from a financial perspective, however they bear the risk of being black-listed by institutional investors with high ESG portfolio requirements, which as an isolated event is expected to increase divestments further \cite{dell2021norwegian}. 
+
+
+\textbf{Peace}
+
+
+The Partnership Pillar consists only of SDG 17 (Partnerships for the Goals). The SDG in itself is relatively vague, as the main message is to strengthen the implementation of global partnerships. However, negative news related to the SDG are on average associated with negative abnormal returns of -1.1\%. The catalyst behind these events lies in the discovery that some firms, proclaiming to be sustainable in diverse aspects, are revealed to be operating immorally. Such strategies, commonly referred to as 'green-washing,' are disapproved of by activist groups and seemingly also penalized in financial markets, if discovered. As a feature of the database, news about green-washing is related to SDG 17, which seems to be the main driver of the negative returns. \cite{Blancard_ESG_sentiment} backs up the argument, but also note that successful green-washing can help mediate the financial penalties from adverse ESG events.  
+
+
+Whether specific SDGs are more important for shareholders is clearly dependent on the category of the news. Positive news related to the 5 P's does not generate abnormal returns in any instance, although Planet and Prosperity comes close to being significant. Hence, I conclude that the average impact from positive news is similar and not different from zero whether it concerns People, Planet, Prosperity, Peace, or Partnership. On the other hand, abnormal returns related to negative news involving the 5 P's are varying to a higher degree. For Prosperity, Peace and Partnership the returns are significant, hence it appears that shareholders attach more importance to sustainability goals within these themes.   
+
+\subsubsection{Impact of ESG risk reputation}
+
+Generalizing how stock returns are behaving to general and specific SDG news provide a good empirical understanding of how investors integrate corporate sustainability in their decision making. However, companies are facing different issues and have different risks toward ESG, hence external pressure might vary accordingly. The literature on the effect of reputation is inconclusive. On the one hand, some argue that a history of strong corporate responsibility will serve as a protective shield in gloomy times, meaning that firms with a good reputation will experience a lower decrease of market value from negative ESG news. On the other hand, high-graded firms will face increased public inquiries from failing to sustain their outlook. The results from \cite{flammer2013corporate} suggest that shareholders of firms with stronger history of environmental performance react less pessimistic to eco-harmful behavior.
+
+
+
+The illustrations from figure \ref{fig:ST_neg_ESG} are in contrast with such claims. The results from the graph are concretized in table \ref{tab: ST_neg_significance} with significance levels of 5 and 10 day CAAR, and they suggest that firms with low ESG risk are penalized relatively harder after negative events compared to medium and high risk-firms. As a natural characteristic of the rating, firms with low ESG risk are expected to avoid negative events related to corporate sustainability. Hence, if they do appear in such circumstances the penalty will be relatively harder. This is perhaps a simple share price-adjustment. For example, a low-risk company may have a high valuation based on their rating or history, meaning investors need to adjust their future expectations of the company through the share price. A penalty is imminent, however the market value correction may only be larger in absolute terms and not in relative terms compared to higher risk groups. \cite{baron2009positive} explains the phenomena as a social pressure from citizen preferences with credible threats of divestment if firms do not live up to their reputation. Moreover, my results show that firms with high ESG-risk are encountering no change in market value from negative news. As investors react to events by adjusting their expectations, which for high-risk firms transpire into no reaction on average as negative events may be priced into the expectations for high risk firms. Medium ESG-risk firms are experiencing negative abnormal returns, however less negative than do low-risk firms, which seems on par with an average investor reaction.   
+
+The reaction to positive news is less clear cut. Medium risk firms experience abnormal returns from positive events, as expected, while low risk firms bear negative abnormal returns. I find no theoretical underpinnings for the distinction in abnormal returns between the two groups in the literature. As mentioned, positive ESG announcements are found to be followed by negative abnormal returns \cite{fisher2011voluntary}, which is a reasonable explanation for the development in the low risk group. 
+
+Overall, I find a clear distinction between ESG-risk levels of companies and their abnormal returns from news related to the SDGs. Thus, the investor reaction to SDG-related news is dependent on the ESG risk of a company on average. 
+
+
+\subsection{Long term}
+
+Hypothesis 2: Positive and negative news related to the SDGs does not have a long term impact on firms’ market values.
+
+To test hypothesis 2# of whether news related to the SDGs have a long term impact of firm's market values, I assess the statistical significance of the alpha generated from portfolios holding firms that have experienced a positive or negative event. 
+
+
+
+
+\textbf{In this regard, I will review
+whether the potential impact of SDG-related news on short and long term market values
+is independent of which specific SDG the news are related to - i do not analyze this question since the data availability is too low.}
+
+
+
+\textbf{By splitting the analysis on the basis of firms’
+ESG risk profile, I can investigate whether the impact of SDG-related news on short and
+long term market values is dependent on the level of ESG risk of the company.}
 
   However, the amount of firms in the portfolios does also have implication for the validity of the alpha, as the results indicate that the numerical value of the alpha is not a sole determinant of whether abnormal performance has been detected. A reason could be that a low amount of average firms , e.g. 5 ($T = 1$ and 3 sd), 
 
@@ -78,24 +130,6 @@ A strict event criteria of 3 SDs presents relatively large negative alphas
 
 
 
-
-
-
-
-
-Hypothesis 1: \textit{Negative news related to the SDGs does not have a short term impact on firm' market value.
-}
-Hypothesis 1a: \textit{A potential impact is independent on which SDG the news are related to.}  
-Hypothesis 1b: \textit{The potential impact is independent on the firm's level of ESG risk.}
-
-Hypothesis 2: \textit{Positive news related to the SDGs does not have a short term impact on firm' market value.}
-Hypothesis 2a: \textit{A potential impact is independent on which SDG the news are related to.}  
-Hypothesis 2b: \textit{The potential impact is independent on the firm's level of ESG risk.}
-
-Hypothesis 3: \textit{The short term impact of news related to SDGs on firms' market value is equivalent for negative news and positive news.}
-
-
-\subsection{Long term}
 
 \textbf{Which risk factors are driving long term portfolio returns?}
 
