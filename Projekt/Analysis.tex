@@ -1,6 +1,6 @@
 
-\subsection{Short term investor reaction} 
-To answer the hypothesis 1, that focus on the short term, and to provide intuition from the sub-questions, I assess the statistical significance of the cumulative average abnormal returns over a window of 21 days around all identified events of negative or positive news in section \ref{ST_results}. The hypothesis for short term performance addressed the immediate investor reaction to events by using the Market Model to estimate abnormal returns. \\
+\subsection{Short term investor reaction} \label{sec: short_term_analysis}
+To answer hypothesis 1 and provide intuition to the sub-questions, I assess the statistical significance of the cumulative average abnormal returns over a window of 21 days around all identified events of negative or positive news in section \ref{ST_results}. The hypothesis for short term performance addressed the immediate investor reaction to events by using the Market Model to estimate abnormal returns. \\
 
 The significance of the results from the Market Model in relation to negative and positive events are summarised with a z-test. The test statistic is computed and compared to its assumed distribution under the null hypothesis that the abnormal return is zero. I use a z-test since the sample size per event day is larger than 30. The z-scores and significance complementary to the AAR on $t=0$ and the CAAR on 5 and 10 days around the event are presented in table \ref{tab: ST_neg_significance} for negative news and table \ref{tab: ST_pos_significance} for positive news.  
 
@@ -99,14 +99,32 @@ The reaction to positive news is less clear cut. Medium risk firms experience ab
 Overall, I find a clear distinction between ESG-risk levels of companies and their abnormal returns from news related to the SDGs. Thus, the investor reaction to SDG-related news is dependent on the ESG risk of a company on average. 
 
 
+
 \subsection{Long term}
 
-Hypothesis 2: Positive and negative news related to the SDGs does not have a long term impact on firms’ market values.
+The long term hypothesis aims to answer whether SDG-related news are associated with negative effects on market value in the long run. I apply the Calendar Time Portfolio approach and use the Fama-French 5 factor model to examine possible abnormal returns. The empirical analysis is made with a focus on general news and with a partition on the level of ESG-risk a company faces.  
 
-To test hypothesis 2# of whether news related to the SDGs have a long term impact of firm's market values, I assess the statistical significance of the alpha generated from portfolios holding firms that have experienced a positive or negative event. 
+\textbf{a.}  Negative news related to the SDGs does not have a long term impact on firm's market values.
+\textbf{b.}  Positive news related to the SDGs does not have a long term impact on firm's market values.
+
+\subsection{Broad sustainability news and alpha}
+
+To test hypothesis $2\#$ of whether news related to the SDGs have a long term impact of firm's market values, I assess the statistical significance of the alpha generated from portfolios holding firms that have experienced a positive or negative event. The hypothesis was split in two; part "a" involved negative news. while part "b" focused on positive news. 
+
+With significant monthly alphas of, respectively, -0.84\% and -0.36\% from negative news-portfolios with holding periods of 1 and 4 months, I reject hypothesis 2.a as negative news related to the SDGs have a long term adverse impact on firms' market values on average.   
+
+From an efficiency perspective the market should react instantly and adjust expectations to new information becoming available. This view is in line with the short term results from section \ref{sec: short_term_analysis}. Post-event long term return anomalies are generally an indication of reactions from an inefficient market. However, the methodology in this study applies significant spikes in news articles as a measure of events, indicating that a specific event date may not necessarily reveal the full context of a news story. Hence, post-event continuation of abnormal returns could be a reaction to more information about the specific events becoming available to the market. Although, such circumstances can result in overreaction as well as underreaction to the initial response, which is an argument from \cite{fama1998_events} to support the efficient market hypothesis.   
+
+The portfolios based on positive events does not generate significant alpha across any of the holding periods. Hence, I cannot reject the hypothesis that positive news related to the SDGs does not have a long term impact on market values. 
 
 
 
+The sensitivity analysis altered the initial models by, separately, using equal weights instead of value weights in the portfolios and by changing the event rule from one to two and three standard deviations. 
+
+
+
+Sensitivity:
+- equal
 
 \textbf{In this regard, I will review
 whether the potential impact of SDG-related news on short and long term market values
