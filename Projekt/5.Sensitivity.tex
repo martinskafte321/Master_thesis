@@ -2,7 +2,7 @@
 
 In this section I will examine the robustness of the results by altering the model variables or event requirements and re-estimate the results, as it is important to cross-validate that a potential appearance of over-performance is not created artificially. Thus, the practice can lead to validation or invalidation along with advancement of model specifications. 
 
-\subsection{Market model: event specification}
+\subsection{Market model: event specification} \label{sec: sens_st_sd}
 The requirement rule for event identification is based on the magnitude of events in relation to the average event for the individual firm. Thus, it seems plausible that an increase in the tightness of the requirement rule will lead to higher abnormal returns in absolute values.  
 To address the issue I test whether the short term abnormal returns are sensitive to the methodology in specifying individual events. Specifically, I re-estimate the models with a requirement stating that the events should be more than, respectively, two and three standard deviations from the average event. A tighter event specification determine that fewer stocks will be included in the model as less events will be regarded as important. Consequently, the events included should be more negative or positive with a stricter rule. 
 
@@ -23,7 +23,7 @@ The two new models based on negative events are compared to the original results
 
 
 
-\subsection{Market model: value vs. equal weights}
+\subsection{Market model: value vs. equal weights} \label{sec: sens_st_weights}
 
 A portfolio of stocks needs to be weighted in order to determine the relative impact the individual constituents have on the performance of the portfolio. Throughout the paper the portfolio weights have been based on the relative market capitalization of the firms - also known as value weights. Table \ref{tab:ST_sensitivity_weights} compares the performance of the value weighted portfolio against an equal weighted. The portfolios hold the same firms, however with different weights, and are based on the same identified events. Again, the results from using equal weights show that none of the portfolio returns, associated with positive events, are significant. 
 
@@ -51,33 +51,6 @@ The sensitivity of returns in relation to the weights used in calculating portfo
 
 Table \ref{tab: FF5_neg_sensi_weights} reports the alphas, t-values and significance levels of equally weighted portfolios. Besides the weights, the portfolio construction is identical to that from the empirical results in section \ref{sec: long_term_portfolio}. The results clearly indicate a discrepancy between value and equal weights with the latter generating higher absolute alpha values. For example, the value weighted portfolio with SD = 2 and T = 1 generated an insignificant alpha of -0.47, while the equivalent equal weighted portfolio generated an alpha of -0.94 significant on the $1\%$ level.   
 
-\setlength{\tabcolsep}{15pt}
-\begin{table}[H]
-\small
-\centering
-\caption{Fama-French five-factor model alpha from negative news with equal weights} 
-\begin{tabular}{cccc}
-\hline \hline \\ 
- &  &  Equal weight   &  \\ \cline{3-3}
-& & T = 1 & \\ \cline{2-3}
-& Alpha (\%) & $-0.96^{***}$  &  \\ 
-& t-value & -3.94  & \\
-& & T = 4 & \\  \cline{2-3}
-& Alpha (\%)  & $-0.70^{***}$  & \\
-& t-value  & -3.95  & \\
-& & T = 8 & \\ \cline{2-3}
-& Alpha (\%)   & $-0.64^{***}$  &  \\
-& t-value &   -4.20  & \\
-&  & T = 12 & \\ \cline{2-3}
-& Alpha (\%)  & $-0.49^{***}$ &  \\
-& t-value   & -3.71  & \\
-\hline \hline
- \multicolumn{4}{l}{ \footnotesize $^* \; p\; <\; 0.1$, $ ^{**} \; p\; <\; 0.05$, $ ^{***} \; p\; <\; 0.01$  } \\
- \multicolumn{4}{p{7cm}}{ \footnotesize Alpha is the WLS-regression intercept (in \%) of the Fama-French 3-factor model, displayed along with the corresponding t-value. N is the average amount of firms included in the portfolio each month, and T is the portfolio holding period. The threshold for event firms to be included in the portfolio is either 1,2 or 3 "SD" (standard deviations) larger than the mean.}  \\ 
-\end{tabular}
-\label{tab: FF5_neg_sensi_weights}
-\end{table}
-
 The results are in accordance with the short term sensitivity analysis on portfolio weights, where the equal weighted Market Model portfolio generated lower abnormal returns as well. As before, a potential explanation for the severity of the alphas are due to smaller stocks receiving a higher relative weight in the equal weighted portfolio. In accordance, the regression summaries report that the portfolio with SD = 1 and T = 1 is highly sensitive towards the size factor with a beta-value of 0.97. However, the negative returns of the constructed portfolios are more severe than explainable by the SMB factor, which gives rise to the alpha generation. A look-back periods of T = 8 and 12 months generate significant alpha as well,  Smaller stocks seems to be punished harder for negative news than larger stocks. However, this is not the focus of the paper. The returns of the equal weighted portfolios confirm the negative association between negative events and abnormal returns and to some degree the magnitude of the value weighted portfolio returns.
 
 
@@ -95,32 +68,28 @@ The factor models are not very sensitive to changes in the market index and the 
 \begin{table}[h]
 \small
 \centering
-\caption{Fama-French five-factor model alpha from negative news } 
-\begin{tabular}{cccccc}
+\caption{FF-5 alpha with equal weights and edit event rule } 
+\makebox[\textwidth][c] {
+\begin{tabular}{ccccccc}
 \hline \hline \\ 
-  & & 2 SD  &  & 3 SD  & \\  \cline{3-3} \cline{5-5}
- & &  & T = 1  & & \\ \cline{2-5}
- & Alpha (\%) &   -0.47 &  & -0.78  &  \\ 
- & t-value   & -1.33  & & -1.63 & \\
- & &  & T = 4  & & \\ \cline{2-5}
- & Alpha (\%)  & -0.45^{**} & &  -0.27 & \\
- & t-value & -2.12  & & -1.04  & \\
- & &  & T = 8  & & \\ \cline{2-5}
- & Alpha (\%) & -0.14 & & -0.12 &  \\
- & t-value   & -0.89 & & -0.68 & \\
-& &  & T = 12  & & \\ \cline{2-5}
- & Alpha (\%) & -0.16 & & -0.17 &  \\
- & t-value  & -1.16 &  & -0.97  & \\ \hline \hline
- \multicolumn{5}{l}{ \footnotesize $^* \; p\; <\; 0.1$, $ ^{**} \; p\; <\; 0.05$, $ ^{***} \; p\; <\; 0.01$  } \\
- \multicolumn{6}{p{11cm}}{ \footnotesize Alpha is the WLS-regression intercept (in \%) of the Fama-French 3-factor model, displayed along with the corresponding t-value. N is the average amount of firms included in the portfolio each month, and T is the portfolio holding period. The threshold for event firms to be included in the portfolio is either 1,2 or 3 "SD" (standard deviations) larger than the mean.} \\ 
+& &  Equal & & \multicolumn{2}{c}{ Value  } & \\ \cline{3-3} \cline{5-6}
+  & & (1 SD) & & 2 SD  &  3 SD  & \\   
+ & & & T = 1  & & \\ \cline{2-6}
+ &  Alpha & $-0.96^{***}$  & &  -0.47  & -0.78  &  \\ 
+ & t-value &  -3.94 &  & -1.33  & -1.63 & \\
+ & &   & T = 4  & \\ \cline{2-6}
+ & Alpha & $-0.70^{***}$ &  & $-0.45^{**}$ &  -0.27 & \\
+ & t-value & -3.95 & & -2.12  & -1.04  & \\
+ & &  & T = 8  & \\ \cline{2-6}
+ & Alpha  & $-0.64^{***}$ & & -0.14 & -0.12 &  \\
+ & t-value  & -4.20 & & -0.89 & -0.68 & \\
+& &  & T = 12  & \\ \cline{2-6}
+ & Alpha  & $-0.49^{***}$ &  & -0.16 & -0.17 &  \\
+ & t-value & -3.71 & & -1.16 &  -0.97  & \\ \hline \hline
+ \multicolumn{7}{l}{ \footnotesize $^* \; p\; <\; 0.1$, $ ^{**} \; p\; <\; 0.05$, $ ^{***} \; p\; <\; 0.01$  } \\
+ \multicolumn{7}{p{12cm}}{ \footnotesize Alpha is the WLS-regression intercept (in \%) of the Fama-French 5-factor model, displayed along with the corresponding t-value. N is the average amount of firms included in the portfolio each month, and T is the portfolio holding period. The threshold for event firms to be included in the portfolio is either 1,2 or 3 "SD" (standard deviations) larger than the mean.} \\ 
  \hline
 \end{tabular}
+}
 \label{tab: FF3-neg}
 \end{table}
-
-
-
-
-
-
-
