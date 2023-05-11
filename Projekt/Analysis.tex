@@ -78,7 +78,7 @@ The short term reaction from negative news on "Planet" is less severe than one m
 Negative news related to Prosperity generates a significant, negative CAAR of 0.6\%, whereas for positive news it is insignificant with an value of around 0.1\%. The Prosperity Pillar is mostly driven by SDG 7 (Affordable and Clean Energy) and 8 (Decent work and Economic Growth) which account for 70\% of the volume in events. The data does not provide information on the contents of the news, however events within these themes may focus on sustainable development and whether firms keep up with the Paris Agreement. The necessary global transition to sustainable energy sources is accompanied with increased investor attention on climate risk as a systematic risk. Companies that doesn't live up to climate goals are not necessarily penalized from a financial perspective, however they bear the risk of being black-listed by institutional investors with high ESG portfolio requirements, which as an isolated event is expected to increase divestments further \cite{dell2021norwegian}. 
 
 
-\textbf{Peace}
+\textbf{Peace, Justice and ??} - captures corporate fraud and most cases of trails and so on. 
 
 
 The Partnership Pillar consists only of SDG 17 (Partnerships for the Goals). The SDG in itself is relatively vague, as the main message is to strengthen the implementation of global partnerships. However, negative news related to the SDG are on average associated with negative abnormal returns of -1.1\%. The catalyst behind these events lies in the discovery that some firms, proclaiming to be sustainable in diverse aspects, are revealed to be operating immorally. Such strategies, commonly referred to as 'green-washing,' are disapproved of by activist groups and seemingly also penalized in financial markets, if discovered. As a feature of the database, news about green-washing is related to SDG 17, which seems to be the main driver of the negative returns. \cite{Blancard_ESG_sentiment} backs up the argument, but also note that successful green-washing can help mediate the financial penalties from adverse ESG events.  
@@ -89,8 +89,6 @@ Whether specific SDGs are more important for shareholders is clearly dependent o
 \subsubsection{Impact of ESG risk reputation}
 
 Generalizing how stock returns are behaving to general and specific SDG news provide a good empirical understanding of how investors integrate corporate sustainability in their decision making. However, companies are facing different issues and have different risks toward ESG, hence external pressure might vary accordingly. The literature on the effect of reputation is inconclusive. On the one hand, some argue that a history of strong corporate responsibility will serve as a protective shield in gloomy times, meaning that firms with a good reputation will experience a lower decrease of market value from negative ESG news. On the other hand, high-graded firms will face increased public inquiries from failing to sustain their outlook. The results from \cite{flammer2013corporate} suggest that shareholders of firms with stronger history of environmental performance react less pessimistic to eco-harmful behavior.
-
-
 
 The illustrations from figure \ref{fig:ST_neg_ESG} are in contrast with such claims. The results from the graph are concretized in table \ref{tab: ST_neg_significance} with significance levels of 5 and 10 day CAAR, and they suggest that firms with low ESG risk are penalized relatively harder after negative events compared to medium and high risk-firms. As a natural characteristic of the rating, firms with low ESG risk are expected to avoid negative events related to corporate sustainability. Hence, if they do appear in such circumstances the penalty will be relatively harder. This is perhaps a simple share price-adjustment. For example, a low-risk company may have a high valuation based on their rating or history, meaning investors need to adjust their future expectations of the company through the share price. A penalty is imminent, however the market value correction may only be larger in absolute terms and not in relative terms compared to higher risk groups. \cite{baron2009positive} explains the phenomena as a social pressure from citizen preferences with credible threats of divestment if firms do not live up to their reputation. Moreover, my results show that firms with high ESG-risk are encountering no change in market value from negative news. As investors react to events by adjusting their expectations, which for high-risk firms transpire into no reaction on average as negative events may be priced into the expectations for high risk firms. Medium ESG-risk firms are experiencing negative abnormal returns, however less negative than do low-risk firms, which seems on par with an average investor reaction.   
 
@@ -117,33 +115,35 @@ From an efficiency perspective the market should react instantly and adjust expe
 
 The portfolios based on positive events does not generate significant alpha across any of the holding periods. Hence, I cannot reject the hypothesis that positive news related to the SDGs does not have a long term impact on market values. 
 
+In order to verify and expand the intuition from the initial results, the sensitivity analysis altered the original models by, separately, using equal weights instead of value weights in the portfolios and by changing the event rule from one to two and three standard deviations. The outcomes are displayed in table \ref{tab: FF5_sensitivity}. Applying equal weights to portfolio allocation results in an adverse alpha for all holding periods compared to value weights. As mentioned, portfolios with equal weights naturally place more emphasis with small stocks, and the returns of small stocks tend to be more volatile and complicated to explain by factor models. Hence, with equal weights negative news drive the regression alpha lower \cite{Fama_french_3fac}. Tables \ref{tab: summary_neg_1} and \ref{tab: summary_neg_EW} show the sensitivities to the small-minus-big factor from the Fama-French regressions on the value and the equal weighted model being, respectively -0.04 and 0.51. The value weighted portfolio has approximately zero sensitivity to the returns of small stocks, whereas the equal weighted is high. Hence, higher sensitivity to small stocks is seemingly a part of the explanation to lower alphas. The change in sensitivity from changing the weighting method further indicates that the portfolio does include a variety of small firms, but their influence is suppressed when applying value weights. The intuition acts as a counterargument to what I postulated in the former subsection. However, as mentioned in section \ref{sec:method}, the time horizon plays an important role in the distinction between risk, as the adjustment for risk is of less importance in short term horizons whereas in long horizons even small errors in risk-adjustments can increase discrepancies in abnormal returns. Hence, the difficulties with estimating expected returns for small firms are of more importance in long run analysis since errors are compounded exponentially over time.  
+
+The sensitivity analysis included an altering of the event rule as well. I change the relative amount of articles required for a spike in news to be classified as a significant event from a one standard deviation move to two and three. Tightening the event rule doesn't change the results considerably, however most of the alphas become insignificant. Moreover, the amount of firms in the portfolios decrease by roughly half as the requirements are tightened by one standard deviation. For example, with T = 1 the portfolio with SD = 1 consists of 18 firms, while SD = 2 has 9 on a monthly average. Portfolios with less firms will inevitably be exposed to more idiosyncratic risks arising from the individual companies. Hence, the portfolio alpha  might be partly driven by specific risks rather than the effect from negative news. The analysis performed in this paper relies on diversification benefits from rebalancing random firms on a monthly basis as it allows to approximately isolate the effect of negative news on stock returns. Anyway, it seems the original results are representative of how the strategy performs. 
+
+\subsubsection{Impact of ESG risk reputation}
+
+\textbf{By splitting the analysis on the basis of firms’ ESG risk profile, I can investigate whether the impact of SDG-related news on short and long term market values is dependent on the level of ESG risk of the company.}
 
 
-In order to verify and expand the intuition from the initial results, the sensitivity analysis altered the original models by, separately, using equal weights instead of value weights in the portfolios and by changing the event rule from one to two and three standard deviations. The outcomes are displayed in table \ref{tab: FF5_sensitivity}. Applying equal weights to portfolio allocation 
+The analysis of the short term impact of negative news suggests that firms with low ESG-risk are penalized harder than firms with medium and high risk. The gap between low and medium risk companies does not persist on the long horizon, indicating that only the initial penalty incorporates the ESG-risk of the company. 
+Furthermore, the pattern cannot be fully generalized to inferences on longer horizons, due to the complete turnaround of alphas on high risk firms. However, the high risk portfolio has imminent issues with idiosyncratic risk as it only has 81 observations of firms experiencing an event and holds only 18 distinct firms throughout the full period, which plays an important factor in the highly negative and fluctuating alpha outcome. Ignoring the outcome of the high risk portfolio, the remaining results do to some degree indicate a pattern similar to that of the short term with negative abnormal returns.
+
+The low- and medium risk portfolios generate negative alphas of approximately the same magnitude, hence the long term abnormal returns are independent of the level of ESG-risk of firms.  
 
 
 
-Sensitivity:
-- equal
-
-\textbf{In this regard, I will review
-whether the potential impact of SDG-related news on short and long term market values
-is independent of which specific SDG the news are related to - i do not analyze this question since the data availability is too low.}
 
 
 
-\textbf{By splitting the analysis on the basis of firms’
-ESG risk profile, I can investigate whether the impact of SDG-related news on short and
-long term market values is dependent on the level of ESG risk of the company.}
-
-Looking into the risk factors  may better our understanding of how firm characteristics 
 
 
-However, the amount of firms in the portfolios does also have implication for the validity of the alpha, as the results indicate that the numerical value of the alpha is not a sole determinant of whether abnormal performance has been detected. A reason could be that a low amount of average firms , e.g. 5 ($T = 1$ and 3 sd), 
+Looking into the risk factors from ESG portfolios may better our understanding of how firm characteristics 
+
+
 
 A strict event criteria of 3 SDs presents relatively large negative alphas
 
-  ??
+??
+
 
 ??
 
