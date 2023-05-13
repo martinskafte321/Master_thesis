@@ -1,6 +1,15 @@
 
 \subsection{Data description}
 
+The potential amount of news related to sustainable development is enormous. Thousands are published every day around the globe. In order to assess what drives the financial markets and their impact on a broad portfolio, we need a large database with frequent updates. When conducting an event study, many researchers compose their database by either collecting events from archives or utilizing an existing database of comprehensive and carefully selected events. As both approaches involve using a database of hand-picked events, their observations updates infrequently, hence the data and the results are not useful in practice. \\
+In this study I use a data set provided by Matter. The company has developed a systematic collection of daily news articles from more than 150.000 media sources, which measure the amount of times a specific company has been mentioned positively, negatively, or neutrally in relation to a specific SDG or on broad level in news articles worldwide.   
+The data set is updated every day at midnight and uses artificial intelligence to relate every single news article to more than 75.000 publicly traded companies. 
+
+Consequently, the relevant events analyzed in this paper are not specified from the data set. Instead, I apply a rule-based approach to detect large spikes in news articles for individual companies. The short term analysis applies daily observations, and identifies an event as a one standard deviation move away from the mean of daily articles. The methodology produces 1.046 negative events from 155 distinct companies and 3.565 positive events from 212 companies from January 2018 to January 2023.  
+
+
+
+
 
 \subsection{Estimation methodology}
 
@@ -112,15 +121,9 @@ Generally, the short term empirical evidence demonstrate a non-verifiable relati
 
 
 
-
-
-
-
-
-
 \subsection{Long term abnormal returns: The Calendar Time Portfolio} \label{sec: long_term_portfolio}
 
-In contrast to the short term models, where the returns are measured relative to an event date, the long term portfolios are rebalanced each month and includes all firms, that have experienced an event within the T = 1/4/8/12 preceding months. The strategy resembles that T becomes the holding period for event firms. The portfolio returns are estimated over the full sample period of five years, and are evaluated by a regression on the market excess return and the factors from the Fama-French \citeyear{Fama_french_3fac} three-factor model. Full regression statistics including coefficient estimates, r-squared, and standard errors are available in Appendix X. The factor models do generally have high power in explaining the excess return risk exposure, with a r-square coefficient between 73\% to 98\% throughout the various portfolios. The portfolios which hold the least amount of firms on average generally has the lowest r-squared, which generally is a result of increased variance with less observations. The long term analysis will not include a division of news depending on which SDG the news are related to, since the monthly amount of firms in the portfolios would decrease to an extent where no intuition can be drawn from the results.   
+In contrast to the short term models, where the returns are measured relative to an event date, the long term portfolios are rebalanced each month and includes all firms, that have experienced an event within the T = 1/4/8/12 preceding months. The strategy resembles that T becomes the holding period for event firms. The portfolio returns are estimated over the full sample period of five years, and are evaluated by a regression on the market excess return and the factors from the Fama-French \citeyear{Fama_french_3fac} five-factor model using White heteroskedastic-robust standard errors. Moreover, any evidence of autocorrelation in all models' residuals has been rejected by a Breusch-Godfrey test of first-order. Full regression statistics including coefficient estimates, r-squared, and standard errors are available in Appendix X.  The factor models do generally have high power in explaining the excess return risk exposure, with a r-square coefficient between 73\% to 98\% throughout the various portfolios. The portfolios which hold the least amount of firms on average generally has the lowest r-squared, which generally is a result of increased variance with less observations. The long term analysis will not include a division of news depending on which SDG the news are related to, since the monthly amount of firms in the portfolios would decrease to an extent where no intuition can be drawn from the results.   
 
 
 \subsubsection{Negative news}
@@ -153,10 +156,10 @@ In general, all ESG types are capable of generating negative alphas. However, on
  &     & Overall &    Low  &  Medium  &  High &  \\    \cline{3-6} 
 & &  \multicolumn{3}{c}{ T = 1} & \\ \cline{2-6}
 & Alpha (\%)    & -0.84^{***} & -0.64^{**}  & -0.61  & -2.21 &  \\ 
-& t-value   & -2.97 & -2.01 & -1.35  & -1.43 &  \\
+& t-value   & -3.13 & -1.88 & -1.35  & -1.43 &  \\
 & &  \multicolumn{3}{c}{ T = 4} & \\ \cline{2-6}
 & Alpha (\%)   & -0.36^{**} & -0.23  & -0.33  &  -0.84 & \\
-& t-value &   -2.23 & -1.06 & -1.28  & -1.23 & \\
+& t-value &   -2.29 & -1.06 & -1.28  & -1.23 & \\
 & &  \multicolumn{3}{c}{ T = 8} & \\ \cline{2-6}
 & Alpha (\%)    & -0.15 & -0.01   & -0.28  & -0.27 &  \\
 & t-value &   -1.21 & -0.08  & -1.35 & -0.51 &  \\
@@ -165,7 +168,7 @@ In general, all ESG types are capable of generating negative alphas. However, on
 & t-value &    -0.86 & -0.62  & -1.23 & 0.48 &  \\
 \hline \hline
  \multicolumn{7}{l}{ \footnotesize $^* \; p\; <\; 0.1$, $ ^{**} \; p\; <\; 0.05$, $ ^{***} \; p\; <\; 0.01$  } \\
- \multicolumn{7}{p{12cm}}{ \footnotesize Alpha is the WLS-regression intercept (in \%) of the Fama-French 3-factor model, displayed along with the corresponding t-value. N is the average amount of firms included in the portfolio each month, and T is the portfolio holding period. The threshold for event firms to be included in the portfolio is either 1,2 or 3 "SD" (standard deviations) larger than the mean.} \\ 
+ \multicolumn{7}{p{12cm}}{ \footnotesize Alpha is the WLS-regression intercept (in \%) of the Fama-French 5-factor model, displayed along with the corresponding White heteroskedasticity-robust t-value. N is the average amount of firms included in the portfolio each month, and T is the portfolio holding period. The threshold for event firms to be included in the portfolio is either 1,2 or 3 "SD" (standard deviations) larger than the mean.} \\ 
  \hline
 \end{tabular}
 \label{tab: FF5_neg_ESG}
@@ -211,7 +214,7 @@ The average monthly amount of firms in the portfolios does contribute to the dis
 & t-value & 0.76 & -1.11  & 0.19 & 1.72 & \\
 \hline \hline
  \multicolumn{7}{l}{ \footnotesize $^* \; p\; <\; 0.1$, $ ^{**} \; p\; <\; 0.05$, $ ^{***} \; p\; <\; 0.01$  } \\
- \multicolumn{7}{p{12cm}}{ \footnotesize Alpha is the WLS-regression intercept (in \%) of the Fama-French 5-factor model, displayed along with the corresponding t-value. T is the portfolio holding period. The threshold for event firms to be included in the portfolio is 1 standard deviation from the mean.}  \\ 
+ \multicolumn{7}{p{12cm}}{ \footnotesize Alpha is the WLS-regression intercept (in \%) of the Fama-French 5-factor model, displayed along with the corresponding White heteroskedasticity-robust t-values. T is the portfolio holding period. The threshold for event firms to be included in the portfolio is 1 standard deviation from the mean.}  \\ 
 \end{tabular}
 \label{tab: FF5_pos_ESG}
 \end{table}
