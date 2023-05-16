@@ -517,3 +517,69 @@ sqrt(170)
 (-0.1383149		 -0)/(6.197935			/13.038)
 
 ```
+
+
+```{r}
+
+data = short_term_data_event %>% 
+  select(date,isin,"0",pos_event,neg_event) %>% 
+  select(-c(contains("pos_event_"),contains("neg_event_"))) %>%
+  filter(pos_event == 1 | neg_event == 1) %>% group_by(date) %>%
+  summarise_by_time(
+        .date_var = date,
+        .by       = "month", # Setup for monthly aggregation
+        # Summarization
+        Positive  = sum(pos_event),
+        Negative  = sum(neg_event)) %>% pivot_longer(!date, names_to = "Type", values_to = "value")
+
+
+data %>%
+  ggplot(aes(x = date, y = value, colour = Type, fill = Type)) + geom_bar(stat = "identity", alpha = 0.7) +
+  theme_bw() +
+   theme(legend.title = element_blank(),
+          legend.position="top",
+          legend.direction = "horizontal") +
+  labs(x = "Date", y = "Events") +
+  scale_x_date(date_breaks = "1 year", 
+             date_labels = "%Y")
+ggsave("event_distribution.png")
+
+
+
+data = short_term_return_sdg %>% select(isin, date, sdg,group) %>% 
+ mutate(sdg = case_when(grepl("sdg_1_", sdg) ~ "SDG 1",
+                          grepl("sdg_2_", sdg) ~ "SDG 2",
+                          grepl("sdg_3_", sdg) ~ "SDG 3",
+                          grepl("sdg_4_", sdg) ~ "SDG 4",
+                          grepl("sdg_5_", sdg) ~ "SDG 5",
+                          grepl("sdg_6_", sdg) ~ "SDG 6",
+                          grepl("sdg_7_", sdg) ~ "SDG 7",
+                          grepl("sdg_8_", sdg) ~ "SDG 8",
+                          grepl("sdg_9_", sdg) ~ "SDG 9",
+                          grepl("sdg_10_", sdg) ~ "SDG 10",
+                          grepl("sdg_11_", sdg) ~ "SDG 11",
+                          grepl("sdg_12_", sdg) ~ "SDG 12",
+                          grepl("sdg_13_", sdg) ~ "SDG 13",
+                          grepl("sdg_14_", sdg) ~ "SDG 14",
+                          grepl("sdg_15_", sdg) ~ "SDG 15",
+                          grepl("sdg_16_", sdg) ~ "SDG 16",
+                          grepl("sdg_17_", sdg) ~ "SDG 17",
+                          )
+        )
+
+data %>% group_by(sdg, group) %>%
+  mutate(sdg = factor(sdg, levels = c("SDG 1", "SDG 2","SDG 3","SDG 4","SDG 5","SDG 6","SDG 7","SDG 8","SDG 9","SDG 10","SDG 11", 
+                                        "SDG 12", "SDG 13","SDG 14","SDG 15","SDG 16","SDG 17"))) %>%
+  summarise(Events = n()) %>% 
+  ggplot(aes(x = sdg, y = Events, colour = group, fill = group )) + 
+  geom_bar(stat = "identity") +
+   theme_bw()+
+  theme(legend.title = element_blank(),
+        legend.key.size = unit(0.5, 'cm'),
+        axis.text.x = element_text(angle=45)) +
+  theme(legend.title = element_blank(),
+          legend.position="top",
+          legend.direction = "horizontal")
+ggsave("event_distribution_SDG.png")
+
+```

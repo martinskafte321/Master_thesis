@@ -101,7 +101,7 @@ for (y in 1:length(rolling_means)) {
   for (z in 1:length(SDs)) { 
 
 long_term_data_monthly <- data_monthly %>%
-  left_join(ESG_RR, by ="isin") %>% filter(ESG_risk_category == 'High') %>%
+  #left_join(ESG_RR, by ="isin") %>% filter(ESG_risk_category == 'High') %>%
   transmute(date,isin,MKT_CAP, free_float_mkt_cap,
             ret = W_RETURN, 
             norm_positive_sum = sentiment_positive_count - sdg_not_relevant_positive_count,
@@ -192,6 +192,22 @@ print(xtable(as.data.frame(emptylist_pos_2[[1]][3]),type="latex",
       include.rownames=FALSE,
       include.colnames = TRUE) %>% 
   write(file="alpha_positive_FF5_3.tex")
+
+
+
+model = lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML + RMW + CMA, weights = n, data = long_term_data_M_positive)
+acf(model$residuals, type = "correlation")
+
+summary(model)
+
+library(lmtest)
+library(sandwich)
+
+coeftest(model, vcov = vcovHC(model, type = 'HC0'))
+
+
+long_term_data_positive %>% filter(period == '-1') %>% ungroup() %>% distinct(isin) %>% rbind(
+long_term_data_negative %>% filter(period == '-1') %>% ungroup() %>% distinct(isin)) %>% distinct(isin) 
 ```
 
 ### Negative news
@@ -208,6 +224,7 @@ for (y in 1:length(rolling_means)) {
   for (z in 1:length(SDs)) { 
 
 long_term_data_monthly <- data_monthly %>%
+  #left_join(ESG_RR, by ="isin") %>% filter(ESG_risk_category == 'High') %>%
   transmute(date,isin,MKT_CAP, free_float_mkt_cap,
             ret = W_RETURN, 
             norm_positive_sum = sentiment_positive_count - sdg_not_relevant_positive_count,
@@ -267,7 +284,9 @@ long_term_data_M_negative = long_term_data_negative %>%
   # Only include the last 1 months:
   filter(period >= -i) %>% 
   group_by(date) %>%
-  summarise(ret = weighted.mean(ret,free_float_mkt_cap),
+  summarise(
+    ret = weighted.mean(ret,free_float_mkt_cap),
+    #ret = mean(ret),
             n = n_distinct(isin)) %>%
   left_join(eu_5factors_monthly, by = "date")
 
@@ -278,6 +297,8 @@ alpha_M_negative = long_term_data_M_negative %>%
              t = tidy(lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML + RMW + CMA, weights = n))$statistic[1],
              p = tidy(lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML + RMW + CMA, weights = n))$p.value[1],
             r = glance(lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML + RMW + CMA, weights = n))$r.squared,
+            ret = 100*mean(12*ret),
+            mkt = 100*mean(12*mkt_excess_ret),
              N = mean(n)) %>%
    mutate(model = paste0(i,"M_",y,"_",z))
 
@@ -289,6 +310,36 @@ emptylist_neg_1[[z]] = alpha_negative
 emptylist_neg_2[[y]] = emptylist_neg_1
 }
 
+# 
+long_term_data_M_negative %>%
+  summarise(tidy(summary(lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML + RMW + CMA, weights = n))))
+
+model = lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML + RMW + CMA, weights = n, data = long_term_data_M_negative)
+
+summary(model)
+
+library(lmtest)
+library(sandwich)
+
+coeftest(model, vcov = vcovHC(model, type = 'HC0'))
+
+lmtest::bptest(model)
+lmtest::dwtest(model)
+lmtest::bgtest(model, order = 1)
+
+library(stats)
+
+acf(model$residuals, type = "correlation")
+
+
+print(xtable(as.data.frame(test),type="latex",
+             digits=c(1,4,4,4,4,4),
+             hline.after=c(-1,0),
+             floating=FALSE,latex.environments=NULL),
+      include.rownames=FALSE,
+      include.colnames = TRUE) %>%
+  write(file="alpha_negative_summary_ESG_M.tex")
+
 print(xtable(as.data.frame(emptylist_neg_2[[5]][3]),type="latex",
              digits=c(0,4,2,3,2,0,1,1,1,1),
              hline.after=c(-1,0),
@@ -297,90 +348,6 @@ print(xtable(as.data.frame(emptylist_neg_2[[5]][3]),type="latex",
       include.colnames = TRUE) %>% 
   write(file="alpha_negative_FF5_15.tex")
 
-
-```
-
-################ 
-Parametric portfolio approach 1 week sentiment data: 
-################
-
-```{r}
-
-pp_data = long_term_data_weekly %>% select(date, isin, ret, MKT_CAP, pos_event,neg_event) %>%
-  group_by(isin) %>%
-  mutate(
-    month = date,
-    ret_excess = ret,
-    permno = isin,
-    MKT_CAP = MKT_CAP/1000000000,
-    mktcap_lag = lag(MKT_CAP)) %>%
-  na.omit()
-  
-pp_monthly_lags = pp_data %>% 
-  group_by(isin) %>%
-  transmute(isin,
-            date_5 = lead(date,5),
-            MKT_CAP) 
-
-pp_data = pp_data %>% 
-  inner_join(pp_monthly_lags,
-             by = c("isin","date" = "date_5"),
-             suffix = c("", "_5"))
-  
-data_portfolios = pp_data %>%
-  mutate(
-    momentum_lag = mktcap_lag / MKT_CAP_5,
-    size_lag = log(mktcap_lag),
-    event = neg_event
-    ) %>%
-  drop_na(contains("lag"))
-
-
-data_portfolios = data_portfolios %>%
-  group_by(date) %>%
-  mutate(
-    n = n(),
-    relative_mktcap = mktcap_lag / sum(mktcap_lag),
-    across(contains("lag"), ~ (. - mean(.)) / sd(.)),
-    ) %>%
-  ungroup() %>%
-  select(-mktcap_lag)
-
-n_parameters <- sum(str_detect(colnames(data_portfolios), "lag"))
-
-theta <- rep(1.5, n_parameters)
-
-names(theta) <- colnames(data_portfolios)[str_detect(
-  colnames(data_portfolios), "lag")]
-
-
-weights <- compute_portfolio_weights(
-  optimal_theta,
-  data_portfolios,
-  value_weighting = TRUE,
-  allow_short_selling = FALSE
-)
-
-power_utility <- function(r, gamma = 5) {
-  (1 + r)^(1 - gamma) / (1 - gamma)
-}
-
-evaluate_portfolio(weights) |>
-  print(n = Inf)
-
-
-
-
-optimal_theta <- optim(
-  par = theta,
-  compute_objective_function,
-  objective_measure = "Expected utility",
-  data = data_portfolios,
-  value_weighting = TRUE,
-  allow_short_selling = FALSE
-)
-
-optimal_theta = optimal_theta$par
 ```
 
 
@@ -466,7 +433,7 @@ short_term_data_event = short_term_data %>%
     case_when(norm_positive_sum > positive_threshold & norm_positive_sum > 10 & norm_positive_sum > 2*norm_negative_sum ~ 1,
               TRUE ~ 0),
     neg_event = 
-    case_when(norm_negative_sum > negative_threshold & norm_negative_sum > 10 & norm_negative_sum > 2*norm_positive_sum ~ 1, 
+    case_when(norm_negative_sum > negative_threshold & norm_negative_sum > 10 & norm_negative_sum > 1*norm_positive_sum ~ 1, 
               TRUE ~ 0)
     ) 
 
@@ -563,6 +530,7 @@ negative_index_10 = negative_index_all %>%
     AAR = weighted.mean(value,MKT_CAP),
     CAAR = weighted.mean(csum, MKT_CAP),
     n = n(),
+    mkt = mean(MKT_CAP),
     SE_AAR = sd(value, na.rm = TRUE)/sqrt(n()),
     SE_CAAR = sd(csum, na.rm = TRUE)/sqrt(n())
     )
@@ -590,7 +558,7 @@ negative_index_10 = negative_index_all %>%
                   aes(ymin = low, ymax = high, fill = metric),
                  alpha=0.3, linetype="dashed", show.legend = FALSE) +
     geom_line(data = ~ filter(.x, metric %in% c("CAAR", "AAR")),
-              size=1) + 
+              linewidth=1) + 
     theme_bw() +
    theme(legend.title = element_blank(),
           legend.position="top",
@@ -625,7 +593,7 @@ negative_index_10 %>% select(type,AAR,CAAR,rel_events) %>%
                  alpha=0.3, linetype="dashed", show.legend = FALSE) +
     
     geom_line(data = ~ filter(.x, metric %in% c("CAAR", "AAR")),
-              size=1) + 
+              linewidth=1) + 
     theme_bw() +
     theme(legend.title = element_blank(),
           legend.position="top",
@@ -673,7 +641,7 @@ positive = positive_index_10 %>%
     ggplot(aes(x = type, y = ret,colour = ESG_risk_category, group = ESG_risk_category)) +
     geom_ribbon(aes(ymin = low, ymax = high, fill = ESG_risk_category),
                  alpha=0.1, linetype="dashed", show.legend = FALSE) +
-  geom_line(size=1) +
+  geom_line(linewidth=1) +
     theme_bw() +
    theme(legend.title = element_blank(),
           legend.position="top",
@@ -717,7 +685,7 @@ negative %>% filter(metric == 'CAAR') %>% mutate(ESG_risk_category = factor(ESG_
     ggplot(aes(x = type, y = ret,colour = ESG_risk_category, group = ESG_risk_category)) +
     geom_ribbon(aes(ymin = low, ymax = high, fill = ESG_risk_category),
                  alpha=0.1, linetype="dashed", show.legend = FALSE) +
-  geom_line(size=1) +
+  geom_line(linewidt=1) +
     theme_bw() +
    theme(legend.title = element_blank(),
           legend.position="top",
@@ -729,7 +697,11 @@ negative %>% filter(metric == 'CAAR') %>% mutate(ESG_risk_category = factor(ESG_
   ggsave("ST_negative_ESG.png")
 
   negative %>% write.csv("ST_negative_ESG.csv")
+  
+  negative_index_all %>% filter(type == '0') %>% group_by(date) %>% summarise(ret = 100*weighted.mean(12*value, MKT_CAP))
+negative_index_all %>% filter(date == '2018-05-25') %>% filter(type == '0') %>% group_by(date) %>% summarise(ret = weighted.mean(value, MKT_CAP))
 
+negative_index_all %>% filter(type == '0') %>% group_by(date) %>% summarise(ret = weighted.mean(value, MKT_CAP))
 ```
 
 ################ 
@@ -928,4 +900,87 @@ ggsave("ST_negative_sdg_bar.png")
 
 ```
 
+
+################ 
+Parametric portfolio approach 1 week sentiment data: 
+################
+
+```{r}
+
+pp_data = long_term_data_weekly %>% select(date, isin, ret, MKT_CAP, pos_event,neg_event) %>%
+  group_by(isin) %>%
+  mutate(
+    month = date,
+    ret_excess = ret,
+    permno = isin,
+    MKT_CAP = MKT_CAP/1000000000,
+    mktcap_lag = lag(MKT_CAP)) %>%
+  na.omit()
+  
+pp_monthly_lags = pp_data %>% 
+  group_by(isin) %>%
+  transmute(isin,
+            date_5 = lead(date,5),
+            MKT_CAP) 
+
+pp_data = pp_data %>% 
+  inner_join(pp_monthly_lags,
+             by = c("isin","date" = "date_5"),
+             suffix = c("", "_5"))
+  
+data_portfolios = pp_data %>%
+  mutate(
+    momentum_lag = mktcap_lag / MKT_CAP_5,
+    size_lag = log(mktcap_lag),
+    event = neg_event
+    ) %>%
+  drop_na(contains("lag"))
+
+
+data_portfolios = data_portfolios %>%
+  group_by(date) %>%
+  mutate(
+    n = n(),
+    relative_mktcap = mktcap_lag / sum(mktcap_lag),
+    across(contains("lag"), ~ (. - mean(.)) / sd(.)),
+    ) %>%
+  ungroup() %>%
+  select(-mktcap_lag)
+
+n_parameters <- sum(str_detect(colnames(data_portfolios), "lag"))
+
+theta <- rep(1.5, n_parameters)
+
+names(theta) <- colnames(data_portfolios)[str_detect(
+  colnames(data_portfolios), "lag")]
+
+
+weights <- compute_portfolio_weights(
+  optimal_theta,
+  data_portfolios,
+  value_weighting = TRUE,
+  allow_short_selling = FALSE
+)
+
+power_utility <- function(r, gamma = 5) {
+  (1 + r)^(1 - gamma) / (1 - gamma)
+}
+
+evaluate_portfolio(weights) |>
+  print(n = Inf)
+
+
+
+
+optimal_theta <- optim(
+  par = theta,
+  compute_objective_function,
+  objective_measure = "Expected utility",
+  data = data_portfolios,
+  value_weighting = TRUE,
+  allow_short_selling = FALSE
+)
+
+optimal_theta = optimal_theta$par
+```
 
