@@ -101,7 +101,7 @@ for (y in 1:length(rolling_means)) {
   for (z in 1:length(SDs)) { 
 
 long_term_data_monthly <- data_monthly %>%
-  #left_join(ESG_RR, by ="isin") %>% filter(ESG_risk_category == 'High') %>%
+  left_join(ESG_RR, by ="isin") %>% filter(ESG_risk_category == 'High') %>%
   transmute(date,isin,MKT_CAP, free_float_mkt_cap,
             ret = W_RETURN, 
             norm_positive_sum = sentiment_positive_count - sdg_not_relevant_positive_count,
@@ -203,11 +203,10 @@ summary(model)
 library(lmtest)
 library(sandwich)
 
+bptest(model)
+
 coeftest(model, vcov = vcovHC(model, type = 'HC0'))
 
-
-long_term_data_positive %>% filter(period == '-1') %>% ungroup() %>% distinct(isin) %>% rbind(
-long_term_data_negative %>% filter(period == '-1') %>% ungroup() %>% distinct(isin)) %>% distinct(isin) 
 ```
 
 ### Negative news
@@ -433,7 +432,7 @@ short_term_data_event = short_term_data %>%
     case_when(norm_positive_sum > positive_threshold & norm_positive_sum > 10 & norm_positive_sum > 2*norm_negative_sum ~ 1,
               TRUE ~ 0),
     neg_event = 
-    case_when(norm_negative_sum > negative_threshold & norm_negative_sum > 10 & norm_negative_sum > 1*norm_positive_sum ~ 1, 
+    case_when(norm_negative_sum > negative_threshold & norm_negative_sum > 10 & norm_negative_sum > 2*norm_positive_sum ~ 1, 
               TRUE ~ 0)
     ) 
 
@@ -698,10 +697,9 @@ negative %>% filter(metric == 'CAAR') %>% mutate(ESG_risk_category = factor(ESG_
 
   negative %>% write.csv("ST_negative_ESG.csv")
   
-  negative_index_all %>% filter(type == '0') %>% group_by(date) %>% summarise(ret = 100*weighted.mean(12*value, MKT_CAP))
-negative_index_all %>% filter(date == '2018-05-25') %>% filter(type == '0') %>% group_by(date) %>% summarise(ret = weighted.mean(value, MKT_CAP))
+negative_index_10 %>% filter(type == '+10') %>% filter(ESG_risk_category =='Low') %>% arrange(csum)
 
-negative_index_all %>% filter(type == '0') %>% group_by(date) %>% summarise(ret = weighted.mean(value, MKT_CAP))
+
 ```
 
 ################ 
