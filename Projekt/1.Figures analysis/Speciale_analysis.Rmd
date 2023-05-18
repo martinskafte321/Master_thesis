@@ -223,7 +223,7 @@ for (y in 1:length(rolling_means)) {
   for (z in 1:length(SDs)) { 
 
 long_term_data_monthly <- data_monthly %>%
-  #left_join(ESG_RR, by ="isin") %>% filter(ESG_risk_category == 'High') %>%
+  left_join(ESG_RR, by ="isin") %>% filter(ESG_risk_category == 'Low') %>%
   transmute(date,isin,MKT_CAP, free_float_mkt_cap,
             ret = W_RETURN, 
             norm_positive_sum = sentiment_positive_count - sdg_not_relevant_positive_count,
@@ -339,13 +339,13 @@ print(xtable(as.data.frame(test),type="latex",
       include.colnames = TRUE) %>%
   write(file="alpha_negative_summary_ESG_M.tex")
 
-print(xtable(as.data.frame(emptylist_neg_2[[5]][3]),type="latex",
-             digits=c(0,4,2,3,2,0,1,1,1,1),
+print(xtable(as.data.frame(emptylist_neg_2[[1]][1]),type="latex",
+             digits=c(0,4,2,3,2,4,1),
              hline.after=c(-1,0),
              floating=FALSE,latex.environments=NULL),
       include.rownames=FALSE,
       include.colnames = TRUE) %>% 
-  write(file="alpha_negative_FF5_15.tex")
+  write(file="alpha_negative_FF5_3.tex")
 
 ```
 
@@ -413,8 +413,10 @@ for (i in 1:10) {
 short_term_data_event = short_term_data %>%
   group_by(isin) %>%
   mutate(
-    norm_positive_sum = na_if(norm_positive_sum, 0),
-    norm_negative_sum = na_if(norm_negative_sum, 0),
+    #norm_positive_sum = na_if(norm_positive_sum, 0),
+    #norm_negative_sum = na_if(norm_negative_sum, 0),
+    norm_positive_sum = replace_na(norm_positive_sum,0),
+    norm_negative_sum = replace_na(norm_negative_sum,0),
     positive_threshold = mean(norm_positive_sum,na.rm = TRUE) + 1*sd(norm_positive_sum,na.rm = TRUE),
     negative_threshold = mean(norm_negative_sum,na.rm = TRUE) + 1*sd(norm_negative_sum,na.rm = TRUE)
     ) %>%

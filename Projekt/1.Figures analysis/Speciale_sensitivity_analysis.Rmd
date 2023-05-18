@@ -472,7 +472,7 @@ positive_index_10_sensi = positive_index_all %>%
     SE_CAAR = sd(csum, na.rm = TRUE)/sqrt(n())
     )
 
-negative_index_10_e = negative_index_all %>% 
+negative_index_e = negative_index_all %>% 
   mutate(csum = cumsum(value)) %>%
   group_by(type) %>%
   summarise(
@@ -483,21 +483,24 @@ negative_index_10_e = negative_index_all %>%
 
 
 
-positive_index_10_sensi %>% select(type, "AAR_sens" = AAR, "CAAR_sens" = CAAR) %>%
-  left_join(negative_index_10_2sd %>% select(type,AAR,CAAR), by ="type") %>%
+negative_index_10_1sd %>% select(type, "AAR_1sd" = AAR, "CAAR_1SD" = CAAR) %>%
+  left_join(negative_index_10_2sd %>% select(type, "AAR_2sd" = AAR, "CAAR_sd2" = CAAR), by ="type") %>%
+  left_join(negative_index_10_3sd %>% select(type, "AAR_3sd" = AAR, "CAAR_sd3" = CAAR), by ="type") %>%
   pivot_longer(!type, names_to = "metric", values_to = "ret") %>%
   mutate(
-    weight = 
+    group = 
            case_when(
-             grepl("sens", metric) ~ "Equal",
+             grepl("1", metric) ~ "1 sd",
+             grepl("2", metric) ~ "2 sd",
+             grepl("3", metric) ~ "3 sd",
              TRUE ~ "Value"),
   Metric = 
            case_when(
              grepl("C", metric) ~ "CAAR",
   TRUE ~ "AAR")) %>%
   group_by(metric) %>%
-  ggplot(aes(x = type, y = ret, colour = weight,linetype = Metric,group = metric)) + 
-  geom_line() +
+  ggplot(aes(x = type, y = ret, colour = group,linetype = Metric,group = metric)) + 
+  geom_line(size=1) +
     theme_bw() +
    theme(legend.title = element_blank(),
           legend.position="top",
@@ -511,7 +514,7 @@ ggsave("ST_positive_sensitivity_weight.png")
 
 
 negative_index_10_v %>% select(type, "AAR_v" = AAR, "CAAR_v" = CAAR) %>%
-  left_join(negative_index_10_e %>% select(type,AAR,CAAR), by ="type") %>%
+  left_join(negative_index_e %>% select(type,AAR,CAAR), by ="type") %>%
   pivot_longer(!type, names_to = "metric", values_to = "ret") %>%
   mutate(
     weight = 
@@ -537,9 +540,9 @@ ggsave("ST_negative_sensitivity_weight.png")
 
 
 
-negative_index_10_1sd %>% select(type,"AAR1sd" = AAR, "CAAR1sd" = CAAR) %>%
-  left_join(negative_index_10_2sd %>% select(type,"CAAR2sd" = CAAR, "AAR2sd" = AAR), by ="type") %>%
-   left_join(negative_index_10_3sd %>% select(type,"CAAR3sd" = CAAR, "AAR3sd" = AAR), by ="type") %>%
+negative_index_10_1sd %>% select(type,"AAR_1sd" = AAR, "CAAR_1sd" = CAAR) %>%
+  left_join(negative_index_10_2sd %>% select(type,"CAAR_2sd" = CAAR, "AAR_2sd" = AAR), by ="type") %>%
+   left_join(negative_index_10_3sd %>% select(type,"CAAR_3sd" = CAAR, "AAR_3sd" = AAR), by ="type") %>%
   pivot_longer(!type, names_to = "metric", values_to = "ret") %>%
   mutate(
     group = 
