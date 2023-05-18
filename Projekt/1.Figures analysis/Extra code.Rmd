@@ -188,7 +188,7 @@ Sorting the SDGs into five groups to see if they become significant (not the cas
 
 
 all = short_term_return_sdg %>%
-  filter(group == 'negative') %>%
+  filter(group == 'positive') %>%
   mutate_at("sdg", str_replace, "_negative_count", "") %>%
   mutate_at("sdg", str_replace, "_", " ") %>%
   mutate(sdg = factor(sdg, levels = c("sdg 1", "sdg 2","sdg 3","sdg 4","sdg 5","sdg 6","sdg 7","sdg 8","sdg 9","sdg 10","sdg 11", 
@@ -210,8 +210,8 @@ all = short_term_return_sdg %>%
 
 
 t = short_term_return_sdg %>% # comes from Speciale analysis
-  filter(group == 'negative') %>%
-  mutate_at("sdg", str_replace, "_negative_count", "") %>%
+  filter(group == 'positive') %>%
+  mutate_at("sdg", str_replace, "_positive_count", "") %>%
   mutate_at("sdg", str_replace, "_", " ") %>%
   mutate(sdg = factor(sdg, levels = c("sdg 1", "sdg 2","sdg 3","sdg 4","sdg 5","sdg 6","sdg 7","sdg 8","sdg 9","sdg 10","sdg 11", 
                                         "sdg 12", "sdg 13","sdg 14","sdg 15","sdg 16","sdg 17"))) %>%
@@ -250,15 +250,13 @@ bands = all %>%
 
 all %>%
   group_by(sdg,period) %>%
-  summarise(CAAR = weighted.mean(csum,MKT_CAP),
-            AAR = weighted.mean(abnormal_ret,MKT_CAP),
-            n = n()) %>% ungroup() %>%
+  summarise(CAAR = weighted.mean(csum,MKT_CAP)) %>% ungroup() %>%
   left_join(bands, by = c("sdg","period")) %>% 
   mutate(period = as.character(period)) %>%
-  filter(period == '10') %>%
-  mutate(sdg = factor(sdg, levels = c("People","Planet","Prosperity","Peace","Partnership"))) %>%
-  # mutate(sdg = factor(sdg, levels = c("sdg 1", "sdg 2","sdg 3","sdg 4","sdg 5","sdg 6","sdg 7","sdg 8","sdg 9","sdg 10","sdg 11", 
-  #                                      "sdg 12", "sdg 13","sdg 14","sdg 15","sdg 16","sdg 17"))) %>%
+  filter(period == '0') %>%
+  #mutate(sdg = factor(sdg, levels = c("People","Planet","Prosperity","Peace","Partnership"))) %>%
+   mutate(sdg = factor(sdg, levels = c("sdg 1", "sdg 2","sdg 3","sdg 4","sdg 5","sdg 6","sdg 7","sdg 8","sdg 9","sdg 10","sdg 11", 
+                                        "sdg 12", "sdg 13","sdg 14","sdg 15","sdg 16","sdg 17"))) %>%
   ggplot(
     aes(x = sdg, y = CAAR, color= sdg,group = sdg, fill = sdg)) + 
   geom_bar(stat="identity") +
@@ -271,7 +269,7 @@ all %>%
         legend.key.size = unit(0.5, 'cm'),
         axis.text.x = element_text(angle=45)) +
   theme(legend.position = "none")
-ggsave("ST_negative_sdg_bar.png")
+ggsave("ST_positive_sdg_bar.png")
 
 ```
 
