@@ -213,7 +213,7 @@ coeftest(model, vcov = vcovHC(model, type = 'HC0'))
 ```{r}
 
 rolling_means = list(1)
-SDs = list(1,2,3)
+SDs = list(1)
 emptylist_neg_1 = list()
 emptylist_neg_2 = list()
 
@@ -223,7 +223,7 @@ for (y in 1:length(rolling_means)) {
   for (z in 1:length(SDs)) { 
 
 long_term_data_monthly <- data_monthly %>%
-  left_join(ESG_RR, by ="isin") %>% filter(ESG_risk_category == 'Low') %>%
+ # left_join(ESG_RR, by ="isin") %>% filter(ESG_risk_category == 'Low') %>%
   transmute(date,isin,MKT_CAP, free_float_mkt_cap,
             ret = W_RETURN, 
             norm_positive_sum = sentiment_positive_count - sdg_not_relevant_positive_count,
@@ -240,7 +240,7 @@ long_term_data_monthly <- data_monthly %>%
     mutate(
     roll_mean_positive = na_if(roll_mean_norm_positive_sum, 0), 
     roll_mean_negative = na_if(roll_mean_norm_negative_sum, 0),
-    positive_threshold = mean(roll_mean_positive,na.rm = TRUE) + 2*sd(roll_mean_positive,na.rm = TRUE),
+    positive_threshold = mean(roll_mean_positive,na.rm = TRUE) + z*sd(roll_mean_positive,na.rm = TRUE),
     negative_threshold = mean(roll_mean_negative,na.rm = TRUE) + z*sd(roll_mean_negative,na.rm = TRUE)
     ) %>%
   group_by(date,isin) %>%
@@ -296,8 +296,6 @@ alpha_M_negative = long_term_data_M_negative %>%
              t = tidy(lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML + RMW + CMA, weights = n))$statistic[1],
              p = tidy(lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML + RMW + CMA, weights = n))$p.value[1],
             r = glance(lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML + RMW + CMA, weights = n))$r.squared,
-            ret = 100*mean(12*ret),
-            mkt = 100*mean(12*mkt_excess_ret),
              N = mean(n)) %>%
    mutate(model = paste0(i,"M_",y,"_",z))
 

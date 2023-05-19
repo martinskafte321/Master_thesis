@@ -29,7 +29,7 @@ ESG %>%
 ###############################################################
 
 # Read stock data from:
-ISIN <- read_excel("ISIN numbers.xlsx")
+ISIN <- read_excel("world_index__ISIN.xlsx")
 stock <- read_excel("SXXP_MONTHLY_EUR.xlsx")
 free_float_data <- read_excel("free_float_sxxp.xlsx")
 
@@ -82,13 +82,13 @@ stocks_monthly %>%
 ###############################################################
 
 # Read Sentiment data from CSV
-sentiment <- read.csv("SXXP_sentiment.csv", sep = ",") %>% 
+sentiment <- read.csv("nasdaq_global_large_cap.csv", sep = ",") %>% 
 # Get the correct date format and cut the series by 2018. 
   mutate(
     aggregate_time_period_start = as_datetime(aggregate_time_period_start)) %>%
   filter(aggregate_time_period_start >= ' 2018-01-01') %>%
   rename("date" = aggregate_time_period_start) %>%
-  select(-c(aggregate_type,aggregate_key,aggregate_updated_ts,aggregate_time_period_end,day,week,month,year,match_identity)) 
+  select(-c(aggregate_type,aggregate_key,aggregate_updated_ts,aggregate_time_period_end,day,week,month,year,match_identity,sentiment_negative_mean:sdg_broad_positive_count)) 
 
 # Remove unnecessary items:
 remove(stock,stocks,ISIN,free_float,free_float_data)
@@ -118,45 +118,26 @@ all_data_monthly %>%
 ###############################################################
        
        # Read stock data from:
-       ISIN <- read_excel("ISIN numbers.xlsx")
-       stock <- read_excel("SXXP_daily_2017.xlsx")
+ISIN <- read_excel("world_index__ISIN.xlsx")
+stock <- read_excel("world_index_daily.xlsx")
        
        
        # Clean up the stock market data: Remove the two first rows 
        stocks_clean <- stock %>%
-         filter(!row_number() %in% c(1,2)) %>% 
+         filter(!row_number() %in% c(1)) %>% 
          # Make the data set a long matrix instead of wide
          pivot_longer(!DATES, names_to = "firm",values_to = "value")  %>% 
          mutate(
-           type = str_split_fixed(firm, "_", 2)[,2],
-           ID = str_split_fixed(firm, "_", 2)[,1],
            date = as.Date(as.numeric(DATES), origin = "1899-12-30"),
-           value = as.numeric(value)
-         ) %>% 
-         select(-DATES,-firm) %>%
-         relocate(type, .after = ID) %>%
-         relocate(date, .before = ID) %>%
+           value = as.numeric(value)) %>% 
+         select(-DATES) %>%
          # And join the stock information with the ISIN number:
-         left_join(ISIN, by = "ID") %>% rename("isin" = id_isin) %>%
-         select(-ID) %>%
-         relocate(value, .after = isin)
-       
-       
-       # Summarize the stocks to index by date and isin
-       stocks_daily <- stocks_clean_2017 %>%
-         pivot_wider(
-           names_from = type,
-           values_from = value
-         )  %>% na.omit() 
-       
-       
-       
-       stocks_daily = stocks_daily %>% rbind(stocks_daily_2017)
-       
+         left_join(ISIN, by = "firm") %>% rename("isin" = id_isin)
+         
        
        # Write to CSV to keep in nice format:
-       stocks_daily %>%
-         write.csv(file = "clean_stock_data_daily.csv")
+       stocks_clean %>%
+         write.csv(file = "clean_stock_data_daily_NASDAQ.csv")
        
        remove(ISIN,stock,stocks_clean)
       
@@ -167,13 +148,7 @@ all_data_monthly %>%
        ###############################################################
        
        # Read Sentiment data from CSV
-       sentiment <- read.csv("SXXP_sentiment.csv", sep = ",") %>% 
-         # Get the correct date format and cut the series by 2018. 
-         mutate(
-           aggregate_time_period_start = as_datetime(aggregate_time_period_start)) %>%
-         filter(aggregate_time_period_start >= ' 2018-01-01') %>%
-         rename("date" = aggregate_time_period_start) %>%
-         select(-c(match_names,aggregate_type,aggregate_key,aggregate_updated_ts,aggregate_time_period_end,day,week,month,year,match_identity)) 
+       sentiment <- read.csv("nasdaq_global_large_cap.csv", sep = ",")
        
        
        # Add a variable that contains the sum of all, respectively, positive, negative and neutral signals wrt. SGD's: 
@@ -193,7 +168,7 @@ all_data_monthly %>%
        
        # Write to CSV to keep in nice format:
        sentiment_daily %>%
-         write.csv(file = "clean_sentiment_daily.csv")
+         write.csv(file = "clean_sentiment_daily_nasdaq.csv")
        
     
        # Load the sentiment data:
@@ -203,12 +178,12 @@ all_data_monthly %>%
        
        
        # Join the weekly sentiment data with the stock prices
-       all_data_daily <- stocks_daily %>% mutate(date = as.Date(date)) %>% 
+       all_data_daily <- stocks_clean %>% mutate(date = as.Date(date)) %>% 
          left_join(sentiment_daily %>% mutate(date = as.Date(date)), by = c("date","isin"))
        
        # Write to CSV to keep in nice format:
        all_data_daily %>%
-         write.csv(file = "data_daily.csv")
+         write.csv(file = "data_daily_nasdaq.csv")
 
        
        
