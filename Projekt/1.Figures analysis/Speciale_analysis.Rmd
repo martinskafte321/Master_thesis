@@ -50,6 +50,8 @@ sxxp_index_daily <- read.csv("C:/Users/Marti/OneDrive - University of Copenhagen
 data_daily <- read.csv("C:/Users/Marti/OneDrive - University of Copenhagen/KU/Speciale/Data behandling/data_daily.csv", sep = ",")  %>% 
   mutate(date = as.Date(date)) %>% select(-X)
 
+
+## REMEMBER - if we need to run this again, then we should change the ISINs in the file - currently NASDAQ
 ESG_RR <- read.csv("C:/Users/Marti/OneDrive - University of Copenhagen/KU/Speciale/Data behandling/ESG_ratings.csv") %>%
   select("isin" = ISIN,ESG_risk_category) %>% 
   mutate(ESG_risk_category =
@@ -357,22 +359,25 @@ Short term abnormal return after an individual event - Daily
 
 
 short_term_data_daily = data_daily %>% 
-  mutate(date = as.Date(date)) %>% 
+    mutate(date_month = ceiling_date(date + 1, "month")-1) %>%
+    left_join(data_monthly %>% select("date_month" = date,isin,"MKT_CAP_MONTH" = MKT_CAP), by = c("isin","date_month")) %>%
+  mutate(date = as.Date(date),
+         MKT_CAP = MKT_CAP_MONTH) %>% 
   right_join(sxxp_index_daily %>% select(date, mkt_excess), by = "date")
 
 
 # plan(multisession, workers = availableCores())
 # 
-# short_term_data_nested <- short_term_data_daily %>% ungroup() %>%
-#   select(date,isin,W_RETURN,mkt_excess) %>%
-#   nest(data = -c(isin)) %>%
-#   mutate(beta = future_map(
-#     data, ~ roll_capm_estimation(., window = 120, min_obs = 80, period = "day")
-#   )) %>%
-#   unnest(c(beta)) %>%
-#   na.omit(beta,alpha) %>% select(-data)
-#                              
-  # # Write to CSV to keep in nice format:
+ short_term_data_nested <- short_term_data_daily %>% filter(isin == 'GB0007188757' | isin =='TW0002409000') %>% ungroup() %>%
+   select(date,isin,W_RETURN,mkt_excess) %>%
+   nest(data = -c(isin)) %>%
+   mutate(beta = future_map(
+     data, ~ roll_capm_estimation(., window = 120, min_obs = 80, period = "day")
+   )) %>%
+   unnest(c(beta)) %>%
+   na.omit(beta,alpha) %>% select(-data)
+                              
+# # Write to CSV to keep in nice format:
   #      short_term_data_nested %>%
   #          write.csv(file = "C:/Users/Marti/OneDrive - University of Copenhagen/KU/Speciale/Data behandling/nested_daily_for_capm_sxxp.csv")
 
@@ -514,8 +519,8 @@ positive_index_10 = positive_index_all %>%
   group_by(type) %>%
   summarise(
     rel_events = mean(relative_events, na.rm = TRUE),
-    AAR = mean(value),
-    CAAR = mean(csum),
+    AAR = weighted.mean(value,MKT_CAP),
+    CAAR = weighted.mean(csum,MKT_CAP),
     SE_AAR = sd(value, na.rm = TRUE)/sqrt(n()),
     n = n(),
     SE_CAAR = sd(csum, na.rm = TRUE)/sqrt(n())
@@ -526,8 +531,8 @@ negative_index_10 = negative_index_all %>%
   group_by(type) %>%
   summarise(
     rel_events = mean(relative_events, na.rm = TRUE),
-    AAR = weighted.mean(value,MKT_CAP),
-    CAAR = weighted.mean(csum, MKT_CAP),
+    AAR = mean(value),
+    CAAR = mean(csum),
     n = n(),
     mkt = mean(MKT_CAP),
     SE_AAR = sd(value, na.rm = TRUE)/sqrt(n()),
@@ -631,8 +636,8 @@ positive = positive_index_10 %>%
        pivot_longer(!c(type,ESG_risk_category), names_to = "metric", values_to = "SE"), by = c("metric","type","ESG_risk_category")
      ) %>%
     mutate(
-     low = ret - 1.96*SE,
-     high = ret + 1.96*SE
+     low = ret - 1.70*SE,
+     high = ret + 1.70*SE
    )
 
   positive %>% filter(metric == 'CAAR') %>% mutate(ESG_risk_category = factor(ESG_risk_category, levels = c("Low", "Medium","High"))) %>%
@@ -659,9 +664,9 @@ negative_index_10 = negative_index_all %>%
   group_by(type,ESG_risk_category) %>% na.omit() %>%
   summarise(
     rel_events = mean(relative_events, na.rm = TRUE),
-    AAR = weighted.mean(value,MKT_CAP),
+    AAR = mean(value),
     n = n(),
-    CAAR = weighted.mean(csum,MKT_CAP),
+    CAAR = mean(csum),
     SE_AAR = sd(value, na.rm = TRUE)/sqrt(n()),
     SE_CAAR = sd(csum, na.rm = TRUE)/sqrt(n())
     )
@@ -684,7 +689,7 @@ negative %>% filter(metric == 'CAAR') %>% mutate(ESG_risk_category = factor(ESG_
     ggplot(aes(x = type, y = ret,colour = ESG_risk_category, group = ESG_risk_category)) +
     geom_ribbon(aes(ymin = low, ymax = high, fill = ESG_risk_category),
                  alpha=0.1, linetype="dashed", show.legend = FALSE) +
-  geom_line(linewidt=1) +
+  geom_line(size=1) +
     theme_bw() +
    theme(legend.title = element_blank(),
           legend.position="top",
@@ -694,10 +699,6 @@ negative %>% filter(metric == 'CAAR') %>% mutate(ESG_risk_category = factor(ESG_
                      labels = scales::percent) +
   scale_x_discrete(name = "Relative time", breaks = c("-10","-5","0","+5","+10"))
   ggsave("ST_negative_ESG.png")
-
-  negative %>% write.csv("ST_negative_ESG.csv")
-  
-negative_index_10 %>% filter(type == '+10') %>% filter(ESG_risk_category =='Low') %>% arrange(csum)
 
 
 ```

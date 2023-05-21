@@ -14,11 +14,11 @@ setwd("C:/Users/Marti/OneDrive - University of Copenhagen/KU/Speciale/Data behan
 ############## ESG Risk Ratings ###############################
 ###############################################################
 
-ESG_RR <- read_excel("ESG_RR.xlsx", sheet = "Results") %>% 
-  select(entity_name, region, country, ISIN, ESG_risk_score, ESG_risk_category)
+ESG <- read_excel("ESG_RR.xlsx", sheet = "Results") %>% 
+  select(ISIN, ESG_risk_category)
 
 
-ESG <- ISIN %>% select(ISIN = id_isin) %>% left_join(ESG_RR, by = "ISIN") 
+ESG <- ISIN %>% select(ISIN = id_isin) %>% left_join(ESG, by = "ISIN") %>% mutate(isin = ISIN)
 
 # Write to CSV to keep in nice format:
 ESG %>%
