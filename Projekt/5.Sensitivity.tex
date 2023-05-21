@@ -2,7 +2,7 @@
 
 In this section I cross-validate the robustness of the initials results by re-estimating the models with altered variables in order to confirm that the appearance of over-performance is not created artificially. Thus, the practice can lead to validation or invalidation along with advancement of model specifications. 
 
-For both the Market Model and the Calendar Time Portfolio I 1) alter the threshold for events to be considered as important from one to two and three standard deviations, and 2) change the portfolio weights from being based on market capitalization (value) to a naive approach (equal). Due to insignificance and borderline randomness of the relation between positive events and returns I only present the plots related to negative events. The comparable graphs of the positive events can be found in Appendix \ref{fig:ST_pos_sensi}.
+For the Market Model and the Calendar Time Portfolio I 1) alter the threshold for events to be considered as important from one to two and three standard deviations, and 2) change the portfolio weights from being based on market capitalization (value) to a naive approach (equal). Due to insignificance and borderline randomness of the relation between positive events and returns I only present the plots related to negative events. The comparable graphs of the positive events can be found in Appendix \ref{fig:ST_pos_sensi}.
 
 \subsection{Market model: event threshold} \label{sec: sens_st_sd}
 
@@ -16,11 +16,11 @@ The requirements behind the thresholds for event identification is based on the 
     \label{fig:ST_neg_sensitivity}
 \end{figure} 
 
-The two new models, based on negative events, are compared to the original outcome (1sd) in figure \ref{fig:ST_neg_sensitivity}. The AAR is presented in dotted lines and the CAAR in solid lines for thresholds applying 2 sd (green) and 3 sd (blue). For simplicity, I have skipped the confidence intervals along with the bars. The similarities of the AAR and CAAR imply that the results are robust to changes in the event specification. Enforcing a stronger sd requirement leads to greater instantaneous impact on AAR on the event date. Moreover, a slight increase in CAAR signify a more severe reaction over the full window. 
+Figure \ref{fig:ST_neg_sensitivity} compares the outcomes from changing the threshold of events. The AAR is presented in dotted lines and the CAAR in solid lines for thresholds applying 2 standard deviations (green) and 3 standard deviations (blue). For simplicity, I omit the confidence intervals along with the bars. The similarities of the AAR and CAAR imply that the results are robust to changes in the methodology. Enforcing a stronger threshold requirement leads to a larger instantaneous impact on the event date, indicated by the lower AAR on $t=0$. However, the overall CAAR is less significant for both 2 and 3 standard deviations relative to 1. Thus, in contrast with common intuition, a tighter threshold leads to lower overall returns from the identified events.  
 
 \subsection{Market model: value vs. equal weights} \label{sec: sens_st_weights}
 
-A portfolio of stocks needs to incorporate a weighted procedure in order to determine the relative impact the individual constituents should on portfolio performance. Figure \ref{fig:ST_neg_sensitivity_weight} compares the performance of applying value and equal weights to the an identical sample of firms experiencing negative events. 
+A portfolio of stocks needs to implement a weighting procedure in order to determine the relative impact of individual constituents on portfolio performance. Figure \ref{fig:ST_neg_sensitivity_weight} compares the performance of applying value and equal weights to a portfolio consisting of an identical sample of firms that have experienced a negative event. 
 
 \begin{figure}[H]
     \centering
@@ -30,8 +30,7 @@ A portfolio of stocks needs to incorporate a weighted procedure in order to dete
     \label{fig:ST_neg_sensitivity_weight}
 \end{figure} 
 
-
-The equal weighted portfolio returns validate the ordinary results, as the CAAR only diverge slightly and appear significant on the equal levels. While the portfolio AARs apparently follow each other to some extent, the development in CAAR is more adverse using equal weights relative to value weights. Applying equal weights inevitably allocates more weight to smaller stocks, which apparently contribute to less severe investor reactions. After the event has occurred the portfolio CAARs diverge, however as the AAR is statistically indifferent to zero in all days, the reactions are simply assumed to be minor estimation errors.    
+From a visual perspective, the abnormal returns from applying equal weights validate the original results, as the CAAR over the full window is approximately equivalent to applying value weights. While the portfolio AARs follow each other to some extent, the development in CAAR is more adverse using equal weights relative to value weights. Applying equal weights inevitably allocates more weight to smaller stocks, which apparently contribute to a more severe investor reaction. In the days leading up to the event the equal weighted portfolio CAAR decreases at a faster rate, which results in a lower bottom of approximately 1.0\%. However, after the spike in news has occurred the CAAR reverts to the same level as the value weighted portfolio. 
 
 \subsection{Calendar Time Portfolio: Portfolio weights}
 
@@ -78,12 +77,28 @@ The abnormal returns of the equal weighted portfolios confirm the negative assoc
 Altering the threshold requirements from one to two and three standard leads to varying outcomes. For holding periods of one month, the alphas decrease and become insignificant from tightening the threshold, however the portfolio with three standard errors produce larger alphas than the one with two. With T = 4 the relation is reverse as the 2 standard deviation portfolio generates the largest alpha. Longer holding periods generate roughly equal abnormal returns across threshold values. As the portfolios are generating seemingly random outcomes, I reason that there is no relation between the event threshold and portfolio return on the long horizon. 
 
 
-\subsection{New data}
+\subsection{Inference from global companies}
 
-\begin{figure}[H]
-    \centering
+In order to further assess the robustness of the results, I reiterate the main parts of the empirical analysis with a completely new sample of firms and corresponding SDG news data. The sample consists of constituent firms from the Nasdaq Global Large Cap Index. In addition to providing robustness, the assessment also generates insights into the global perspective on the relation between ESG and corporate performance. 
+
+
+
+\begin{figure}
+     \centering
+     \begin{minipage}[b]{0.49\textwidth}
+         \centering
+    \caption{Negative}
+    \includegraphics[width=\textwidth]{Projekt/1.Figures analysis/ST_negative_all_CI_nasdaq.png}
+     \label{fig:ST_neg_sensitivity_nasdaq}
+     \end{minipage}
+     \hfill
+     \begin{minipage}[b]{0.49\textwidth}
+       \centering
     \caption{Negative news: Nasdaq Global}
-    \includegraphics[scale=0.6]{Projekt/1.Figures analysis/ST_negative_all_CI_nasdaq.png}
-     \caption*{\footnotesize The figure illustrates the average abnormal return (AAR) and cumulative AAR (CAAR) around the event date (t = 0) of negative news. The blue lines are returns calculated from an equally weighted portfolio, while the red lines are based on market capitalization weights.}
-    \label{fig:ST_neg_sensitivity_weight}
-\end{figure} 
+    \includegraphics[width=\textwidth]{Projekt/1.Figures analysis/ST_positive_all_CI_nasdaq.png}
+    \label{fig:ST_pos_sensitivity_nasdaq}
+     \end{minipage}
+        \caption*{\footnotesize The figure illustrates the average abnormal return (AAR) and cumulative AAR (CAAR) around the event date (t = 0) of negative news. The blue lines are returns calculated from an equally weighted portfolio, while the red lines are based on market capitalization weights.}
+        
+        \label{fig:three graphs}
+\end{figure}
