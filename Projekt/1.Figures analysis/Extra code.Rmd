@@ -331,7 +331,9 @@ conf.level = 0.95
 )
 
 
-significance_neg_10 = negative_index %>% 
+significance_neg_10 = negative_index %>%
+  left_join(ESG_RR, by = "isin") %>%
+  filter(ESG_risk_category == 'Low') %>%
   mutate(csum = 100*cumsum(value)) %>%
   filter(type == '+10')
    
@@ -343,7 +345,7 @@ significance_neg_10 = negative_index %>%
 z.test(significance_neg_10 %>% ungroup() %>% select(csum),y = NULL,
 mu = 0,
 sigma.x = se_neg_10[[2]],
-conf.level = 0.95
+conf.level = 0.90
 )
 
 ################
@@ -496,23 +498,25 @@ conf.level = 0.95
 
 
 
-negative_index %>% 
+positive_index %>% 
+   left_join(ESG_RR, by = "isin") %>%
   mutate(type = as.numeric(as.character(type))) %>%
-  #filter(type >= -5) %>%
-  filter(type == 0) %>%
+  filter(type >= -10) %>%
+  filter(type <= 10) %>%
   arrange(date,isin,type) %>%
   mutate(csum = 100*cumsum(value)) %>%
-  filter(type == '0') %>% 
+  filter(type == '10') %>% 
   ungroup() %>%
+  group_by(ESG_risk_category) %>%
   summarise(sd = sd(csum, na.rm = TRUE),
             mean = weighted.mean(csum,MKT_CAP))
    
  
   
 
-sqrt(170)
+sqrt(499)
 
-(-0.1383149		 -0)/(6.197935			/13.038)
+(-0.5359181 - 0)/(8.478791 /sqrt(811))
 
 ```
 

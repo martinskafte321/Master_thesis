@@ -52,7 +52,7 @@ estimate_capm <- function(data, min_obs = 1) {
   if (nrow(data) < min_obs) {
     beta <- as.numeric(NA)
   } else {
-    fit <- lm(W_RETURN ~ mkt_excess, data = data)
+    fit <- lm(W_RETURN ~ mkt_excess, data = data, na.action=na.omit)
     beta <- as.numeric(coefficients(fit)[2])
   }
   return(beta)
@@ -62,7 +62,7 @@ estimate_capm_alpha <- function(data, min_obs = 1) {
   if (nrow(data) < min_obs) {
     alpha <- as.numeric(NA)
   } else {
-    fit <- lm(W_RETURN ~ mkt_excess, data = data)
+    fit <- lm(W_RETURN ~ mkt_excess, data = data, na.action=na.omit)
     alpha <- as.numeric(coefficients(fit)[1])
   }
   return(alpha)
@@ -79,7 +79,6 @@ roll_capm_estimation <- function(data, window, min_obs, period = "day" ) {
     .period = period,
     .f = ~ estimate_capm(data = ., min_obs),
     .before = window - 1,
-    .after = - 10,
     .complete = FALSE
   )
   
@@ -89,7 +88,6 @@ roll_capm_estimation <- function(data, window, min_obs, period = "day" ) {
     .period = period,
     .f = ~ estimate_capm_alpha(., min_obs),
     .before = window - 1,
-    .after = - 10,
     .complete = FALSE
   )
 
