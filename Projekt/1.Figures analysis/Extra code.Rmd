@@ -209,7 +209,7 @@ all = short_term_return_sdg %>%
 
 
 
-t = short_term_return_sdg %>% # comes from Speciale analysis
+t = short_term_return_sdg_2 %>% # comes from Speciale analysis
   filter(group == 'negative') %>%
   mutate_at("sdg", str_replace, "_negative_count", "") %>%
   mutate_at("sdg", str_replace, "_", " ") %>%
@@ -253,10 +253,10 @@ all %>%
   summarise(CAAR = weighted.mean(csum,MKT_CAP)) %>% ungroup() %>%
   left_join(bands, by = c("sdg","period")) %>% 
   mutate(period = as.character(period)) %>%
-  filter(period == '0') %>%
+  filter(period == '10') %>%
   mutate(sdg = factor(sdg, levels = c("People","Planet","Prosperity","Peace","Partnership"))) %>%
-   # mutate(sdg = factor(sdg, levels = c("sdg 1", "sdg 2","sdg 3","sdg 4","sdg 5","sdg 6","sdg 7","sdg 8","sdg 9","sdg 10","sdg 11", 
-   #                                      "sdg 12", "sdg 13","sdg 14","sdg 15","sdg 16","sdg 17"))) %>%
+  #  mutate(sdg = factor(sdg, levels = c("sdg 1", "sdg 2","sdg 3","sdg 4","sdg 5","sdg 6","sdg 7","sdg 8","sdg 9","sdg 10","sdg 11", 
+  #                                       "sdg 12", "sdg 13","sdg 14","sdg 15","sdg 16","sdg 17"))) %>%
   ggplot(
     aes(x = sdg, y = CAAR, color= sdg,group = sdg, fill = sdg)) + 
   geom_bar(stat="identity") +
@@ -269,6 +269,20 @@ all %>%
         legend.key.size = unit(0.5, 'cm'),
         axis.text.x = element_text(angle=45)) +
   theme(legend.position = "none")
+ggsave("ST_positive_sdg_bar.png")
+
+
+t %>% filter(period == '0') %>% mutate(t = "negative") %>% rbind(t_pos %>% filter(period == '0') %>% mutate(t = "positive")) %>%
+  mutate(sdg = factor(sdg, levels = c("sdg 1", "sdg 2","sdg 3","sdg 4","sdg 5","sdg 6","sdg 7","sdg 8","sdg 9","sdg 10","sdg 11", 
+                                        "sdg 12", "sdg 13","sdg 14","sdg 15","sdg 16","sdg 17"))) %>% 
+  group_by(sdg,t) %>% summarise(n=n()) %>% 
+  ggplot(aes(x = sdg, y = n, color =  t, group = t, fill = t)) + geom_bar(stat = "identity") +
+  theme(legend.title = element_blank(),
+        legend.key.size = unit(0.5, 'cm'),
+        axis.text.x = element_text(angle=45))
+
+
+
 ggsave("ST_positive_sdg_bar.png")
 
 ```

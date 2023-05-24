@@ -31,7 +31,7 @@ ESG %>%
 # Read stock data from:
 ISIN <- read_excel("world_index__ISIN.xlsx")
 stock <- read_excel("SXXP_MONTHLY_EUR.xlsx")
-free_float_data <- read_excel("free_float_sxxp.xlsx")
+mkt_cap <- read_excel("World_market_cap.xlsx")
 
 free_float = free_float_data %>%
   filter(!row_number() %in% c(1,2)) %>% 

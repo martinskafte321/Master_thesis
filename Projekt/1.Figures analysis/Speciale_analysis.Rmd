@@ -103,7 +103,7 @@ for (y in 1:length(rolling_means)) {
   for (z in 1:length(SDs)) { 
 
 long_term_data_monthly <- data_monthly %>%
-  left_join(ESG_RR, by ="isin") %>% filter(ESG_risk_category == 'High') %>%
+ # left_join(ESG_RR, by ="isin") %>% filter(ESG_risk_category == 'High') %>%
   transmute(date,isin,MKT_CAP, free_float_mkt_cap,
             ret = W_RETURN, 
             norm_positive_sum = sentiment_positive_count - sdg_not_relevant_positive_count,
@@ -368,14 +368,14 @@ short_term_data_daily = data_daily %>%
 
 # plan(multisession, workers = availableCores())
 # 
- short_term_data_nested <- short_term_data_daily %>% filter(isin == 'GB0007188757' | isin =='TW0002409000') %>% ungroup() %>%
-   select(date,isin,W_RETURN,mkt_excess) %>%
-   nest(data = -c(isin)) %>%
-   mutate(beta = future_map(
-     data, ~ roll_capm_estimation(., window = 120, min_obs = 80, period = "day")
-   )) %>%
-   unnest(c(beta)) %>%
-   na.omit(beta,alpha) %>% select(-data)
+ # short_term_data_nested <- short_term_data_daily %>% filter(isin == 'GB0007188757' | isin =='TW0002409000') %>% ungroup() %>%
+ #   select(date,isin,W_RETURN,mkt_excess) %>%
+ #   nest(data = -c(isin)) %>%
+ #   mutate(beta = future_map(
+ #     data, ~ roll_capm_estimation(., window = 120, min_obs = 80, period = "day")
+ #   )) %>%
+ #   unnest(c(beta)) %>%
+ #   na.omit(beta,alpha) %>% select(-data)
                               
 # # Write to CSV to keep in nice format:
   #      short_term_data_nested %>%
@@ -531,8 +531,8 @@ negative_index_10 = negative_index_all %>%
   group_by(type) %>%
   summarise(
     rel_events = mean(relative_events, na.rm = TRUE),
-    AAR = mean(value),
-    CAAR = mean(csum),
+    AAR = weighted.mean(value,MKT_CAP),
+    CAAR = weighted.mean(csum,MKT_CAP),
     n = n(),
     mkt = mean(MKT_CAP),
     SE_AAR = sd(value, na.rm = TRUE)/sqrt(n()),
@@ -664,9 +664,9 @@ negative_index_10 = negative_index_all %>%
   group_by(type,ESG_risk_category) %>% na.omit() %>%
   summarise(
     rel_events = mean(relative_events, na.rm = TRUE),
-    AAR = mean(value),
+    AAR = weighted.mean(value,MKT_CAP),
     n = n(),
-    CAAR = mean(csum),
+    CAAR = weighted.mean(csum,MKT_CAP),
     SE_AAR = sd(value, na.rm = TRUE)/sqrt(n()),
     SE_CAAR = sd(csum, na.rm = TRUE)/sqrt(n())
     )
@@ -724,7 +724,7 @@ short_term_data_event_sdg = short_term_data_sdg %>%
   select(isin,date,abnormal_ret,MKT_CAP, contains("sdg")) %>% 
   select(isin,date,abnormal_ret, MKT_CAP,contains("tive"),-c(sdg_broad_negative_count,sdg_broad_neutral_count,sdg_broad_positive_count))
 
-remove(short_term_data_sdg,sentiment_daily,data_daily,betas,)
+remove(short_term_data_sdg,sentiment_daily,data_daily,betas, short_term_data_daily)
 # Create columns that represent the lagged and leading values in relation to the event date:
 
 for (i in 1:10) {
@@ -895,7 +895,8 @@ negative_index_sdg %>% filter(period == '0') %>%
 ggsave("ST_negative_sdg_bar.png")
 
 
-
+n_positive %>% mutate(t = "positive") %>% select(t,sdg,n) %>% rbind(n_negative %>% mutate(t = "negative") %>% select(t,sdg,n)) %>% 
+  ggplot(aes(x = sdg, y = n, color = t, group = t, fill=t)) + geom_bar(stat = "identity")
 
 ```
 

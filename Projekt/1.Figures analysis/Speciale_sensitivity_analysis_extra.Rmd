@@ -40,7 +40,7 @@ source("functions.R")
 #################################
 ```{r}
 
-# STOXX 600 Europe index 
+#  Nasdaq index 
 index_daily <- read_excel("C:/Users/Marti/OneDrive - University of Copenhagen/KU/Speciale/Data behandling/MSCI_World_daily.xlsx") %>%
   transmute(date = as.Date(Date, format = "%Y-%m-%d"),
          mkt_excess = as.numeric(gsub('%','',Change))/100)
@@ -51,6 +51,14 @@ data_daily <- read.csv("C:/Users/Marti/OneDrive - University of Copenhagen/KU/Sp
 
 isin_nasdaq = read.csv("C:/Users/Marti/OneDrive - University of Copenhagen/KU/Speciale/Data behandling/nasdaq_isin.csv") %>% select(-X)
 
+mkt_cap <- read_excel("C:/Users/Marti/OneDrive - University of Copenhagen/KU/Speciale/Data behandling/World_market_cap.xlsx")  %>%
+  pivot_longer(!date, names_to = "firm", values_to = "MKT_CAP") %>%  
+  mutate(date = as.Date(date, format = "%Y-%m-%d"),
+         date = ceiling_date(date, "month")-1) %>% 
+  group_by(firm) %>%
+  summarise(MKT_CAP = mean(MKT_CAP, na.rm = TRUE)) %>%
+  left_join(ISIN, by = "firm") %>%
+  transmute(isin = id_isin, MKT_CAP)
 
 
 ```
@@ -329,7 +337,8 @@ Short term abnormal return after an individual event - Daily
 short_term_data_daily = data_daily %>% 
   right_join(isin_nasdaq, by = "isin") %>%
   mutate(date = as.Date(date)) %>% 
-  right_join(index_daily %>% select(date, mkt_excess), by = "date")
+  right_join(index_daily %>% select(date, mkt_excess), by = "date") %>%
+  left_join(mkt_cap, by = "isin")
 
 # 
 #  plan(multisession, workers = availableCores())
@@ -422,11 +431,11 @@ short_term_data_event = short_term_data %>%
 
         
 positive_index = short_term_data_event %>% 
-  select(date,isin,"0",contains("-"),contains("+"),pos_event) %>% 
+  select(date,isin,MKT_CAP,"0",contains("-"),contains("+"),pos_event) %>% 
   select(-c(contains("neg_event_"),contains("pos_event_"))) %>%
   filter(pos_event == 1) %>%
   select(-pos_event) %>%
-  pivot_longer(!c(date,isin), names_to = "type", values_to = "value") %>%
+  pivot_longer(!c(date,isin,MKT_CAP), names_to = "type", values_to = "value") %>%
   na.omit(value)  %>%
   mutate(type = factor(type, levels = c("-10", "-9","-8","-7","-6","-5","-4","-3","-2","-1",
                                         "0", "+1", "+2","+3","+4","+5","+6","+7","+8","+9","+10"))) %>%
@@ -438,12 +447,13 @@ positive_index_10 = positive_index %>%
   mutate(csum = cumsum(value)) %>%
   group_by(type) %>%
   summarise(
-    AAR = mean(value),
-    CAAR = mean(csum),
+     AAR = weighted.mean(value,MKT_CAP),
+    CAAR = weighted.mean(csum,MKT_CAP),
     SE_AAR = sd(value, na.rm = TRUE)/sqrt(n()),
     n = n(),
     SE_CAAR = sd(csum, na.rm = TRUE)/sqrt(n())
     )
+
 
 
 positive_index_10 %>% select(type,AAR,CAAR) %>%
@@ -476,11 +486,11 @@ ggsave("ST_positive_all_CI_nasdaq.png")
 ### negative 
 
 negative_index = short_term_data_event %>% 
-  select(date,isin,"0",contains("-"),contains("+"),neg_event) %>% 
+  select(date,isin,MKT_CAP,"0",contains("-"),contains("+"),neg_event) %>% 
   select(-c(contains("pos_event_"),contains("neg_event_"))) %>%
   filter(neg_event == 1) %>%
   select(-neg_event) %>%
-  pivot_longer(!c(date,isin), names_to = "type", values_to = "value") %>%
+  pivot_longer(!c(date,isin,MKT_CAP), names_to = "type", values_to = "value") %>%
   na.omit(value)  %>%
   mutate(type = factor(type, levels = c("-10", "-9","-8","-7","-6","-5","-4","-3","-2","-1",
                                         "0", "+1", "+2","+3","+4","+5","+6","+7","+8","+9","+10"))) %>%
@@ -491,8 +501,8 @@ negative_index_10 = negative_index %>%
   mutate(csum = cumsum(value)) %>%
   group_by(type) %>%
   summarise(
-    AAR = mean(value),
-    CAAR = mean(csum),
+    AAR = weighted.mean(value,MKT_CAP),
+    CAAR = weighted.mean(csum,MKT_CAP),
     n = n(),
     SE_AAR = sd(value, na.rm = TRUE)/sqrt(n()),
     SE_CAAR = sd(csum, na.rm = TRUE)/sqrt(n())
@@ -584,9 +594,9 @@ negative_index_10 = negative_index %>%
   mutate(csum = cumsum(value)) %>%
   group_by(type,ESG_risk_category) %>% na.omit() %>%
   summarise(
-    AAR = mean(value),
+    AAR = weighted.mean(value,MKT_CAP),
     n = n(),
-    CAAR = mean(csum),
+    CAAR = weighted.mean(csum,MKT_CAP),
     SE_AAR = sd(value, na.rm = TRUE)/sqrt(n()),
     SE_CAAR = sd(csum, na.rm = TRUE)/sqrt(n())
     )
