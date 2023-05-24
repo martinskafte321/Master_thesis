@@ -1,52 +1,59 @@
 
+To cross-validate the robustness of the initials results, I re-estimate the models with altered methods in order to confirm that the appearance of over-performance is not created artificially. Thus, the practice can lead to validation or invalidation of the methodologies and further increase our understanding of the underlying drivers of shareholder behavior. \\
+For the Market Model and the Calendar-Time Portfolio I have made two adjustments. First, I modify the threshold for events to be considered as important by increasing the threshold to two and three standard deviations. Second, I change the portfolio weight from being determined by market capitalization (value weights) to a naive approach (equal weights). 
+Ultimately, I round off the section with an introduction of the relation between negative events and abnormal returns on global markets. 
 
-In this section I cross-validate the robustness of the initials results by re-estimating the models with altered variables in order to confirm that the appearance of over-performance is not created artificially. Thus, the practice can lead to validation or invalidation along with advancement of model specifications. 
-
-For the Market Model and the Calendar Time Portfolio I 1) alter the threshold for events to be considered as important from one to two and three standard deviations, and 2) change the portfolio weights from being based on market capitalization (value) to a naive approach (equal). Due to insignificance and borderline randomness of the relation between positive events and returns I only present the plots related to negative events. The comparable graphs of the positive events can be found in Appendix \ref{fig:ST_pos_sensi}.
+As the relation between positive events and returns appeared to be insignificant and vague, which is also reflected in the re-estimated results, I have chosen to focus this section solely on the relation to negative news. However, the corresponding graphs illustrating positive events can be found in Appendix \ref{app: sensitivity}.
 
 \subsection{Market model: event threshold} \label{sec: sens_st_sd}
 
-The requirements behind the thresholds for event identification is based on the volume of events relative to the average throughout the full sample for a given firm. Increasing the threshold naturally leads to fewer stocks included in the calculation of average abnormal returns. Intuitively, an increase in the tightness of the threshold is expected capture more extreme events, which should to lead to higher abnormal returns in absolute values, if firms with larger events are penalized harder.  
+The selection of thresholds for event identification is primarily driven by the volume of events on a given day in relation to the overall average for a specific firm over the entire sample period. Raising the threshold naturally leads to fewer stocks being included in the portfolio. Intuitively, tightening the threshold is anticipated to capture more extreme events, which is expected to result in higher abnormal returns. In other words, the stricter threshold focuses on capturing events that have a greater potential to generate substantial market reactions, potentially resulting in more pronounced abnormal returns, if the causality holds true. 
 
 \begin{figure} [H]
     \centering
-    \caption{Negative news: Update event requirement}
+    \caption{Threshold value: Negative news}
     \includegraphics[scale=0.6]{Projekt/1.Figures analysis/ST_negative_sensitivity.png}
      \caption*{\footnotesize The figure illustrates the AAR and CAAR around the event date (t = 0) of negative news. The various colors represent the event identification rule of 1, 2, or 3 standard errors. The groups have, respectively, 1618, 1,231, and 997 events for 1,2, and 3 standard deviations}
     \label{fig:ST_neg_sensitivity}
 \end{figure} 
 
-Figure \ref{fig:ST_neg_sensitivity} compares the outcomes from changing the threshold of events. The AAR is presented in dotted lines and the CAAR in solid lines for thresholds applying 2 standard deviations (green) and 3 standard deviations (blue). For simplicity, I omit the confidence intervals along with the bars. The similarities of the AAR and CAAR imply that the results are robust to changes in the methodology. Enforcing a stronger threshold requirement leads to a larger instantaneous impact on the event date, indicated by the lower AAR on $t=0$. However, the overall CAAR is less significant for both 2 and 3 standard deviations relative to 1. Thus, in contrast with common intuition, a tighter threshold leads to lower overall returns from the identified events.  
+Figure \ref{fig:ST_neg_sensitivity} compares the outcomes from changing the threshold of events. The AAR is presented in dotted lines and the CAAR in solid lines for thresholds applying one standard deviation as originally (red), two standard deviations (green), and 3 standard deviations (blue). For simplicity, I omit the confidence intervals along with the bars. The similarity of the AARs and CAARs imply that the results are robust to changes in the methodology. 
 
+Enforcing a tighter threshold leads to a greater immediate impact on the event date, indicated by the lower AAR on $t=0$ for both two and three standard deviation thresholds. However, the cumulative investor reaction over the entire window is less significant for the two and three standard deviation thresholds compared to one standard deviation. Thus, in contrast with common intuition, more extreme events leads to lower abnormal returns. At least from this methodology. 
+ 
 \subsection{Market model: value vs. equal weights} \label{sec: sens_st_weights}
 
-A portfolio of stocks needs to implement a weighting procedure in order to determine the relative impact of individual constituents on portfolio performance. Figure \ref{fig:ST_neg_sensitivity_weight} compares the performance of applying value and equal weights to a portfolio consisting of an identical sample of firms that have experienced a negative event. 
+Figure \ref{fig:ST_neg_sensitivity_weight} compares the performance of applying value and equal weights to the portfolio. Both portfolios consist of the same sample of firms that have encountered a negative event. 
 
 \begin{figure}[H]
     \centering
-    \caption{Negative news: Value vs. Equal weights}
+    \caption{Value vs. equal weights: Negative news }
     \includegraphics[scale=0.6]{Projekt/1.Figures analysis/ST_negative_sensitivity_weight.png}
      \caption*{\footnotesize The figure illustrates the average abnormal return (AAR) and cumulative AAR (CAAR) around the event date (t = 0) of negative news. The blue lines are returns calculated from an equally weighted portfolio, while the red lines are based on market capitalization weights.}
     \label{fig:ST_neg_sensitivity_weight}
 \end{figure} 
 
-From a visual perspective, the abnormal returns from applying equal weights validate the original results, as the CAAR over the full window is approximately equivalent to applying value weights. While the portfolio AARs follow each other to some extent, the development in CAAR is more adverse using equal weights relative to value weights. Applying equal weights inevitably allocates more weight to smaller stocks, which apparently contribute to a more severe investor reaction. In the days leading up to the event the equal weighted portfolio CAAR decreases at a faster rate, which results in a lower bottom of approximately 1.0\%. However, after the spike in news has occurred the CAAR reverts to the same level as the value weighted portfolio. 
+From a visual perspective, the abnormal returns obtained by applying equal weights to the portfolio validate the original results, as the CAAR over the entire window is approximately equivalent to that of applying value weights. Although the portfolio AARs show a degree of similarity, the development of the CAAR is more adverse when applying equal weights compared to value weights. 
+
+Applying equal weights to the portfolio inherently allocates more weight to smaller stocks, which contribute to a more severe initial investor reaction. In the days leading up to the event, the CAAR of the equal weighted portfolio declines at a faster rate compared to the value weighted portfolio, which results in a lower bottom of approximately 1.0\%. However, after the spike in negative news has occurred, the CAAR reverts to the same level as the value weighted portfolio. The observed pattern suggests that there is an initial overreaction among investors in the case of smaller stocks. As more information becomes available and the true magnitude of the event is revealed, the market adjusts its expectations and reevaluates the impact, ultimately bringing the performance of the portfolio in line with the value weighted portfolio.
+
+\subsection{Calendar Time Portfolio: Threshold}
+
+Altering the threshold requirements from one to two and three standard leads to varying outcomes. When considering holding periods of one month, the alphas decrease and become statistically insignificant. The portfolio constructed using a threshold of three standard deviations produce larger alphas compared to the one with a threshold of two standard errors, with values of -0.78\% and -0.47\%, respectively. However, for a holding period of T = 4, the relation is reversed, with values of -0.27\% and -0.45\% respectively. For longer holding periods, the abnormal returns converge to approximately zero across different threshold values. As the portfolios are generating seemingly random, or at least fluctuating, outcomes, I reason that there is no relation between the event threshold and portfolio return on the long horizon, which aligns with the outcomes from the short term sensitivity control. However, although insignificant, the results support the relation between negative events and abnormal returns.  
 
 \subsection{Calendar Time Portfolio: Portfolio weights}
 
-Table \ref{tab: FF5_sensitivity} reports the alphas, t-values and significance levels of equally weighted portfolios along with the results from changing the threshold requirements. Besides the weights, the portfolio construction is identical to that from the empirical results in section \ref{sec: long_term_portfolio}. 
+Table \ref{tab: FF5_sensitivity} reports the alphas, t-values and significance levels of equally weighted portfolios, along with the results obtained by altering the threshold requirements. Besides the weights and thresholds, the portfolio construction is identical to that from the empirical results relating to negative events in section \ref{sec: long_term_portfolio}.   
 
-Altering the portfolio weights from value to equal clearly indicate a discrepancy from measurement with the latter generating higher absolute alpha values. The value weighted portfolio with T = 1 generated abnormal returns of -0.84\%, while the equivalent portfolio with equal weights ends up at -0.96\% significant on the $1\%$ level.   
+Applying equal portfolio weights clearly indicate a discrepancy in the significance of the alphas compared to value weights. The equal weighted portfolio generates significant alpha values in all holding periods. Most notably, the equal weighted portfolio demonstrates significant alpha values of -0.64\% and -0.49\% with holding periods of eight and 12 months, respectively. In contrast, the value weighted portfolios yield insignificant alpha values of less than 0.05\% with the same holding periods. 
 
-The results are in contrast with the short term sensitivity analysis on portfolio weights, where the equal weighted portfolio generated lower abnormal returns. Again, the increased allocation toward smaller stocks seems to have an influential impact on the long run, however in the opposite direction relative to the short term. Applying holding periods of T = 8 and 12 months generate significant alpha as well indicating that smaller stocks are penalized over a longer time horizon than relatively larger ones.   
-
-The abnormal returns of the equal weighted portfolios confirm the negative association between negative events and abnormal returns and to some degree the magnitude of the value weighted portfolio returns.
+Overall, the results show a slight contrast with the short-term sensitivity analysis on portfolio weights, where the portfolio constructions generated approximately even abnormal returns. However, the short-term behavior displayed increased volatility and a lower minimum level of the CAAR when applying equal weights, aligning with the long term results. Moreover, the significant alpha values obtained when using holding periods of T = 8 and 12 months suggest that smaller stocks are penalized over a longer time horizon than relatively larger ones. The abnormal returns of the equal weighted portfolios confirm the negative association between negative events and abnormal returns on a short to medium time horizon. 
 
 \setlength{\tabcolsep}{15pt}
 \begin{table}[H]
 \small
 \centering
-\caption{FF-5 alpha with equal weights and edit event rule } 
+\caption{FF-5 alpha: Equal weights and threshold value } 
 \makebox[\textwidth][c] {
 \begin{tabular}{ccccccc}
 \hline \hline \\ 
@@ -72,30 +79,29 @@ The abnormal returns of the equal weighted portfolios confirm the negative assoc
 \label{tab: FF5_sensitivity}
 \end{table}
 
-\subsection{Calendar Time Portfolio: Thresholds}
-
-Altering the threshold requirements from one to two and three standard leads to varying outcomes. For holding periods of one month, the alphas decrease and become insignificant from tightening the threshold, however the portfolio with three standard errors produce larger alphas than the one with two. With T = 4 the relation is reverse as the 2 standard deviation portfolio generates the largest alpha. Longer holding periods generate roughly equal abnormal returns across threshold values. As the portfolios are generating seemingly random outcomes, I reason that there is no relation between the event threshold and portfolio return on the long horizon. 
-
-
 \subsection{Inference from global companies}
 
-In order to further assess the robustness of the results, I reiterate the main parts of the empirical analysis with a completely new sample of firms and corresponding SDG news data. The sample consists of constituent firms from the Nasdaq Global Large Cap Index. In addition to providing robustness, the assessment also generates insights into the global perspective on the relation between ESG and corporate performance. \\
-The impact from positive news on global companies are slightly different from European companies. High risk companies are to a larger degree being rewarded for positive news, whereas the impact on medium and low risk companies are close to zero. However, since the remaining part of the paper will focus mostly on negative news, I will do the same here. The AAR and CAAR graphs for all firms and split on ESG risk for positive events are available in appendix \ref{app: sensitivity}. On negative news, the shareholder reaction is approximately equivalent across European and global companies with CAAR values around -0.6\%. Again, most of the decline happens before the event is identified.  
+To further assess the robustness of the results, I reiterate the main parts of the empirical analysis with a novel sample of firms and corresponding SDG news from the constituents of the Nasdaq Global Large Cap Index\footnote{https://indexes.nasdaqomx.com/Index/Overview/NQGLCI}. Moreover, the inclusion of the new sample firms offer valuable insights into the global perspective on the relationship between ESG factors and corporate performance. The abnormal returns on both short- and long-term returns has been through the same transformation as the ones from the original models. The Market Model applies the MSCI World Index\footnote{https://www.msci.com/World} as the market portfolio, while the Calendar-Time Portfolio approach applies the Fama-French Developed Markets 5 factors in the regressions. 
 
+The short-term market reaction from negative news is approximately equivalent across European and global companies. However, the reaction in Europe is slightly more negative compared to global companies with CAAR-values of -0.72\% and -0.56\%, respectively. Again, most of the decline in market value of global companies happens before the event is identified. On the contrary, when partitioning on ESG risk levels, the inferences shift around. Specifically, for global low-risk companies, it appears that negative news does not significantly impact their market values, as the CAAR remains close to zero throughout the entire window. In stark contrast, European companies experience a notable decline, with an average loss of -1.65\% over the 21-day window. 
+The impact of negative events on global high-risk companies is substantial, leading to a significant market value loss of approximately -1.5\%, while the reaction for medium-risk firms is comparable to that of European equities.
 
+The short term impact from positive news on global companies are slightly different from European companies. High risk companies are to a larger degree being rewarded for positive news, whereas the impact on medium and low-risk companies are close to zero. However, since the remaining part of the paper will focus mostly on negative news, I will do the same here. The AAR and CAAR for all firms and split on ESG risk for positive events are available in tables \ref{fig:ST_pos_sensitivity_nasdaq} and \ref{fig:ST_pos_sensitivity_nasdaq_ESG} in appendix \ref{app: sensitivity}.
+
+Overall, in Europe and the rest of the world, corporate negative news related to the SDGs are penalized by investors. However, investor are in disagreement on how to penalize companies when accounting for ESG risk.  
 
 \begin{figure}
      \centering
      \begin{minipage}[b]{0.49\textwidth}
          \centering
-    \caption{Negative}
+    \caption{Global: Negative news}
     \includegraphics[width=\textwidth]{Projekt/1.Figures analysis/ST_negative_all_CI_nasdaq.png}
      \label{fig:ST_neg_sensitivity_nasdaq}
      \end{minipage}
      \hfill
      \begin{minipage}[b]{0.49\textwidth}
        \centering
-    \caption{Negative news: Nasdaq Global}
+    \caption{Global: Negative news, ESG}
     \includegraphics[width=\textwidth]{Projekt/1.Figures analysis/ST_negative_ESG_nasdaq.png}
     \label{fig:ST_pos_sensitivity_nasdaq}
      \end{minipage}
