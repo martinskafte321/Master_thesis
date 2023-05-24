@@ -1,17 +1,17 @@
 
 
-\subsection{Short term abnormal returns in the Market Model} \label{ST_results}
+\subsection{Short term abnormal returns} \label{ST_results}
 
 With a baseline in the thesis' theoretical and methodological groundwork from prior sections, the following presents the main empirical results in relation to the hypotheses. 
-To test hypothesis #1 of whether SDG-related events impacts firms' market values in the short term, I separate negative and positive events and assess the aggregated development in abnormal returns 10 days before and 10 days after an event has occurred. Moreover, I isolate the influence of individual SDGs to assess if events related to specific sustainability goals are more relevant for investors than other. The Market Model is applied to measure abnormal returns in all instances. For simplicity, when discussing negative events, I will mention the AAR as an absolute value. Thus, although the AAR decreases on the graph I will communicate the move as an increase in abnormal returns, since I assume we wish to take a short position in the assets. 
+To test hypothesis #1 of whether SDG-related events impact firms' market values in the short term, I separate negative and positive events and assess the development in abnormal returns 10 days before and 10 days after an event has occurred. Additionally, I examine the influence of individual SDGs to determine if events related to specific sustainability goals have a greater impact on investors compared to others. I apply the Market Model to measure abnormal returns in all instances. 
+
+For simplicity in the context of negative events, I will communicate the abnormal return in absolute values, as it aligns with the assumption of taking a short position in the asset that experiences a negative event. Therefore, a decrease in the AAR on the graph corresponds to an increase in abnormal returns.
 
 \subsubsection{Negative news} \label{sec: st_negative}
 
-The average abnormal returns and development in cumulative average abnormal returns after a negative events are illustrated in figure \ref{fig:ST_neg_news}. To support the analysis, the 95\% confidence intervals of the AAR and CAAR are portrayed along with the amount of events on a given day relative to the event day $(t = 0)$ (right axis) illustrated by the white bars in the background. The left y-axis depicts the abnormal return and the x-axis is the number of days before and after an event has occurred. 
+The average abnormal returns and development in cumulative average abnormal returns after a negative event are illustrated in figure \ref{fig:ST_neg_news}. To support the analysis, the graph also includes the 95\% confidence intervals of the AAR and CAAR. Additionally, the white bars in the background represent the number of events on a given day relative to the event day $(t = 0)$, shown on the right axis. The left y-axis represents the abnormal return, while the x-axis displays the number of days before and after an event has occurred.
 
-The average abnormal returns of the event date $(t=0)$ is significantly negative at -0.40\% at a 1\% level. Investors are reacting to spikes in bad news of firms by selling their shares. The days following an event demonstrates no abnormal performance. The abnormal returns are approximately zero on average until $t = -6$ upon which the AAR decreases in the days leading up to the event date, with the only significantly negative AARs found between $t=-6$ and $t=0$ at a $5\%$ level. Nonetheless, the CAAR is significantly negative from $t=-4$ and through the remaining window where it bottoms at approximately $-0.75\%$ 10 days after an event. The new information appears to be priced in prior to the spike in news articles. 
-
-The declining nature of the CAAR suggests that the market gradually learns about the negative events upon which the prospective events are gradually priced in. After the spike in news on the event date the news has limited impact. \\ 
+On the event date $(t=0)$, the average abnormal returns are significantly negative at -0.17\% with a 5\% level of significance. This indicates that investors react to spikes in bad news by selling their shares. The days following an event demonstrates no abnormal performance. The abnormal returns are approximately zero until six days before the event. After that, the AAR start to decrease, indicating a loss in market share prior to the observed event. The CAAR is significantly negative from $t=-4$ and through the remaining window where it bottoms at approximately $-0.65\%$ 10 days after an event. The new information appears to be priced in prior to the spike in news articles. 
 
 
 \begin{figure} [H]
@@ -23,41 +23,38 @@ The declining nature of the CAAR suggests that the market gradually learns about
 \end{figure} 
 
  
-The bars in the background offer insights into the extent of media attention in the days around a spike in news. For example, at $t = -1$ the average firm is mentioned in nearly 50\% less articles as the amount of the $t = 0$ day. The bars increase along with the CAAR declining in the days from $t=-7$, which imply a relation between attention towards negative news and pessimistic investor behavior even before the event date. 
+The declining trend of the CAAR suggests that the market gradually learns about the negative events before a spike in news occurs, while the news has limited impact after. The bars in the background offer insights into the extent of media attention during the days surrounding a spike in news. For instance, at $t = -1$ the average firm is mentioned in nearly 50\% fewer articles compared to the number of articles on $t = 0$. The bars increase as the CAAR decline in the days from $t=-7$, suggesting a relation between media attention towards negative news and pessimistic investor behavior even before the event date. These results are an initial indication of the relation between negative news and investor reactions.  
 
-The selection method for negative events was proposed to gather cases of severe negative abnormal returns. These results are an initial indication of the relation between negative news and investor reactions. 
+Examining the abnormal returns associated with news related to specific SDGs has the potential to enhance our understanding of which themes within corporate sustainability that investors prioritize. The CAAR for each SDG over the full event window are illustrated in figure \ref{fig:ST_neg_bar_all} in the appendix. Due to the limited number of observations for certain SDGs, the CAAR results are highly insignificant, as indicated by the wide confidence intervals. This is particularly relevant for SDG 4 and 9, where only 16 and 74 negative events are identified, respectively. 
 
-Investigating the abnormal returns associated with news specific to the individual SDGs can potentially deepen the understanding of which themes within corporate sustainability that investors place most emphasis with. Splitting the data into 17 groups impose a natural restriction on the amount of observations of each group, which is followed by statistical uncertainty in this case. For example, SDG 4 and 9 encounter only 16 and 83 observations, respectively. The CAAR at $t=10$ per SDG are illustrated in the appendix in figure \ref{fig:ST_neg_bar_all}. With a low amount of observations the CAAR becomes highly insignificant, as indicated by the confidence intervals. To counter the issue I categorize the SDGs into five groups known officially as the Five Pillars of SDG, which consist of People, Prosperity, Planet, Peace, and Partnership\footnote{The groups consist of the following SDGs: People (1,2,3,4,5), Prosperity (7,8,9,10,11), Planet (6,12,13,14,15), Peace (16), Partnership (17)}. The analysis changes focus from the individual SDGs to broader themes within sustainability, which, regardless, allows to adequately test the hypotheses.
+To address this limitation, I adopt a categorization approach by grouping the SDGs into five themes commonly referred to as the "Five Pillars of SDGs"\footnote{https://unsdg.un.org/latest/videos/5ps-sdgs-people-planet-prosperity-peace-and-partnership}, which consist of People, Prosperity, Planet, Peace, and Partnership\footnote{The groups consist of the following SDGs: People (1,2,3,4,5), Prosperity (7,8,9,10,11), Planet (6,12,13,14,15), Peace (16), Partnership (17)}.
+This approach enables a shift in focus from individual SDGs to broader sustainability themes, thereby allowing for a more comprehensive examination of the research questions. Figure \ref{fig:ST_neg_bar} illustrate the CAAR over the full event window for negative news related to the Five Pillars of SDGs. The results show that all groups, except for the People pillar, are associated with negative abnormal returns.Specifically, the Prosperity, Peace, and Partnership pillars are associated with significantly negative CAAR of -0.6\%, -1.5\%, and -1.1\%, respectively. Investors clearly have a preference for specific themes within sustainability. 
 
 \begin{figure} [H]
     \centering
-    \caption{SDG 5 pillars: negative news}
+    \caption{Five Pillars of SDGs: Negative news}
     \includegraphics[scale=0.6]{Projekt/1.Figures analysis/ST_negative_sdg_bar_groups_0.png}
     \caption*{\footnotesize The figure illustrates the CAAR on $t = 10$ (the full period) from negative news. The error bars represent the 95\% confidence intervals of the CAAR.}
     \label{fig:ST_neg_bar}
 \end{figure}
 
+To further investigate whether the degree of sustainability of firms influence the performance of abnormal returns  after encountering news, I estimate the model with a partition based on company ESG risk ratings. Figure \ref{fig:ST_neg_ESG} follows the same setup as figure \ref{fig:ST_neg_news} and displays the CAAR of event firms with a partition on ESG risk. In this analysis, the "Low" rating indicates that a firm has a low risk of encountering complications in relation to ESG affairs.
 
-Figure \ref{fig:ST_neg_bar} illustrate CAAR over the full event window from negative news related to the Five Pillars of SDGs, and indicates that all groups but People are associated with negative abnormal returns. Moreover Prosperity, Peace, and Partnership are associated with significantly negative CAAR of -0.6\%, -1.5\%, and -1.1\%, respectively.       
+The CAAR of the three groups exhibit dissimilar patters, suggesting that the overall findings of significant, negative abnormal returns from figure \ref{fig:ST_neg_news} do not apply uniformly across all risk types. Nonetheless, firms with low and medium risk profiles both experience significant negative abnormal returns up of to -1.65\% and -0.54\%, respectively. The groups are barely statistically different from one another, however the distinction in mean values do imply a discrepancy in investor reactions. On the other hand, the group of high-risk companies, which consists of only 289 observed events, exhibits a CAAR of -0.25\% and no significant relationship can be determined due to the wide confidence intervals
 
-To assess whether the degree of sustainability of firms are determinants of how abnormal returns perform after encountering news, I estimate the model with a partition on company ESG risk ratings. Figure \ref{fig:ST_neg_ESG} employs the same setup as figure \ref{fig:ST_neg_news} and displays the CAAR of event firms with a partition on ESG risk profiles. As a measure of risk, "Low" represent that a firm has a low risk of encountering complications in relation to ESG affairs.
 
 \begin{figure} [H]
     \centering
-    \caption{Negative news: CAAR split on ESG rating}
+    \caption{CAAR partitioned on ESG Risk rating: Negative news }
     \includegraphics[scale=0.6]{Projekt/1.Figures analysis/ST_negative_ESG.png}
      \caption*{\footnotesize The figure illustrates the CAAR around the event date of negative news. The lines represent low, medium and high ESG risk of the firms in the sample. The ribbons represent the 95th confidence intervals. The categories low, medium, and high have, respectively, 504, 811, and 289 observed events in the sample. }
     \label{fig:ST_neg_ESG}
 \end{figure} 
 
 
-The CAAR of the three groups show dissimilar patters, indicating that the general results of negative abnormal results from figure \ref{fig:ST_neg_news} doesn't apply to all risk types. Nonetheless, firms with low and medium risk profiles both develop significant negative abnormal returns up of to -1.68\% and -0.50\%, respectively. The groups are barely statistically different from one another, however the distinction in mean values do imply a discrepancy in investor reactions. As the group of high risk companies consists of only 289 observed events, the confidence intervals become wide with a mean around -0.25\%, and no significant relation can be determined. 
-
-
-
 \subsubsection{Positive news}
 
-According to figure \ref{fig:ST_pos_news}, investors react promptly to positive events, as abnormal returns are present on the event day, while the remaining days of the window are not associated with a significant reaction from shareholders. The CAAR revolves around 0\% as well with a slight top on the event date. Although insignificant, a slightly positive reaction is present, however the effect reverts to zero throughout the next five days.     
+According to figure \ref{fig:ST_pos_news}, investors react promptly to positive events, as abnormal returns are present on the event day, while the remaining days of the window are not associated with a significant reaction from shareholders. The CAAR revolves around 0\% as well with a slight top on the event date. Although insignificant, a slightly positive reaction is present, however the average effect reverts to zero throughout the event window. 
 
 \begin{figure} [H] 
     \centering
@@ -67,18 +64,21 @@ According to figure \ref{fig:ST_pos_news}, investors react promptly to positive 
     \label{fig:ST_pos_news}
 \end{figure}
 
-The tendencies are further emphasized by the insignificance of the abnormal returns regarding the Five Pillars of SDGs. In contrast to the case of negative events, where a potential issue involved insufficient observations, the underlying uncertainty emerge from the seemingly random shareholder reaction to positive events, as indicated by the aggregate overview in figure \ref{fig:ST_pos_bar}. People, Peace, and Partnership present negative abnormal returns, while Planet and Prosperity are positive. However, none of them are significant at a 5\% level. Only SDG 7, that deals with clean energy, display significantly abnormal returns as per figure \ref{fig:ST_pos_bar_all} in the appendix. 
+The tendencies of insignificance are further emphasized by the abnormal returns across the Five Pillars of SDGs for positive events. 
+
+In contrast to the issue of insufficient observations in the case of negative events, the underlying uncertainty emerges from the seemingly random shareholder reaction to positive events in general, as indicated by the aggregate overview in figure \ref{fig:ST_pos_bar}. 
+Only SDGs 4, 8, and 10, demonstrates significantly abnormal returns over the full window as per figure \ref{fig:ST_pos_bar_all} in the appendix. While People, Peace, and Partnership exhibit negative abnormal returns, Planet and Prosperity display positive abnormal returns. However, none of these results reach statistical significance at a 5\% level.   
 
 \begin{figure} [H]
     \centering
-    \caption{SDG 5 pillars: positive news}
+    \caption{Five Pillars of SDG: Positive news}
     \includegraphics[scale=0.6]{Projekt/1.Figures analysis/ST_positive_sdg_bar_groups_0.png}
     \caption*{\footnotesize The figure illustrates the CAAR on $t = 10$ (full period) from positive news. The error bars represent the 95\% confidence intervals of the CAAR.}
     \label{fig:ST_pos_bar}
 \end{figure}
 
- 
-Average results do not justify the full narrative as an evident difference between firms with a low and medium ESG risk profile is illustrated in figure \ref{fig:ST_pos_ESG}. With significantly negative CAAR of -0.25\% over the window, shareholders allegedly react pessimistic if low ESG risk-firms are involved in positive interactions with SDGs. High ESG risk-firms experience negative abnormal returns of the around -0.5\%, although the average comes with high uncertainty. In contrary, firms with a medium risk rating enjoy a significant, positive CAAR at $0.25\%$ over the full window. 
+Average results alone do not fully capture the narrative, as figure \ref{fig:ST_pos_ESG} highlights a notable distinction between firms with low and medium ESG risk profiles. Shareholders demonstrate a pessimistic reaction, with a significantly negative CAAR of -0.25\%, when low ESG risk firms engage in positive interactions with SDGs. 
+High ESG risk firms, on the other hand, experience negative abnormal returns of approximately -0.5\%, although the average result comes with high uncertainty. In contrast, firms with a medium risk rating enjoy a significant and positive CAAR at $0.25\%$ over the entire  window. 
 
 \begin{figure} [H]
     \centering
@@ -88,17 +88,21 @@ Average results do not justify the full narrative as an evident difference betwe
     \label{fig:ST_pos_ESG}
 \end{figure} 
 
-Generally, the short term empirical evidence demonstrate a non-verifiable relation between abnormal returns and positive events, apart from an instant reaction on the event date.  Partitioning firms with regard to their ESG risk rating indicates that firms with medium risk are rewarded for positive news while low and high are sold off. In contrary, negative events showed a significant negative reaction on broad news and from various SDG-themes, and from medium and low risk companies.   
+Overall, the short term empirical evidence demonstrate intriguing  insights into the relationship between SDG events and corporate performance. Negative events are associated with an average penalty of -0.65\% from shareholders. When considering ESG risk characteristics  it is observed that low-risk firms are penalized the most. On the other hand, shareholders are not influenced by positive events, with an apparent average of -0.2\% over the period. Interestingly, medium risk-firms are rewarded for positive events, while low-risk firms face are penalized. Accounting for the SDG theme reveals that shareholders react significantly negative to adverse news related to prosperity, peace, and partnerships, whereas no significant reaction is observed from positive news. 
 
-\subsection{Long term abnormal returns: The Calendar Time Portfolio} \label{sec: long_term_portfolio}
+\subsection{Long term abnormal returns} \label{sec: long_term_portfolio}
 
-In contrast to the short term methodology, where all returns from events are averaged to a single event day, the long term portfolios are rebalanced each month and includes all firms, that have experienced an event within the T = 1/4/8/12 preceding months. The performance of portfolio returns are evaluated in accordance with the Calendar Time Portfolio approach, and by applying White heteroskedastic-robust standard errors. Moreover, any evidence of autocorrelation in the significant models's residuals has been rejected by a Breusch-Godfrey test of first-order. Full regression statistics including coefficient estimates, r-squared, and standard errors are available in Appendix X. The factor models do generally have high power in explaining the excess return risk exposure, with a r-square coefficient between 73\% to 98\% throughout the various portfolios. The portfolios that hold the least amount of firms on average generally has the lowest r-squared, which is a result of increased idiosyncratic variance with less observations. The inspection will not divide events into SDG themes, since the monthly amount of firms in the various portfolios would decrease to an extent where no intuition can be drawn from the results.  
+In contrast to the short-term methodology, where all returns from events are averaged to a single event day, the long-term portfolios are rebalanced on a monthly basis, and they include all firms that have experienced an event within the previous T [1,4,8,12] months. The performance of these portfolios is evaluated in accordance with the Calendar Time Portfolio approach, and White heteroskedastic-robust standard errors are applied to account for potential heteroskedasticity in the data. Any evidence of autocorrelation in the models' residuals have been rejected by a Breusch-Godfrey test of first-order. Furthermore, the appendix provides all necessary regression statistics, including coefficient estimates, R-squared values, and standard errors, for further reference and analysis.
+
+The factor models demonstrate a strong ability to explain the risk exposure and excess returns of the portfolios, with R-squared coefficients ranging from 85\% to 98\% for the ordinary portfolios. The portfolios that hold the least amount of firms generally has the lowest r-squared, which is a result of increased idiosyncratic variance. To maintain a sufficient number of observations in the portfolios, the analysis does not measure the performance from categorizing events into specific SDG themes. This decision ensures that the monthly portfolios have a reasonable number of firms, enabling meaningful insights to be derived from the results.
 
 \subsubsection{Negative news}
 
-The abnormal returns from the individual portfolios are reflected through the intercept (alpha) from the Fama-French regressions in table \ref{tab: FF5_neg_ESG} along with the corresponding t-value. The table present an overall column containing the alpha from a portfolio of all firms that have experienced a negative event, and three columns representing firms split on ESG risk rating. Above each horizontal line, the "$T = x$" express the portfolio holding period after an event has occurred. 
 
-Overall, negative events generate negative alphas for across holding periods, which indicates that the event selection methodology works as intended. The alphas are  significantly negative at -0.84\% at a $1\%$ level and -0.36\% at $5\%$ with holding periods of $T = 1$ and $T = 4$ months. Holding periods larger than four months are closer to zero and insignificant, which is in support of market efficiency on a long horizon. An implication of the strategy is that portfolios with longer holding periods will accordingly include more firms in each rebalancing, which ultimately will drive the portfolio return closer to the market return.  
+
+The abnormal returns of the individual portfolios are captured by the intercept (alpha) estimated from the Fama-French regressions, as illustrated in table \ref{tab: FF5_neg_ESG} along with the corresponding t-statistics. The table includes an "Overall" column, which represents the alpha of the portfolio consisting of all firms that have experienced a negative event in a given calendar month. Additionally, there are three columns representing firms categorized based on their ESG risk rating. Each section in the table corresponds to a different portfolio holding period, denoted by "$T = x$" above each horizontal line.
+
+Overall, the results reveal that negative events lead to negative alphas across all holding periods, which in part illustrates the effectiveness of the event selection methodology. The alphas are significantly negative, with values of -0.84\% at a 1\% level and -0.36\% at a 5\% level for holding periods of T = 1 and T = 4 months, respectively. However, as the holding period increases beyond four months, the alphas approach zero and become statistically insignificant. This finding supports the idea of market efficiency over longer time horizons. It is worth noting that portfolios with longer holding periods include more firms in each rebalancing, which tends to align the portfolio returns with the overall market return. 
 
 \setlength{\tabcolsep}{15pt}
 \begin{table}[H]
@@ -128,20 +132,16 @@ Overall, negative events generate negative alphas for across holding periods, wh
 \label{tab: FF5_neg_ESG}
 \end{table}
 
-Across all subsets, the relation between negative news and returns are most severe within 1-4 months after an event has occurred. 
 
-With a partition on ESG-risk, all alphas are negative, which confirm the initial inference. Risk characteristics of low and medium types generate alphas of approximate even magnitude at $-0.64\%$ and $-0.61\%$, respectively, with the latter being significant at 5\%. The portfolios with high ESG risk and holding periods of one and four months generates considerably larger alphas of $-2.3\%$ and $-0.84\%$.  
+With a partition on ESG-risk, the negative alphas persist across all categories,  providing further confirmation of the initial inference. 
 
-The monthly rebalancing contains only a few constituents as the sample of high-risk firms is small. Hence, the portfolio is exposed to idiosyncrasies, which compromise the ability of the factor models to explaining the returns through the included risk factors. Consequently, this implicates that the r-squared of regressions become very low at 0.4 and 0.53 as more of the variation ends up in the error terms. 
+Low- and medium-risk portfolios generate alphas of approximate even magnitude at $-0.64\%$ and $-0.61\%$, respectively, with the former being significant at 5\%. On the other hand, portfolios with high ESG risk show considerably larger negative alphas, with values of -2.3\% and -0.84\% for holding periods of one and four months, respectively. For portfolios consisting of high-risk firms, the monthly rebalancing results in a small number of constituents due to the limited sample size of high-risk firms. As a result, the portfolios are more exposed to idiosyncrasies, which compromise the ability of the factor models to explain the portfolio returns through the systematic risk factors. Consequently, this implicates that the r-squared of the regressions become very low at 0.4 and 0.53, indicating that more of the variation in the portfolio returns is attributed to the error terms rather than the systematic risk factors. 
 
-In general, all ESG risk types are capable of generating negative alphas. However, only firms with low ESG risk generate a significant output on average. The outcomes are more severe and with higher significance when applying shorter holding periods.   
-
+Across all subsets, the relation between negative news and returns are most severe within 1-4 months after an event has occurred.
 
 \subsubsection{Positive news}
 
-The impact from positive news on financial performance in the long run is illustrated in table \ref{tab: FF5_pos}. The table applies the same format as table \ref{tab: FF5_neg_ESG}. Positive events have no significant impact on returns over any of the portfolio constructions. Nevertheless, the long run effect is predominantly negative, which appears in contrast to the short term relation. Without partitioning on ESG risk, the performance is most negative when applying a brief holding period of $T=1$ with an alpha of of -0.26\%.   
-Such results are indicative of a pessimistic short-to-medium term investor reaction to general positive news. However, as the alphas are insignificant in all instances, the general conclusion is that there is no relation between positive news and stock returns.  
-
+The impact of positive events on long-term market values is illustrated in table \ref{tab: FF5_pos}. The table follows the same format as table \ref{tab: FF5_neg_ESG}. Without partitioning on ESG risk, positive events have no significant impact on returns over any of the holding periods. The performance is most negative when using a brief holding period of $T=1$, with an alpha of of -0.26\%, which appears in line with the short term relation. Such results are indicative of a pessimistic short-to-medium term investor reaction to general positive news. However, since the alphas are not statistically significant in any of the cases, the overall inference is that there is no significant relationship between positive news and stock returns. This suggests that the portfolio returns resemble those of a well-diversified portfolio, which closely aligns with the returns of the overall market portfolio. This result is expected if we assume that positive news is generally perceived as irrelevant by investors in the long term.
 
 \setlength{\tabcolsep}{15pt}
 \begin{table}[H]
@@ -170,7 +170,6 @@ Such results are indicative of a pessimistic short-to-medium term investor react
 \label{tab: FF5_pos_ESG}
 \end{table}
 
-Applying holding periods longer than $T=1$ generates exclusively alphas close to zero, which resembles a well-diversified portfolio return close to the market portfolio, which is an expected result if positive news are recognized as irrelevant. 
+For the low ESG risk portfolio with a holding period of one month, the alpha is practically zero at -0.04\%, indicating no significant abnormal returns from positive events. The medium ESG risk portfolio exhibits a slightly higher alpha of -0.41\%, however still not statistically significant. Surprisingly, the high ESG risk portfolio shows significant positive alphas for holding periods longer than four month. With T = 1 the abnormal returns are negative - on par with the short term results. The fluctuating trend of the alphas along with low r-squared in the range of 0.48\% to 0.63\% indicate that the results from the high-risk portfolios are unreliable. 
 
-With a value of -0.04\% the alpha is practically zero for the low ESG risk portfolio, while it increases to -0.41\% for medium risk, with none of the new estimates being significant. On the contrary, firms with high ESG risk seems to be rewarded with high alphas for positive events on horizons longer than four month. With T = 1 the abnormal returns are negative - on par with the short term results. However, the issue with small portfolio sizes does also apply for positive events.   
-
+In summary, the combined findings from short and long-term empirical results reveal that investor tend to react adverse to negative news, whether it is an immediate reaction or a lasting impact over several months. This negative reaction is most pronounced when it comes to companies with lower ESG risk levels. On the other hand, positive news does not appear to generate a significant response from investors. In the next sections, I will examine the validity of these results by testing some of the assumptions of the model. 
