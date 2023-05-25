@@ -149,6 +149,8 @@ negative_index_sdg_5 %>%
                      labels = scales::percent,
                      breaks = c(-0.08,-0.06,-0.04,-0.02,0,0.02,0.04)) +
   theme(legend.title = element_blank(),
+        legend.position="top",
+        legend.direction = "horizontal",
         legend.key.size = unit(0.5, 'cm'),
         axis.text.x = element_text(angle=45))
 ggsave("ST_negative_sdg_bar_0.png")
@@ -186,30 +188,7 @@ Sorting the SDGs into five groups to see if they become significant (not the cas
 ```{r}
 
 
-
-all = short_term_return_sdg %>%
-  filter(group == 'positive') %>%
-  mutate_at("sdg", str_replace, "_negative_count", "") %>%
-  mutate_at("sdg", str_replace, "_", " ") %>%
-  mutate(sdg = factor(sdg, levels = c("sdg 1", "sdg 2","sdg 3","sdg 4","sdg 5","sdg 6","sdg 7","sdg 8","sdg 9","sdg 10","sdg 11", 
-                                        "sdg 12", "sdg 13","sdg 14","sdg 15","sdg 16","sdg 17"))) %>%
-  select(-c(event,group)) %>%
-  pivot_longer(!c(date,isin,sdg), names_to = "period", values_to = "abnormal_ret") %>% na.omit(abnormal_ret) %>%
-   mutate(sdg = as.character(sdg)) %>%
-   mutate(sdg = case_when(
-    sdg == "sdg 1" | sdg == "sdg 2" | sdg == "sdg 3" | sdg == "sdg 4" | sdg == "sdg 5"  ~ "People",
-    sdg == "sdg 7" | sdg == "sdg 8" | sdg == "sdg 9" | sdg == "sdg 10" | sdg == "sdg 11"  ~ "Prosperity",
-    sdg == "sdg 6" | sdg == "sdg 12" | sdg == "sdg 13" | sdg == "sdg 14" | sdg == "sdg 15"  ~ "Planet",
-    sdg == "sdg 16"  ~ "Peace",
-    sdg == "sdg 17" ~ "Partnership")
-         ) %>%
-  mutate(period = as.factor(period),
-           sdg = as.factor(sdg)) %>%
-  mutate(period = factor(period, levels = c("-5","-4","-3","-2","-1","0", "1", "2","3","4","5")))
-
-
-
-t = short_term_return_sdg_2 %>% # comes from Speciale analysis
+t = short_term_return_sdg %>% # comes from Speciale analysis
   filter(group == 'negative') %>%
   mutate_at("sdg", str_replace, "_negative_count", "") %>%
   mutate_at("sdg", str_replace, "_", " ") %>%
@@ -228,8 +207,8 @@ t = short_term_return_sdg_2 %>% # comes from Speciale analysis
   
   all = t %>%
     mutate(period = as.numeric(period)) %>%
-  filter(period >= -10) %>%
-  filter(period <= 10) %>%
+  filter(period >= -6) %>%
+  filter(period <= 0) %>%
   mutate(period = as.factor(period),
            sdg = as.factor(sdg)) %>%
   mutate(period = factor(period, levels = c("-10","-9","-8","-7","-6","-5","-4","-3","-2","-1","0", "1", "2","3","4","5","6","7","9","10"))) %>% na.omit() %>%
@@ -253,10 +232,10 @@ all %>%
   summarise(CAAR = weighted.mean(csum,MKT_CAP)) %>% ungroup() %>%
   left_join(bands, by = c("sdg","period")) %>% 
   mutate(period = as.character(period)) %>%
-  filter(period == '10') %>%
+  filter(period == '1') %>%
   mutate(sdg = factor(sdg, levels = c("People","Planet","Prosperity","Peace","Partnership"))) %>%
   #  mutate(sdg = factor(sdg, levels = c("sdg 1", "sdg 2","sdg 3","sdg 4","sdg 5","sdg 6","sdg 7","sdg 8","sdg 9","sdg 10","sdg 11", 
-  #                                       "sdg 12", "sdg 13","sdg 14","sdg 15","sdg 16","sdg 17"))) %>%
+   #                                      "sdg 12", "sdg 13","sdg 14","sdg 15","sdg 16","sdg 17"))) %>%
   ggplot(
     aes(x = sdg, y = CAAR, color= sdg,group = sdg, fill = sdg)) + 
   geom_bar(stat="identity") +
@@ -267,23 +246,15 @@ all %>%
    theme_bw()+
   theme(legend.title = element_blank(),
         legend.key.size = unit(0.5, 'cm'),
-        axis.text.x = element_text(angle=45)) +
+        #axis.text.x = element_text(angle=45)
+        ) +
   theme(legend.position = "none")
-ggsave("ST_positive_sdg_bar.png")
-
-
-t %>% filter(period == '0') %>% mutate(t = "negative") %>% rbind(t_pos %>% filter(period == '0') %>% mutate(t = "positive")) %>%
-  mutate(sdg = factor(sdg, levels = c("sdg 1", "sdg 2","sdg 3","sdg 4","sdg 5","sdg 6","sdg 7","sdg 8","sdg 9","sdg 10","sdg 11", 
-                                        "sdg 12", "sdg 13","sdg 14","sdg 15","sdg 16","sdg 17"))) %>% 
-  group_by(sdg,t) %>% summarise(n=n()) %>% 
-  ggplot(aes(x = sdg, y = n, color =  t, group = t, fill = t)) + geom_bar(stat = "identity") +
-  theme(legend.title = element_blank(),
-        legend.key.size = unit(0.5, 'cm'),
-        axis.text.x = element_text(angle=45))
+ggsave("ST_negative_sdg_bar_groups_0.png")
 
 
 
-ggsave("ST_positive_sdg_bar.png")
+
+
 
 ```
 
