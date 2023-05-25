@@ -81,16 +81,9 @@ Overall, the results show a slight contrast with the short-term sensitivity anal
 
 \subsection{Inference from global companies}
 
-To further assess the robustness of the results, I reiterate the main parts of the empirical analysis with a novel sample of firms and corresponding SDG news from the constituents of the Nasdaq Global Large Cap Index\footnote{https://indexes.nasdaqomx.com/Index/Overview/NQGLCI}. Moreover, the inclusion of the new sample firms offer valuable insights into the global perspective on the relationship between ESG factors and corporate performance. The abnormal returns on both short- and long-term returns has been through the same transformation as the ones from the original models. The Market Model applies the MSCI World Index\footnote{https://www.msci.com/World} as the market portfolio, while the Calendar-Time Portfolio approach applies the Fama-French Developed Markets 5 factors in the regressions. 
+To further assess the robustness of the results, I reiterate the main parts of the empirical analysis with a novel sample of firms and corresponding SDG news from the constituents of the Nasdaq Global Large Cap Index\footnote{https://indexes.nasdaqomx.com/Index/Overview/NQGLCI}. Moreover, the inclusion of the new sample firms offer valuable insights into the global perspective on the relationship between ESG factors and corporate performance. The abnormal returns on both short- and long-term returns has been through the same transformation as the ones from the original models. The Market Model applies the MSCI World Index\footnote{https://www.msci.com/World} as the market portfolio, while the Calendar-Time Portfolio approach applies the Fama-French Developed Markets 5 factors in the regressions. The Calendar-Time Portfolio approach identifies 3.945 negative events from 810 distinct companies. 
 
-The short-term market reaction from negative news is approximately equivalent across European and global companies. However, the reaction in Europe is slightly more negative compared to global companies with CAAR-values of -0.72\% and -0.56\%, respectively. Again, most of the decline in market value of global companies happens before the event is identified. On the contrary, when partitioning on ESG risk levels, the inferences shift around. Specifically, for global low-risk companies, it appears that negative news does not significantly impact their market values, as the CAAR remains close to zero throughout the entire window. In stark contrast, European companies experience a notable decline, with an average loss of -1.65\% over the 21-day window. 
-The impact of negative events on global high-risk companies is substantial, leading to a significant market value loss of approximately -1.5\%, while the reaction for medium-risk firms is comparable to that of European equities.
-
-The short term impact from positive news on global companies are slightly different from European companies. High risk companies are to a larger degree being rewarded for positive news, whereas the impact on medium and low-risk companies are close to zero. However, since the remaining part of the paper will focus mostly on negative news, I will do the same here. The AAR and CAAR for all firms and split on ESG risk for positive events are available in tables \ref{fig:ST_pos_sensitivity_nasdaq} and \ref{fig:ST_pos_sensitivity_nasdaq_ESG} in appendix \ref{app: sensitivity}.
-
-Overall, in Europe and the rest of the world, corporate negative news related to the SDGs are penalized by investors. However, investor are in disagreement on how to penalize companies when accounting for ESG risk.  
-
-\begin{figure}
+\begin{figure} [H]
      \centering
      \begin{minipage}[b]{0.49\textwidth}
          \centering
@@ -109,3 +102,42 @@ Overall, in Europe and the rest of the world, corporate negative news related to
         
         \label{fig:three graphs}
 \end{figure}
+
+The short-term market reaction from negative news is approximately equivalent across European and global companies. However, the reaction in Europe is slightly more negative compared to global companies with CAAR-values of -0.72\% and -0.56\%, respectively. Again, most of the decline in market value of global companies happens before the event is identified. On the contrary, when partitioning on ESG risk levels, the inferences shift around. Specifically, for global low-risk companies, it appears that negative news does not significantly impact their market values, as the CAAR remains close to zero throughout the entire window. In stark contrast, European companies experience a notable decline, with an average loss of -1.65\% over the 21-day window. 
+The impact of negative events on global high-risk companies is substantial, leading to a significant market value loss of approximately -1.5\%, while the reaction for medium-risk firms is comparable to that of European equities.
+
+The short term impact from positive news on global companies are slightly different from European companies. High risk companies are to a larger degree being rewarded for positive news, whereas the impact on medium and low-risk companies are close to zero. However, since the remaining part of the paper will focus mostly on negative news, I will do the same here. The AAR and CAAR for all firms and split on ESG risk for positive events are available in tables \ref{fig:ST_pos_sensitivity_nasdaq} and \ref{fig:ST_pos_sensitivity_nasdaq_ESG} in appendix \ref{app: sensitivity}.
+
+Overall, in Europe and the rest of the world, corporate negative news related to the SDGs are penalized by investors. However, investor are in disagreement on how to penalize companies when accounting for ESG risk.  
+
+
+
+
+
+\setlength{\tabcolsep}{15pt}
+\begin{table}[H]
+\small
+\centering
+\caption{Fama-French five-factor model alpha from NASDAQ negative news split on ESG risk} 
+\begin{tabular}{llllllc}
+\hline \hline \\ 
+ &     & Overall &    Low  &  Medium  &  High &  \\    \cline{3-6} 
+& &  \multicolumn{3}{c}{ T = 1} & \\ \cline{2-6}
+& Alpha (\%)    & 0.12 & -0.44  & 0.06  & -0.03 &  \\ 
+& t-value   & 0.24 & -0.89 & 0.09  & -0.04 &  \\
+& &  \multicolumn{3}{c}{ T = 4} & \\ \cline{2-6}
+& Alpha (\%)   & -0.12 & -0.05  & -0.06  &  $-0.69^{*}$ & \\
+& t-value &   -0.35 & -1.06 & -0.13  & -1.82 & \\
+& &  \multicolumn{3}{c}{ T = 8} & \\ \cline{2-6}
+& Alpha (\%)    & -0.29 & -0.08  & -0.26  & -0.45 &  \\
+& t-value &   -1.26 & -0.19  & -0.89 & -1.21 &  \\
+& &  \multicolumn{3}{c}{ T = 12} & \\ \cline{2-6}
+& Alpha (\%)    & -0.28 & -0.28  & -0.45  & -0.41 &  \\
+& t-value &    -1.22 & -0.84  & -1.48 & -1.21 &  \\
+\hline \hline
+ \multicolumn{7}{l}{ \footnotesize $^* \; p\; <\; 0.1$, $ ^{**} \; p\; <\; 0.05$, $ ^{***} \; p\; <\; 0.01$  } \\
+ \multicolumn{7}{p{12cm}}{ \footnotesize Alpha is the WLS-regression intercept (in \%) of the Fama-French 5-factor model, displayed along with the corresponding White heteroskedasticity-robust t-value. N is the average amount of firms included in the portfolio each month, and T is the portfolio holding period. The threshold for event firms to be included in the portfolio is either 1,2 or 3 "SD" (standard deviations) larger than the mean.} \\ 
+ \hline
+\end{tabular}
+\label{tab: FF5_neg_ESG}
+\end{table}
