@@ -15,7 +15,13 @@ setwd("C:/Users/Marti/OneDrive - University of Copenhagen/KU/Speciale/Data behan
 ###############################################################
 
 ESG <- read_excel("ESG_RR.xlsx", sheet = "Results") %>% 
-  select(ISIN, ESG_risk_category)
+  select(ISIN, ESG_risk_category) %>%
+  mutate(ESG_risk_category =
+           case_when(
+             ESG_risk_category == "Severe" ~ "High",
+             ESG_risk_category == "Negligible" ~ "Low",
+             TRUE ~ ESG_risk_category)) %>%
+  filter(!ESG_risk_category %in% c('No data','Severe','Negligible')) %>% na.omit()
 
 
 ESG <- ISIN %>% select(ISIN = id_isin) %>% left_join(ESG, by = "ISIN") %>% mutate(isin = ISIN)
@@ -30,52 +36,29 @@ ESG %>%
 
 # Read stock data from:
 ISIN <- read_excel("world_index__ISIN.xlsx")
-stock <- read_excel("SXXP_MONTHLY_EUR.xlsx")
+
 mkt_cap <- read_excel("World_market_cap.xlsx")
 
-free_float = free_float_data %>%
-  filter(!row_number() %in% c(1,2)) %>% 
-  # Make the data set a long matrix instead of wide
-  pivot_longer(!DATES, names_to = "firm",values_to = "free_float") %>%
+stock <- read_excel("C:/Users/Marti/OneDrive - University of Copenhagen/KU/Speciale/Data behandling/nasdaq_return_monthly.xlsx")  %>%
+  pivot_longer(!DATES, names_to = "firm", values_to = "ret") %>%  
   mutate(
-    type = str_split_fixed(firm, "_", 2)[,2],
-    ID = str_split_fixed(firm, "_", 2)[,1],
-    date = as.Date(as.numeric(DATES), origin = "1899-12-30"),
-    free_float = as.numeric(free_float)
-  ) %>% 
-  select(-DATES,-firm)
+    date = DATES,
+    date = as.Date(date, format = "%Y-%m-%d"),
+    date = ceiling_date(date, "month")-1) %>% 
+  group_by(date,firm) %>%
+  summarise(ret = mean(ret, na.rm = TRUE)) %>%
+  left_join(ISIN, by = "firm") %>% 
+  transmute(date, isin = id_isin, ret) %>%
+  left_join(mkt_cap, by = c("isin","date"))
 
-# Clean up the stock market data: Remove the two first rows 
-stocks <- stock %>%
-  filter(!row_number() %in% c(1,2)) %>% 
-  # Make the data set a long matrix instead of wide
-  pivot_longer(!DATES, names_to = "firm",values_to = "value")  %>% 
-  mutate(
-    type = str_split_fixed(firm, "_", 2)[,2],
-    ID = str_split_fixed(firm, "_", 2)[,1],
-    date = as.Date(as.numeric(DATES), origin = "1899-12-30"),
-    value = as.numeric(value)
-    ) %>% 
-  select(-DATES,-firm) %>%
-  # And join the stock information with the ISIN number:
-  left_join(ISIN, by = "ID") %>% rename("isin" = id_isin)
-
-# Summarize the stocks to index by date and isin
-stocks_monthly <- stocks %>% 
-  pivot_wider(
-    names_from = type,
-    values_from = value
-  ) %>% unnest(c(PX_LAST,MKT_CAP,W_RETURN)) %>% 
-  left_join(free_float, by = c("date","ID")) %>%
-  na.omit() %>% 
-  mutate(date = (ceiling_date(date, "month")-1),
-         free_float_mkt_cap = MKT_CAP * (free_float/100)) %>%
-  select(-c(ID,free_float,type))
+nasdaq_index = stock %>% mutate(year = year(date)) %>%
+  group_by(date) %>% 
+  na.omit() %>%
+  summarise(ret = weighted.mean(ret,MKT_CAP, na.rm = TRUE)) %>%
+  write.csv(file = "nasdaq_index.csv")
+  
 
 
-# Write to CSV to keep in nice format:
-stocks_monthly %>%
-      write.csv(file = "clean_stock_data_monthly.csv")
   
 ###############################################################
 ############# Get Sentiment data monthly ##############################
@@ -104,13 +87,13 @@ sentiment_monthly <- sentiment %>%
   group_by(isin)
 
 # Join the monthly sentiment data with the stock prices
-all_data_monthly <- stocks_monthly %>% mutate(date = as.Date(date)) %>% 
+all_data_monthly <- stock %>% mutate(date = as.Date(date)) %>% 
   left_join(sentiment_monthly %>% mutate(date = as.Date(date)), by = c("date","isin"))
 
 
 # Write to CSV to keep in nice format:
 all_data_monthly %>%
-           write.csv(file = "all_data_month.csv")
+           write.csv(file = "all_data_month_nasdaq.csv")
 
        
 ###############################################################
