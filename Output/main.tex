@@ -60,7 +60,7 @@
 \usepackage{listings}
 \usepackage{setspace}
 \usepackage[bottom]{footmisc}
-
+\usepackage[labelfont=bf]{caption}
 
 
 \usepackage[a4paper,margin=1in,headheight=.4in,headsep=12pt,heightrounded]{geometry}
@@ -165,6 +165,8 @@
 \newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
 \newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
  
+\pagenumbering{roman}
+
 
 \begin{document}
 
@@ -177,28 +179,43 @@
   \fancyfoot[R]{ \thepage}%
   \renewcommand{\headrulewidth}{0pt}% Line at the header invisible
 }
+
 \frontmatter
 
 
 \include{Output/frontpage.tex}
 
+\linespread{1.5}
+\selectfont
+
+\input{Projekt/abstract}
+\pagebreak
 
 %%%% Indholdsfortegnelse (TOC) %%%%
 
-\phantomsection													% Kunstigt afsnit, som hyperlinks kan 'holde fast i'
+\linespread{1.1}
+\selectfont
+
+\phantomsection		
+
+% Kunstigt afsnit, som hyperlinks kan 'holde fast i'
 \pdfbookmark[0]{Indholdsfortegnelse}{indhold}					% Tildeler en klikbar bookmark til den endelige PDF
+
 \tableofcontents*	
 \newpage
-% Here we can add figures and tables
-%\listoffigures
-%\newpage
-%\listoftables
-% Indholdsfortegnelsen (kaldet ToC) 
 
-%\addtocontents{toc}{\protect\newpage}							% Fremtvinger sideskift i ToC hvis noedvendig (der hvor koden placeres)
+\vspace{1.5 cm}
+\selectfont
+
+\linespread{1.5}
+\selectfont
+
+\pagenumbering{arabic}
 
 \renewcommand{\cleardoublepage}{\newpage}
 \mainmatter
+
+
 
 \fancypagestyle{plain}{%
   \fancyhf{}%
@@ -206,42 +223,42 @@
   \renewcommand{\headrulewidth}{0pt}% Line at the header invisible
 }
 
-\vspace{1.5 cm}
-\selectfont
 
 
 
 \input{Projekt/1.Introduction.tex}
+\pagebreak
 
 \section{Literature review} \label{lit_rev}
 \input{Projekt/2.Litterature review.tex}
+\pagebreak
 
-
-\section{Methodology and theory} \label{sec:method}
+\section{Methodology and Theory} \label{sec:method}
 \input{Projekt/3.Methodology.tex}
+\pagebreak
 
-
-\section{Empirical results} \label{sec:analysis}
+\section{Empirical Results} \label{sec:results}
 \input{Projekt/4.Empirical results}
+\pagebreak
 
-
-\section{Sensitivity of results} \label{sec:sensitivity}
+\section{Sensitivity of Results} \label{sec:sensitivity}
 \input{Projekt/5.Sensitivity}
+\pagebreak
 
-
-\section{Analysis} \label{results}
+\section{Analysis} \label{sec: analysis}
 \input{Projekt/Analysis}
-
+\pagebreak
 
 \section{Discussion} \label{sec:discussion}
 \input{Projekt/Discussion.tex}
 
+\pagebreak
 
  \renewcommand{\bibsection}{\section{Bibliography}}
 \bibliography{Output/Litteraturliste}
 
 \pagebreak
-
+\pagenumbering{roman}
 \appendix
 \rhead{University of Copenhagen}
 \lhead{Bilag}
