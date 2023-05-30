@@ -225,7 +225,7 @@ for (y in 1:length(rolling_means)) {
   for (z in 1:length(SDs)) { 
 
 long_term_data_monthly <- data_monthly %>%
- # left_join(ESG_RR, by ="isin") %>% filter(ESG_risk_category == 'Low') %>%
+  left_join(ESG_RR, by ="isin") %>% filter(ESG_risk_category == 'Low') %>%
   transmute(date,isin,MKT_CAP, free_float_mkt_cap,
             ret = W_RETURN, 
             norm_positive_sum = sentiment_positive_count - sdg_not_relevant_positive_count,
@@ -289,15 +289,15 @@ long_term_data_M_negative = long_term_data_negative %>%
     ret = weighted.mean(ret,free_float_mkt_cap),
     #ret = mean(ret),
             n = n_distinct(isin)) %>%
-  left_join(eu_5factors_monthly, by = "date")
+  left_join(eu_3factors_monthly, by = "date")
 
 # Calculate alpha of portfolios:
   
 alpha_M_negative = long_term_data_M_negative %>% 
-   summarise(alpha = tidy(lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML + RMW + CMA, weights = n))$estimate[1],
-             t = tidy(lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML + RMW + CMA, weights = n))$statistic[1],
-             p = tidy(lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML + RMW + CMA, weights = n))$p.value[1],
-            r = glance(lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML + RMW + CMA, weights = n))$r.squared,
+   summarise(alpha = tidy(lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML, weights = n))$estimate[1],
+             t = tidy(lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML , weights = n))$statistic[1],
+             p = tidy(lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML, weights = n))$p.value[1],
+            r = glance(lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML, weights = n))$r.squared,
              N = mean(n)) %>%
    mutate(model = paste0(i,"M_",y,"_",z))
 
@@ -311,16 +311,16 @@ emptylist_neg_2[[y]] = emptylist_neg_1
 
 # 
 long_term_data_M_negative %>%
-  summarise(tidy(summary(lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML + RMW + CMA, weights = n))))
+  summarise(tidy(summary(lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML, weights = n))))
 
-model = lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML + RMW + CMA, weights = n, data = long_term_data_M_negative)
+model = lm(ret - RF ~ 1 + mkt_excess_ret + SMB + HML, weights = n, data = long_term_data_M_negative)
 
 summary(model)
 
 library(lmtest)
 library(sandwich)
 
-coeftest(model, vcov = vcovHC(model, type = 'HC0'))
+?coeftest(model, vcov = vcovHC(model, type = 'HC0'))
 
 lmtest::bptest(model)
 lmtest::dwtest(model)
