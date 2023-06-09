@@ -1,66 +1,60 @@
 \section{Introduction} \label{sec:intro}
 
-The global financial markets has experienced tremendous growth within sustainable investing. The mega-trend has evolved over the last two decades and emphasises corporate focus on non-financial information categorized as environmental, social, and governance (ESG) in investment decisions. A growing societal focus on capital allocation toward sustainable investments, accountability and transparency, implies that firms cannot override infringement cases such as oil spills, accounting fraud and the use of child labor, which formerly have experienced less public attention. Recent history provides several instances of adverse corporate social behavior causing large financial losses for afflicted companies. For instance, Swedbank faced allegations as being part of a money laundering scheme resulting in a drop in market share of -13\% on the same day news articles spiked. Similarly, the shares of Électicité de France plunged -15\% after a spike in news about faults found in the nuclear reactors. 
+In recent decades, global financial markets have witnessed remarkable growth within sustainable investing, reflecting a significant shift towards incorporating non-financial information regarding environmental, social, and governance (ESG) factors into investment decisions. This trend has gained momentum since the formulation of an international agenda for sustainable development by the United Nations in 2015. The agenda outlines 17 Social Development Goals (SDGs) as a shared blueprint to achieve peace and prosperity for both people and the planet by 2030. Understanding the relationship between the SDGs and corporate performance returns could provide valuable insights for investors who seek to align their portfolios with their values. The financial sector plays a crucial role in allocating capital towards projects that contribute to reaching these goals, making sustainable investing increasingly popular among investors seeking ethical and socially responsible investment opportunities. 
 
-According to a  1970’s essay by Friedman 2007 the sole responsibility of a firm is to generate profits for its shareholders. Such a view would imply that any ESG related activity, that is not a
-part of the core business, should not be taken forward by the manager and neither should
-investors integrate information on ESG into their financial decision making.
+In this study, I investigate the stock market's short- and long-term reaction to about 12.000 events related to the Social Development Goals from 2018 to 2023. The overall aim is to gain a better understanding of how investors value the SDGs. I target the constituent firms from the STOXX Europe 600 index. For this purpose, I use a time series dataset called SDG Signals supplied by Matter, which contains the daily amount of times individual companies are mentioned negatively or positively in global news in relation to the SDGs. I combine these datasets with firm-specific ESG risk ratings in order to characterize the effect on firms on a deeper level. The aim of this study is to first identify and isolate relevant events related to the SDGs, and then measure the corresponding investors reaction through the abnormal return. To obtain abnormal returns, I adjust the realized return for the expected return by use of normal return models.
 
-Despite the presence of anecdotal evidence, our understanding of the explicit shareholder reactions from everyday ESG news are limited. Recently, \cite{Blancard_ESG_sentiment} as well as \cite{kruger2015corporate} provides interesting insights on how shareholders react negatively to ordinary news about corporate social responsibility (CSR). 
+This study differs from the existing research, mainly by utilizing a dataset that offers two key advantages. First, I apply  the volume of news articles as a proxy for events, providing a more accurate representation of incidents at the time of occurrence. Related research use hand-picked events, which may bias the sample toward certain desirable event characteristics. Second,  due to the flexibility of the research methodology, the outcomes are applicable from a practical perspective. For example, either as an early indicator of negative exposure toward a particular asset or as an instrument in the development of a trading strategy. In addition, the comprehensiveness of the data sources, allow me to, separately, relate the corporate news events to specific SDG themes, and partition the event firms based on their ESG rating. Both are, to the best of my knowledge, additions to the existing research in related event studies.  
 
-In this study...
+Initially, I examine the direct impact of positive and negative SDG news on companies' market values. I follow up by providing intuition on how certain characteristics of the news or the targeted firm affect this impact.
+An important event is defined as a one standard deviation shift in the daily or monthly volume of news articles from their respective averages. This criterion allows for both short-term and long-term investigations. By differentiating between positive and negative events, I explore any potential asymmetric impact on market value. 
 
+I measure the short run impact as the abnormal returns 10 days before and 10 days after an event, with the abnormal returns being the residual component between the realized returns and expected returns estimated with the Market Model. The results indicate that companies which endure a negative event show a significant decline in market value of -0.72\% over a 21-day window. In contrast, firms encountering positive events exhibit no impact. Interestingly, while the investors appear to penalize negative corporate behavior, they do not really react to positive behavior. I do not explore the exact causes for the occurrence of these specific results. However, I do attempt to emphasize various perspectives behind the results. For example, I partition the companies based on their ESG risk and measure the reaction in similar style. Particularly, low-risk firms are penalized on the short run with a decline of -1.65\% when associated with negative news. This suggest that reputational effects are not present, and investors have high expectations for European companies. Moreover, the shareholder reaction to positive news diverge between medium-risk firms and low-risk firms with significant abnormal returns of 0.24\% and -0.23\%, respectively, over the full window. This result indicates a clear discrepancy between shareholder reactions to firms of varying risk levels. 
 
+In addition, by relating the corporate events to specific SDGs, I explore which themes within the SDGs that shareholders emphasize the most. Due to a lack of observations within specific SDGs I adopt the categorization, Five Pillars of SDG, which mitigates the issues and relate the goals into broader themes. As a result, negative news that involves to themes Planet, Peace, and Prosperity impact firms' market values most negative, whereas investors do not react to those involving People and Partnerships. I find no significant impact from positive news related to any of the themes, although, the average reaction is large for news related to the planet and prosperity. The trend is quite clear. News related to more tangible themes receive more attention from shareholders.  
 
+When measuring performance over longer horizons I apply the Calendar-Time Portfolio (CTP) approach along with a Fama-French Five Factor Model. I find that negative news generate significantly negative alpha values of -0.84\% and -0.36\% for holding periods of one and four months, respectively, while reactions to positive news are insignificant. Only the low-risk portfolio with a holding period of one month generates a significant negative alpha. Thus, the intuition from the short term developments continues. Conversely, none of the three groups based on ESG risk generate significant long run alpha from positive news. 
 
+To round up the analysis, I compare the findings with related results from a sample of global companies. At first sight, the overall market reaction to negative news appears slightly lower, but remains consistent with the patterns observed in European equities. However, a partition on ESG risk shows that the inference reverses for low-risk global companies, whose abnormal returns are insignificant from zero throughout the full window for global companies. This indicates that reputational effects, which were not present in Europe, are highly effective for global equities. 
 
-Understanding the relationship between SDG-related news and stock returns could provide valuable insights for investors who are looking to incorporate sustainability criteria into their investment decisions. This is particularly important as sustainable investing continues to grow in popularity, with more and more investors seeking to align their portfolios with their values. Additionally, understanding the relationship between SDG-related news and stock returns could also inform the efforts of companies and policymakers to achieve the SDGs by incentivizing companies to prioritize sustainability initiatives and enabling policymakers to design policies that support sustainable development. Therefore, investigating the relationship between SDG-related news and stock returns is not only important for investors, but also for companies, policymakers, and society as a whole.
+Overall, this paper offers guidance to understand the circumstances under which SDG news is likely to have an impact on a firm's market value. By identifying the factors that contribute to market reactions, shareholders can make more informed investment decisions.  
 
+\subsection{Research Question}
 
-\subsection{Motivation}
+Specifically, this thesis will investigate whether news related to the United Nations' Sustainable Development Goals have a direct impact on firms market values, and how this relation varies by certain characteristics of the news or the afflicted firms. To investigate this question, I have developed two main hypotheses that I pursue to test. In order to differentiate between positive and negative news, the hypothesis is partitioned into an "a" and a "b" part, which should not be confused with alternative hypotheses. 
 
+First, I hypothesize that news related to the SDGs does not have a significant short term impact on firms' market values. 
 
-\subsection{Problem statement}
-
-As investors increasingly consider environmental, social, and governance (ESG) factors when making investment decisions, it is important to understand the relationship between ESG-related news and stock market returns.  Specifically, does news related to the United Nations' Sustainable Development Goals (SDGs) have an impact on firms' short-term and long-term market values. The overall research questions that this thesis will investigate is the following: \\
-
-What is the relationship between news related to the United Nations' Sustainable Development Goals and stock market returns?
-
-To investigate this question, I have developed two main hypotheses. First, I hypothesize that news related to SDGs does not have a significant short term impact on firms' market values. The hypothesis is partitioned between positive and negative news through creation of an "a" and a "b" hypothesis.  \\
-
-\textbf{Hypothesis 1:} 
-
+\noindent \textbf{Hypothesis 1:} 
 \begin{itemize}
-  \item \textbf{a.}  Negative news related to the SDGs does not have a short term impact on firm's market values.
-  \item \textbf{b.}  Positive news related to the SDGs does not have a short term impact on firm's market values.
+  \item[\textbf{a.}]  Positive news related to the SDGs does not have a short term impact on firm's market values.
+  \item[\textbf{b.}]  Negative news related to the SDGs does not have a short term impact on firm's market values.
 \end{itemize}
 
-Second, I hypothesize that news related to SDGs does not have a significant long-term impact on firms' market values. \\
+\noindent The short term impact is measured as a 21-day range surrounding the identified event. Thus, I measure the impact from a empirical and academic point of view in order to increase our understanding of these relations, and not from a practical point of view. 
 
-\textbf{
-Hypothesis 2: \textit{Positive and negative news related to the SDGs does not have a long term impact on firms' market values.}}
+Second, I hypothesize that news related to the SDGs does not have a significant long-term impact on firms' market values. 
 
+\noindent \textbf{Hypothesis 2: }
 \begin{itemize}
-  \item \textbf{a.}  Negative news related to the SDGs does not have a long term impact on firm's market values.
-  \item \textbf{b.}  Positive news related to the SDGs does not have a long term impact on firm's market values.
+  \item[\textbf{a.}]  Positive news related to the SDGs does not have a long term impact on firm's market values.
+  \item[\textbf{b.}]  Negative news related to the SDGs does not have a long term impact on firm's market values.
 \end{itemize}
 
+\noindent The long term impact of an event is measured by holding the asset in a portfolio for either one, four, eight, or 12 months. By testing these hypotheses, I hope to contribute to a better understanding of the relationship between sustainability and financial performance. 
 
-By testing these hypotheses, I hope to contribute to a better understanding of the relationship between sustainability and financial performance. 
+\noindent However, I also recognize that there may be factors that influence the relationship between SDG-related news and market reactions. To explore these potential moderators, I will look into two additional sub-questions, which ultimately should expand our interpretation of the results from the main hypotheses. 
 
-However, I also recognize that there may be factors that influence the relationship between SDG-related news and market values. 
-To explore these potential moderators, I have developed two additional sub-questions, which ultimately should expand our interpretation of the results from the main hypotheses. 
+\noindent One potential moderator is the specific SDG that the news is related to. Each of the 17 SDGs represents a different aspect of sustainable development, from eradicating poverty to ensuring access to clean water and sanitation. In this regard, I will review whether the potential impact of SDG-related news on market value is independent of which specific SDG the news are related to.
 
-One potential moderator is the specific SDG that the news is related to. Each of the 17 SDGs represents a different aspect of sustainable development, from eradicating poverty to ensuring access to clean water and sanitation. In this regard, I will review whether the potential impact of SDG-related news on short and long term market values is independent of which specific SDG the news are related to.
+\noindent Another potential determinant of the relation is the firm's level of ESG risk. ESG risk refers to the degree to which a company's operations and business practices are aligned with environmental, social, and governance principles. Hence, I expand the analysis with an investigation on the influence of ESG risk on investor reactions. 
 
-Another potential moderator is the firm's level of ESG risk. ESG risk refers to the degree to which a company's operations and business practices are aligned with environmental, social, and governance principles.
-By splitting the analysis on the basis of firms' ESG risk profile, I can investigate whether the impact of SDG-related news on short and long term market values is dependent on the level of ESG risk of the company. 
+By testing these hypotheses and exploring potential determinants, I aim to gain a more nuanced understanding of how SDG news may impact firms' market values. 
 
- 
-By testing these hypotheses and exploring potential moderators, I hope to gain a more nuanced understanding of how SDG-related news may impact firms' market values. Moreover, this knowledge can help investors make more informed decisions around ESG investing and encourage companies to align their business practices with sustainable development principles.
+\subsection{Scope and Delimitation}
 
+The scope of this paper is the relation between the information shareholders actively gather directly from the media and the market value development of a given company. While previous literature has extensively examined the relationship between sustainability events and market returns, the primary objective of this paper is to delve into the relation from a more practical and realistic perspective. Hence, the assessment is based on actual public awareness, with the awareness proxied by a sample of events, that are deemed relevant by the general public through the media. Hence, the analysis is limited to the degree of which investors actually attach relevance to the information published by the media. 
 
-\subsection{Method}
+It is acknowledged that the Market Model may provide an unrealistic perception of stock returns, due to its limited assumptions on the risk-free rate being constant and the linear relation between stock returns and market returns. Hence, the abnormal returns are limited to the capabilities of this model. Moreover, using a factor model to evaluate long-term portfolio returns has its limitations. The Fama-French models assume that average stock returns are explained by a linear relation to a specific set of risk factors. Hence, the model will not capture all the relevant risk factors or the complex relations that impact portfolio performance.
 
-\subsection{Scope and delimitation}
-
+The following chapter will explore how other researchers have addressed with these considerations, and how I plan to expand on their findings.   
