@@ -94,7 +94,7 @@ Calendar-time portfolio approach 1 month sentiment data:
 
 ```{r}
 rolling_means = list(1)
-SDs = list(1,2,3)
+SDs = list(1)
 emptylist_pos_1 = list()
 emptylist_pos_2 = list()
 
@@ -225,7 +225,7 @@ for (y in 1:length(rolling_means)) {
   for (z in 1:length(SDs)) { 
 
 long_term_data_monthly <- data_monthly %>%
-  left_join(ESG_RR, by ="isin") %>% filter(ESG_risk_category == 'Low') %>%
+  left_join(ESG_RR, by ="isin") %>% #filter(ESG_risk_category == 'Medium') %>%
   transmute(date,isin,MKT_CAP, free_float_mkt_cap,
             ret = W_RETURN, 
             norm_positive_sum = sentiment_positive_count - sdg_not_relevant_positive_count,
@@ -531,8 +531,10 @@ negative_index_10 = negative_index_all %>%
   group_by(type) %>%
   summarise(
     rel_events = mean(relative_events, na.rm = TRUE),
-    AAR = weighted.mean(value,MKT_CAP),
-    CAAR = weighted.mean(csum,MKT_CAP),
+    #AAR = weighted.mean(value,MKT_CAP),
+    #CAAR = weighted.mean(csum,MKT_CAP),
+    AAR =mean(value),
+    CAAR = mean(csum),
     n = n(),
     mkt = mean(MKT_CAP),
     SE_AAR = sd(value, na.rm = TRUE)/sqrt(n()),
@@ -756,6 +758,7 @@ short_term_return_sdg = short_term_data_event_sdg %>%
                             grepl("nega", sdg) ~"negative"),
          )
   
+
 
 # Splitting up positive and negative events:
 

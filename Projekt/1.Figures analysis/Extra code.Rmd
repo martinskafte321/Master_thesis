@@ -189,8 +189,8 @@ Sorting the SDGs into five groups to see if they become significant (not the cas
 
 
 t = short_term_return_sdg %>% # comes from Speciale analysis
-  filter(group == 'negative') %>%
-  mutate_at("sdg", str_replace, "_negative_count", "") %>%
+  filter(group == 'positive') %>%
+  mutate_at("sdg", str_replace, "_positive_count", "") %>%
   mutate_at("sdg", str_replace, "_", " ") %>%
   mutate(sdg = factor(sdg, levels = c("sdg 1", "sdg 2","sdg 3","sdg 4","sdg 5","sdg 6","sdg 7","sdg 8","sdg 9","sdg 10","sdg 11", 
                                         "sdg 12", "sdg 13","sdg 14","sdg 15","sdg 16","sdg 17"))) %>%
@@ -207,8 +207,8 @@ t = short_term_return_sdg %>% # comes from Speciale analysis
   
   all = t %>%
     mutate(period = as.numeric(period)) %>%
-  filter(period >= -6) %>%
-  filter(period <= 0) %>%
+  filter(period >= -10) %>%
+  filter(period <= 10) %>%
   mutate(period = as.factor(period),
            sdg = as.factor(sdg)) %>%
   mutate(period = factor(period, levels = c("-10","-9","-8","-7","-6","-5","-4","-3","-2","-1","0", "1", "2","3","4","5","6","7","9","10"))) %>% na.omit() %>%
@@ -232,7 +232,7 @@ all %>%
   summarise(CAAR = weighted.mean(csum,MKT_CAP)) %>% ungroup() %>%
   left_join(bands, by = c("sdg","period")) %>% 
   mutate(period = as.character(period)) %>%
-  filter(period == '1') %>%
+  filter(period == '10') %>%
   mutate(sdg = factor(sdg, levels = c("People","Planet","Prosperity","Peace","Partnership"))) %>%
   #  mutate(sdg = factor(sdg, levels = c("sdg 1", "sdg 2","sdg 3","sdg 4","sdg 5","sdg 6","sdg 7","sdg 8","sdg 9","sdg 10","sdg 11", 
    #                                      "sdg 12", "sdg 13","sdg 14","sdg 15","sdg 16","sdg 17"))) %>%
@@ -338,11 +338,10 @@ negative_index %>%
   filter(type >= -10) %>%
   filter(type <= 10) %>%
   arrange(date,isin,type) %>%
-  mutate(csum = cumsum(value)) %>%
-  filter(type == '10') %>% 
+  filter(type == '0') %>% 
   ungroup() %>%
-  summarise(sd = sd(csum, na.rm = TRUE),
-            mean = mean(csum),
+  summarise(sd = sd(valu, na.rm = TRUE),
+            mean = mean(AAR),
             n())
    
  
@@ -502,17 +501,12 @@ conf.level = 0.95
 
 
 
-positive_index %>% 
-   left_join(ESG_RR, by = "isin") %>%
+negative_index %>% 
+  # left_join(ESG_RR, by = "isin") %>%
   mutate(type = as.numeric(as.character(type))) %>%
-  filter(type >= -10) %>%
-  filter(type <= 10) %>%
-  arrange(date,isin,type) %>%
-  mutate(csum = 100*cumsum(value)) %>%
-  filter(type == '10') %>% 
+  filter(type == '0') %>% 
   ungroup() %>%
-  group_by(ESG_risk_category) %>%
-  summarise(sd = sd(csum, na.rm = TRUE),
+  summarise(sd = sd(AR, na.rm = TRUE),
             mean = weighted.mean(csum,MKT_CAP))
    
  

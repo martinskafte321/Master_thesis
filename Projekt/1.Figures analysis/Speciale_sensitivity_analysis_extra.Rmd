@@ -505,7 +505,7 @@ ggsave("ST_positive_all_CI_nasdaq.png")
 
 ### negative 
 
-negative_index = short_term_data_event %>% 
+negative_index = short_term_data_event_nasdaq %>% 
   select(date,isin,MKT_CAP,"0",contains("-"),contains("+"),neg_event) %>% 
   select(-c(contains("pos_event_"),contains("neg_event_"))) %>%
   filter(neg_event == 1) %>%
@@ -610,13 +610,13 @@ positive %>% filter(metric == 'CAAR') %>%
   #######
   
 negative_index_10 = negative_index %>% 
-  left_join(ESG_RR, by = "isin") %>%
+  left_join(ESG, by = "isin") %>%
   mutate(csum = cumsum(value)) %>%
   group_by(type,ESG_risk_category) %>% na.omit() %>%
   summarise(
-    AAR = weighted.mean(value,MKT_CAP),
+    AAR = weighted.mean(value),
     n = n(),
-    CAAR = weighted.mean(csum,MKT_CAP),
+    CAAR = mean(csum),
     SE_AAR = sd(value, na.rm = TRUE)/sqrt(n()),
     SE_CAAR = sd(csum, na.rm = TRUE)/sqrt(n())
     )
