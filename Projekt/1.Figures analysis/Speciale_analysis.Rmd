@@ -413,13 +413,15 @@ for (i in 1:10) {
   short_term_data[paste0("pos_event_+",i)] <- short_term_data %>% group_by(isin) %>% transmute(l = lead(norm_positive_sum,i)) %>% ungroup() %>% select(-isin)
 }
 
-short_term_data_event = short_term_data %>%
+short_term_data_event = short_term_data %>% 
   group_by(isin) %>%
   mutate(
     #norm_positive_sum = na_if(norm_positive_sum, 0),
     #norm_negative_sum = na_if(norm_negative_sum, 0),
     norm_positive_sum = replace_na(norm_positive_sum,0),
     norm_negative_sum = replace_na(norm_negative_sum,0),
+    #roll_mean = across(c(norm_positive_sum,norm_negative_sum),
+     #                 ~ rollmean(.x, k = 100, fill = NA, align = "right")),
     positive_threshold = mean(norm_positive_sum,na.rm = TRUE) + 1*sd(norm_positive_sum,na.rm = TRUE),
     negative_threshold = mean(norm_negative_sum,na.rm = TRUE) + 1*sd(norm_negative_sum,na.rm = TRUE)
     ) %>%
@@ -531,10 +533,10 @@ negative_index_10 = negative_index_all %>%
   group_by(type) %>%
   summarise(
     rel_events = mean(relative_events, na.rm = TRUE),
-    #AAR = weighted.mean(value,MKT_CAP),
-    #CAAR = weighted.mean(csum,MKT_CAP),
-    AAR =mean(value),
-    CAAR = mean(csum),
+    AAR = weighted.mean(value,MKT_CAP),
+    CAAR = weighted.mean(csum,MKT_CAP),
+    #AAR =mean(value),
+    #CAAR = mean(csum),
     n = n(),
     mkt = mean(MKT_CAP),
     SE_AAR = sd(value, na.rm = TRUE)/sqrt(n()),
@@ -611,7 +613,7 @@ negative_index_10 %>% select(type,AAR,CAAR,rel_events) %>%
                        breaks = c(0,0.5,1),
                        ~.*100,name="Relative events")) +
   scale_x_discrete(name = "Relative time",breaks=c("-10","-5","0","+5","+10"))
-ggsave("ST_negative_all_CI.png")
+ggsave("ST_negative_all_CI_new.png")
 
 
 # ESG:
@@ -638,8 +640,8 @@ positive = positive_index_10 %>%
        pivot_longer(!c(type,ESG_risk_category), names_to = "metric", values_to = "SE"), by = c("metric","type","ESG_risk_category")
      ) %>%
     mutate(
-     low = ret - 1.70*SE,
-     high = ret + 1.70*SE
+     low = ret - 1.96*SE,
+     high = ret + 1.96*SE
    )
 
   positive %>% filter(metric == 'CAAR') %>% mutate(ESG_risk_category = factor(ESG_risk_category, levels = c("Low", "Medium","High"))) %>%

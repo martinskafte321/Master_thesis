@@ -358,9 +358,12 @@ short_term_data_daily = data_daily %>%
   right_join(isin_nasdaq, by = "isin") %>%
   mutate(date = as.Date(date)) %>% 
   right_join(index_daily %>% select(date, mkt_excess), by = "date") %>%
-  left_join(mkt_cap %>% select(isin,MKT_CAP), by = "isin")
+  mutate(date1 = ceiling_date(date, "month")-1) %>%
+  left_join(mkt_cap %>% select(isin,MKT_CAP), by = c("isin",'date1'='date')) %>%
+  #mutate(date = date.y) %>%
+  select(firm, value, isin, sentiment_negative_count, sentiment_positive_count,sdg_not_relevant_negative_count,sdg_not_relevant_positive_count,mkt_excess,date,MKT_CAP)
 
-# 
+remove(data_daily,mkt_cap) 
 #  plan(multisession, workers = availableCores())
 # 
 #  short_term_data_nested <- short_term_data_daily %>% mutate(W_RETURN = value) %>% 
@@ -383,11 +386,19 @@ short_term_data_daily = data_daily %>%
 
  
 short_term_data <- betas %>% 
-  left_join(short_term_data_daily, by = c("date","isin")) %>%
+  left_join(short_term_data_daily, by = c("date","isin"))
+
+#remove(betas,short_term_data_daily, data_monthly,mkt_cap)
+
+short_term_data = short_term_data %>% select(-c(firm))
+
+short_term_data = short_term_data %>%
   group_by(isin) %>%
   mutate(
       pred_ret = alpha + beta*mkt_excess,
-      abnormal_ret = value - pred_ret,
+      abnormal_ret = value - pred_ret)
+
+short_term_data = short_term_data %>% mutate(
       norm_positive_sum = sentiment_positive_count - sdg_not_relevant_positive_count,
       norm_negative_sum = sentiment_negative_count - sdg_not_relevant_negative_count#,
   #     
@@ -397,9 +408,9 @@ short_term_data <- betas %>%
   # unnest(roll_sum,names_sep = "_") %>%
      
   ) %>%
-  select(-c(sdg_not_relevant_positive_count,sdg_not_relevant_negative_count,sdg_not_relevant_neutral_count,firm,match_names:global_unique_sources,))
+  select(-c(alpha,beta,pred_ret,sdg_not_relevant_positive_count,sdg_not_relevant_negative_count))
 
-remove(short_term_data_daily,short_term_data_nested,betas,short_term_data_sdg,sentiment_daily,data_daily,sxxp_index_daily,msci_index_daily)
+#remove(short_term_data_daily,short_term_data_nested,betas,short_term_data_sdg,sentiment_daily,data_daily,sxxp_index_daily,msci_index_daily)
 
 # Create columns that represent the lagged and leading values in relation to the event date:
 
@@ -409,21 +420,27 @@ for (i in 1:10) {
   short_term_data[paste0("+",i)] <- short_term_data %>% group_by(isin) %>% transmute(t = lead(abnormal_ret,i)) %>% ungroup() %>% select(-isin)
 }
 
+#short_term_data_before2020 = short_term_data[short_term_data$date < '2020-01-01',1]
+
+
 short_term_data_event = short_term_data %>%
   group_by(isin) %>%
   mutate(
-    #norm_positive_sum = na_if(norm_positive_sum, 0),
-    #norm_negative_sum = na_if(norm_negative_sum, 0),
-    norm_positive_sum = replace_na(norm_positive_sum,0),
-    norm_negative_sum = replace_na(norm_negative_sum,0),
+    norm_positive_sum = na_if(norm_positive_sum, 0),
+    norm_negative_sum = na_if(norm_negative_sum, 0),
+    #norm_positive_sum = replace_na(norm_positive_sum,0),
+    #norm_negative_sum = replace_na(norm_negative_sum,0),
     positive_threshold = mean(norm_positive_sum,na.rm = TRUE) + 1*sd(norm_positive_sum,na.rm = TRUE),
     negative_threshold = mean(norm_negative_sum,na.rm = TRUE) + 1*sd(norm_negative_sum,na.rm = TRUE)
-    ) %>%
+    )
+
+remove(short_term_data)
+
+short_term_data_event = short_term_data_event %>%
   rename("0" = abnormal_ret) %>%
-  
    select(-c("value",
              #"positive_threshold","negative_threshold","norm_positive_sum","norm_negative_sum",
-              "sentiment_negative_count","sentiment_positive_count",
+            "sentiment_negative_count","sentiment_positive_count", "mkt_excess"
              #"roll_mean_norm_negative_sum","roll_mean_norm_positive_sum", "roll_sum_norm_negative_sum","roll_sum_norm_positive_sum"
              )) %>%
 
@@ -438,18 +455,18 @@ short_term_data_event = short_term_data %>%
     ) 
 
 # Write to CSV to keep in nice format:
-       short_term_data_event %>%
-           write.csv(file = "C:/Users/Marti/OneDrive - University of Copenhagen/KU/Speciale/Data behandling/short_term_data_event_nasdaq.csv")
+short_term_data_event %>%
+  write.csv(file = "C:/Users/Marti/OneDrive - University of Copenhagen/KU/Speciale/Data behandling/short_term_data_event_nasdaq_new.csv")
 
-        short_term_data_event <- read.csv("C:/Users/Marti/OneDrive - University of Copenhagen/KU/Speciale/Data behandling/short_term_data_event_nasdaq.csv", sep = ",") %>%
-   select(-X) %>%
+short_term_data_event <- read_csv("C:/Users/Marti/OneDrive - University of Copenhagen/KU/Speciale/Data behandling/short_term_data_event_nasdaq_new.csv") %>%
+   select(-...1) %>%
    mutate(date = as.Date(date))
 
 #Splitting events into positive and negative, and cleaning the data
 
 # Positive 
 
-        
+
 positive_index = short_term_data_event %>% 
   select(date,isin,MKT_CAP,"0",contains("-"),contains("+"),pos_event) %>% 
   select(-c(contains("neg_event_"),contains("pos_event_"))) %>%
@@ -467,8 +484,8 @@ positive_index_10 = positive_index %>%
   mutate(csum = cumsum(value)) %>%
   group_by(type) %>%
   summarise(
-     AAR = weighted.mean(value,MKT_CAP),
-    CAAR = weighted.mean(csum,MKT_CAP),
+     AAR = mean(value),
+    CAAR = mean(csum),
     SE_AAR = sd(value, na.rm = TRUE)/sqrt(n()),
     n = n(),
     SE_CAAR = sd(csum, na.rm = TRUE)/sqrt(n())
@@ -505,7 +522,7 @@ ggsave("ST_positive_all_CI_nasdaq.png")
 
 ### negative 
 
-negative_index = short_term_data_event_nasdaq %>% 
+negative_index = short_term_data_event %>% 
   select(date,isin,MKT_CAP,"0",contains("-"),contains("+"),neg_event) %>% 
   select(-c(contains("pos_event_"),contains("neg_event_"))) %>%
   filter(neg_event == 1) %>%
@@ -521,8 +538,8 @@ negative_index_10 = negative_index %>%
   mutate(csum = cumsum(value)) %>%
   group_by(type) %>%
   summarise(
-    AAR = weighted.mean(value,MKT_CAP),
-    CAAR = weighted.mean(csum,MKT_CAP),
+    AAR = mean(value),
+    CAAR = mean(csum),
     n = n(),
     SE_AAR = sd(value, na.rm = TRUE)/sqrt(n()),
     SE_CAAR = sd(csum, na.rm = TRUE)/sqrt(n())
@@ -537,7 +554,7 @@ negative_index_10 %>% select(type,AAR,CAAR) %>%
     mutate( 
      low = ret - 1.96*SE,
      high = ret + 1.96*SE
-   ) %>%
+   ) %>% 
     group_by(metric) %>%
     ggplot(aes(x = type, y = ret,colour = metric, group = metric)) +
     geom_ribbon(data = ~ filter(.x, metric %in% c("CAAR", "AAR")),
@@ -587,7 +604,8 @@ positive = positive_index_10 %>%
      high = ret + 1.96*SE
    )
 
-positive %>% filter(metric == 'CAAR') %>%
+positive %>% 
+  filter(metric == 'CAAR') %>%
     mutate(ESG_risk_category = factor(ESG_risk_category, levels = c("Low", "Medium","High"))) %>% 
     group_by(ESG_risk_category) %>%
     ggplot(aes(x = type, y = ret,colour = ESG_risk_category, group = ESG_risk_category)) +
@@ -610,11 +628,11 @@ positive %>% filter(metric == 'CAAR') %>%
   #######
   
 negative_index_10 = negative_index %>% 
-  left_join(ESG, by = "isin") %>%
+  left_join(ESG, by = c('isin'='ISIN')) %>%
   mutate(csum = cumsum(value)) %>%
   group_by(type,ESG_risk_category) %>% na.omit() %>%
   summarise(
-    AAR = weighted.mean(value),
+    AAR = mean(value),
     n = n(),
     CAAR = mean(csum),
     SE_AAR = sd(value, na.rm = TRUE)/sqrt(n()),
@@ -624,6 +642,7 @@ negative_index_10 = negative_index %>%
 negative = negative_index_10 %>%
     transmute(type, ESG_risk_category,AAR,CAAR) %>%
     pivot_longer(!c(type,ESG_risk_category), names_to = "metric", values_to = "ret") %>%
+    
     left_join(
      negative_index_10 %>% select(type,ESG_risk_category, "AAR" = SE_AAR, "CAAR" = SE_CAAR) %>% 
        pivot_longer(!c(type,ESG_risk_category), names_to = "metric", values_to = "SE"), by = c("metric","type","ESG_risk_category")
@@ -634,7 +653,7 @@ negative = negative_index_10 %>%
    )
 
 negative %>% filter(metric == 'CAAR') %>%
-    mutate(ESG_risk_category = factor(ESG_risk_category, levels = c("Low", "Medium","High"))) %>% 
+    mutate(ESG_risk_category = factor(ESG_risk_category, levels = c("Low", "Medium","High"))) %>%
     group_by(ESG_risk_category) %>%
     ggplot(aes(x = type, y = ret,colour = ESG_risk_category, group = ESG_risk_category)) +
     geom_ribbon(aes(ymin = low, ymax = high, fill = ESG_risk_category),

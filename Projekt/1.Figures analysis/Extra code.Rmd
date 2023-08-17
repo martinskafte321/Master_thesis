@@ -233,9 +233,9 @@ all %>%
   left_join(bands, by = c("sdg","period")) %>% 
   mutate(period = as.character(period)) %>%
   filter(period == '10') %>%
-  mutate(sdg = factor(sdg, levels = c("People","Planet","Prosperity","Peace","Partnership"))) %>%
-  #  mutate(sdg = factor(sdg, levels = c("sdg 1", "sdg 2","sdg 3","sdg 4","sdg 5","sdg 6","sdg 7","sdg 8","sdg 9","sdg 10","sdg 11", 
-   #                                      "sdg 12", "sdg 13","sdg 14","sdg 15","sdg 16","sdg 17"))) %>%
+ # mutate(sdg = factor(sdg, levels = c("People","Planet","Prosperity","Peace","Partnership"))) %>%
+    mutate(sdg = factor(sdg, levels = c("sdg 1", "sdg 2","sdg 3","sdg 4","sdg 5","sdg 6","sdg 7","sdg 8","sdg 9","sdg 10","sdg 11", 
+                                         "sdg 12", "sdg 13","sdg 14","sdg 15","sdg 16","sdg 17"))) %>%
   ggplot(
     aes(x = sdg, y = CAAR, color= sdg,group = sdg, fill = sdg)) + 
   geom_bar(stat="identity") +
